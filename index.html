@@ -7,6 +7,7 @@
   <title>Freedom by Design — Jenny Keller</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
   <style>
     :root {
       --color-1: 0 100% 63%;
@@ -359,7 +360,7 @@
 
         <!-- CTAs -->
         <div class="flex flex-wrap gap-4 fade-up" style="transition-delay:0.4s">
-          <a href="#about" class="rainbow-btn">Let's have a chat</a>
+          <button onclick="openContactModal()" class="rainbow-btn">Let's have a chat</button>
           <a href="#timeline"
             class="px-5 py-2.5 rounded-full border border-white/[0.08] bg-white/[0.04] text-zinc-300 text-sm font-semibold hover:border-white/[0.15] hover:bg-white/[0.08] transition-colors">My
             journey</a>
@@ -869,6 +870,35 @@
 
   </section>
 
+  <!-- ── Globe ─────────────────────────────────────────────── -->
+  <section class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto py-24 border-t border-white/[0.04]">
+    <div class="text-center mb-10 fade-up">
+      <span class="text-xs font-mono text-zinc-600 tracking-widest uppercase">Operating base</span>
+      <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mt-3 mb-4">Digital Nomad</h2>
+      <div class="flex items-baseline justify-center gap-2">
+        <span id="nomad-days" class="text-4xl font-semibold tabular-nums text-[#7957ff]">—</span>
+        <span class="text-xs font-mono text-zinc-500 tracking-widest uppercase">days nomadic</span>
+      </div>
+      <p class="text-xs font-mono text-zinc-700 mt-1">since 10 Oct 2023</p>
+    </div>
+    <div class="fade-up flex justify-center">
+      <div id="globe-container" style="position:relative; width:100%; max-width:680px;">
+        <canvas id="globe-canvas" style="border-radius:1rem; cursor:grab; display:block; width:100%;"></canvas>
+        <div class="flex flex-col items-center gap-2 mt-3">
+          <span class="text-xs font-mono text-zinc-700">Drag to rotate · Scroll to zoom</span>
+          <div class="flex items-center gap-1.5">
+            <div class="w-2 h-2 rounded-full bg-[#7957ff] opacity-70"></div>
+            <span class="text-xs font-mono text-zinc-600">Countries visited</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <div class="w-2 h-2 rounded-full bg-[#7957ff]"></div>
+            <span class="text-xs font-mono text-[#7957ff]">Da Nang — now</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ── Footer ────────────────────────────────────────────── -->
   <footer class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto pb-16 pt-8 border-t border-white/[0.04]">
     <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
@@ -879,6 +909,45 @@
       </div>
     </div>
   </footer>
+
+  <!-- ── Contact Modal ──────────────────────────────────────── -->
+  <div id="contact-modal" aria-modal="true" role="dialog" aria-label="Contact form"
+    style="display:none; position:fixed; inset:0; z-index:200; align-items:center; justify-content:center; padding:1.5rem;">
+    <!-- Backdrop -->
+    <div id="contact-backdrop" onclick="closeContactModal()"
+      style="position:absolute; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);"></div>
+    <!-- Panel -->
+    <div style="position:relative; width:100%; max-width:480px; background:#0f0f0f; border:1px solid rgba(255,255,255,0.07); border-radius:1.25rem; padding:2rem; box-shadow:0 24px 64px rgba(0,0,0,0.6);">
+      <!-- Close -->
+      <button onclick="closeContactModal()" aria-label="Close"
+        style="position:absolute; top:1rem; right:1rem; background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.3); line-height:1; font-size:1.25rem; padding:0.25rem;">✕</button>
+
+      <h2 style="font-size:1.125rem; font-weight:600; color:#f4f4f5; margin:0 0 0.25rem;">Let's talk</h2>
+      <p style="font-size:0.75rem; color:#71717a; font-family:monospace; margin:0 0 1.75rem;">hello@natrix-ethos.com</p>
+
+      <form id="contact-form" onsubmit="submitContactForm(event)">
+        <div style="margin-bottom:1rem;">
+          <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Name</label>
+          <input id="cf-name" type="text" required placeholder="Your name"
+            style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.5rem; padding:0.65rem 0.875rem; font-size:0.875rem; color:#f4f4f5; outline:none; box-sizing:border-box; transition:border-color 0.2s;"
+            onfocus="this.style.borderColor='rgba(121,87,255,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+        </div>
+        <div style="margin-bottom:1rem;">
+          <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Your email</label>
+          <input id="cf-email" type="email" required placeholder="you@example.com"
+            style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.5rem; padding:0.65rem 0.875rem; font-size:0.875rem; color:#f4f4f5; outline:none; box-sizing:border-box; transition:border-color 0.2s;"
+            onfocus="this.style.borderColor='rgba(121,87,255,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+        </div>
+        <div style="margin-bottom:1.5rem;">
+          <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Message</label>
+          <textarea id="cf-message" required rows="4" placeholder="What's on your mind?"
+            style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.5rem; padding:0.65rem 0.875rem; font-size:0.875rem; color:#f4f4f5; outline:none; box-sizing:border-box; resize:vertical; font-family:inherit; transition:border-color 0.2s;"
+            onfocus="this.style.borderColor='rgba(121,87,255,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'"></textarea>
+        </div>
+        <button type="submit" class="rainbow-btn" style="width:100%; justify-content:center;">Send message</button>
+      </form>
+    </div>
+  </div>
 
   <script>
     // Parallax blobs on mouse move
@@ -1042,6 +1111,276 @@
       }
       lastScrollY = currentScrollY;
     }, { passive: true });
+
+    // ── Globe ───────────────────────────────────────────────
+    (function initGlobe() {
+      const canvas = document.getElementById('globe-canvas');
+      if (!canvas || typeof d3 === 'undefined') return;
+      const ctx = canvas.getContext('2d');
+      const container = document.getElementById('globe-container');
+
+      const W = container.clientWidth || 680;
+      const H = Math.round(W * 0.62);
+      const baseRadius = Math.min(W, H) / 2.1;
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.scale(dpr, dpr);
+
+      const proj = d3.geoOrthographic()
+        .scale(baseRadius)
+        .translate([W / 2, H / 2])
+        .clipAngle(90);
+
+      const path = d3.geoPath().projection(proj).context(ctx);
+      const graticule = d3.geoGraticule()();
+
+      // Visited countries — ISO alpha-3 codes
+      const VISITED = new Set([
+        'BEL','BGR','COL','CRI','HRV','DNK','EGY','FRA','GEO','DEU',
+        'GRC','HUN','IDN','ITA','KAZ','MUS','NLD','PRT','RUS','THA',
+        'GBR','USA','ARE','TUR','VNM','ESP','LTU','MYS','MLT','POL',
+        'SGP','CZE'
+      ]);
+
+      const DA_NANG = [108.2022, 16.0544];
+
+      let countries = null;
+      const landDots = [];    // non-visited
+      const visitedDots = []; // visited
+
+      function inPoly(pt, ring) {
+        let inside = false;
+        for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+          const [xi, yi] = ring[i], [xj, yj] = ring[j];
+          if ((yi > pt[1]) !== (yj > pt[1]) && pt[0] < ((xj - xi) * (pt[1] - yi)) / (yj - yi) + xi)
+            inside = !inside;
+        }
+        return inside;
+      }
+
+      function inFeature(pt, feature) {
+        const g = feature.geometry;
+        if (!g) return false;
+        if (g.type === 'Polygon') {
+          if (!inPoly(pt, g.coordinates[0])) return false;
+          for (let i = 1; i < g.coordinates.length; i++) if (inPoly(pt, g.coordinates[i])) return false;
+          return true;
+        }
+        if (g.type === 'MultiPolygon') {
+          for (const poly of g.coordinates) {
+            if (inPoly(pt, poly[0])) {
+              let hole = false;
+              for (let i = 1; i < poly.length; i++) if (inPoly(pt, poly[i])) { hole = true; break; }
+              if (!hole) return true;
+            }
+          }
+        }
+        return false;
+      }
+
+      function getISO(f) {
+        const p = f.properties || {};
+        return p.ADM0_A3 || p.ISO_A3 || p.iso_a3 || '';
+      }
+
+      function makeDots(feature, isVisited) {
+        const bounds = d3.geoBounds(feature);
+        if (!bounds) return;
+        const [[minLng, minLat], [maxLng, maxLat]] = bounds;
+        const step = 1.28; // 16 * 0.08 degrees
+        const target = isVisited ? visitedDots : landDots;
+        for (let lng = minLng; lng <= maxLng; lng += step)
+          for (let lat = minLat; lat <= maxLat; lat += step)
+            if (inFeature([lng, lat], feature)) target.push([lng, lat]);
+      }
+
+      function render() {
+        ctx.clearRect(0, 0, W, H);
+        const sc = proj.scale();
+        const sf = sc / baseRadius;
+
+        // Ocean
+        ctx.beginPath();
+        ctx.arc(W / 2, H / 2, sc, 0, 2 * Math.PI);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+
+        // Graticule
+        ctx.beginPath();
+        path(graticule);
+        ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+        ctx.lineWidth = 0.5 * sf;
+        ctx.stroke();
+
+        if (countries) {
+          // Visited country fills
+          countries.features.forEach(f => {
+            if (!VISITED.has(getISO(f))) return;
+            ctx.beginPath();
+            path(f);
+            ctx.fillStyle = 'rgba(121,87,255,0.22)';
+            ctx.fill();
+          });
+
+          // All country outlines
+          countries.features.forEach(f => {
+            ctx.beginPath();
+            path(f);
+            ctx.strokeStyle = VISITED.has(getISO(f))
+              ? 'rgba(121,87,255,0.55)'
+              : 'rgba(255,255,255,0.07)';
+            ctx.lineWidth = 0.7 * sf;
+            ctx.stroke();
+          });
+
+          // Non-visited dots (white, subtle)
+          landDots.forEach(([lng, lat]) => {
+            const p = proj([lng, lat]);
+            if (p && p[0] >= 0 && p[0] <= W && p[1] >= 0 && p[1] <= H) {
+              ctx.beginPath();
+              ctx.arc(p[0], p[1], 0.85 * sf, 0, 2 * Math.PI);
+              ctx.fillStyle = 'rgba(255,255,255,0.16)';
+              ctx.fill();
+            }
+          });
+
+          // Visited dots (purple)
+          visitedDots.forEach(([lng, lat]) => {
+            const p = proj([lng, lat]);
+            if (p && p[0] >= 0 && p[0] <= W && p[1] >= 0 && p[1] <= H) {
+              ctx.beginPath();
+              ctx.arc(p[0], p[1], 1.1 * sf, 0, 2 * Math.PI);
+              ctx.fillStyle = 'rgba(121,87,255,0.85)';
+              ctx.fill();
+            }
+          });
+        }
+
+        // Globe border
+        ctx.beginPath();
+        ctx.arc(W / 2, H / 2, sc, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'rgba(255,255,255,0.1)';
+        ctx.lineWidth = 1.5 * sf;
+        ctx.stroke();
+
+        // Da Nang marker
+        const center = [-rot[0], -rot[1]];
+        if (d3.geoDistance(DA_NANG, center) < Math.PI / 2) {
+          const mp = proj(DA_NANG);
+          if (mp) {
+            const t = (Date.now() % 2000) / 2000;
+            // Pulse ring
+            ctx.beginPath();
+            ctx.arc(mp[0], mp[1], (4 + t * 14) * sf, 0, 2 * Math.PI);
+            ctx.strokeStyle = `rgba(121,87,255,${(1 - t) * 0.65})`;
+            ctx.lineWidth = 1.5 * sf;
+            ctx.stroke();
+            // Core dot
+            ctx.beginPath();
+            ctx.arc(mp[0], mp[1], 3.5 * sf, 0, 2 * Math.PI);
+            ctx.fillStyle = '#7957ff';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.9)';
+            ctx.lineWidth = 1 * sf;
+            ctx.stroke();
+            // Label
+            ctx.fillStyle = 'rgba(255,255,255,0.85)';
+            ctx.font = `${Math.max(9, Math.round(10 * sf))}px monospace`;
+            ctx.fillText('Da Nang', mp[0] + 7 * sf, mp[1] + 4 * sf);
+          }
+        }
+      }
+
+      fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/cultural/ne_110m_admin_0_countries.json')
+        .then(r => r.json())
+        .then(data => {
+          countries = data;
+          data.features.forEach(f => makeDots(f, VISITED.has(getISO(f))));
+        })
+        .catch(() => {});
+
+      const rot = [0, 0];
+      let auto = true;
+
+      (function animate() {
+        if (auto) { rot[0] += 0.25; proj.rotate(rot); }
+        render();
+        requestAnimationFrame(animate);
+      })();
+
+      canvas.addEventListener('mousedown', e => {
+        auto = false;
+        canvas.style.cursor = 'grabbing';
+        const sx = e.clientX, sy = e.clientY, sr = [...rot];
+        function onMove(me) {
+          rot[0] = sr[0] + (me.clientX - sx) * 0.4;
+          rot[1] = Math.max(-90, Math.min(90, sr[1] - (me.clientY - sy) * 0.4));
+          proj.rotate(rot);
+        }
+        function onUp() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup', onUp);
+          canvas.style.cursor = 'grab';
+          setTimeout(() => { auto = true; }, 1500);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup', onUp);
+      });
+
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        const factor = e.deltaY > 0 ? 0.92 : 1.08;
+        proj.scale(Math.max(baseRadius * 0.5, Math.min(baseRadius * 3, proj.scale() * factor)));
+      }, { passive: false });
+    })();
+
+    // Nomad day counter
+    (function() {
+      const start = new Date('2023-10-10');
+      const el = document.getElementById('nomad-days');
+      function update() {
+        const days = Math.floor((Date.now() - start) / 86400000);
+        el.textContent = days.toLocaleString();
+      }
+      update();
+      setInterval(update, 60000);
+    })();
+
+    // Contact modal
+    function openContactModal() {
+      const modal = document.getElementById('contact-modal');
+      modal.style.display = 'flex';
+      requestAnimationFrame(() => {
+        modal.style.opacity = '1';
+      });
+      document.body.style.overflow = 'hidden';
+      document.getElementById('cf-name').focus();
+    }
+
+    function closeContactModal() {
+      const modal = document.getElementById('contact-modal');
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeContactModal();
+    });
+
+    function submitContactForm(e) {
+      e.preventDefault();
+      const name = document.getElementById('cf-name').value.trim();
+      const email = document.getElementById('cf-email').value.trim();
+      const message = document.getElementById('cf-message').value.trim();
+      const subject = encodeURIComponent(`Message from ${name}`);
+      const body = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
+      window.location.href = `mailto:hello@natrix-ethos.com?subject=${subject}&body=${body}`;
+      closeContactModal();
+    }
   </script>
 
 </body>
