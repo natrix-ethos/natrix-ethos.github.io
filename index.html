@@ -926,6 +926,7 @@
       <p style="font-size:0.75rem; color:#71717a; font-family:monospace; margin:0 0 1.75rem;">hello@natrix-ethos.com</p>
 
       <form id="contact-form" onsubmit="submitContactForm(event)">
+        <input type="hidden" name="access_key" value="42883b3e-9bb8-45da-b1c7-05f8914cf4ad">
         <div style="margin-bottom:1rem;">
           <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Name</label>
           <input id="cf-name" type="text" required placeholder="Your name"
@@ -1371,15 +1372,40 @@
       if (e.key === 'Escape') closeContactModal();
     });
 
-    function submitContactForm(e) {
+    async function submitContactForm(e) {
       e.preventDefault();
       const name = document.getElementById('cf-name').value.trim();
       const email = document.getElementById('cf-email').value.trim();
       const message = document.getElementById('cf-message').value.trim();
-      const subject = encodeURIComponent(`Message from ${name}`);
-      const body = encodeURIComponent(`From: ${name}\nEmail: ${email}\n\n${message}`);
-      window.location.href = `mailto:hello@natrix-ethos.com?subject=${subject}&body=${body}`;
-      closeContactModal();
+      const btn = e.target.querySelector('button[type="submit"]');
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            access_key: '42883b3e-9bb8-45da-b1c7-05f8914cf4ad',
+            name, email, message,
+            subject: `Message from ${name}`
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          btn.textContent = 'Message sent!';
+          btn.style.opacity = '0.7';
+          e.target.reset();
+          setTimeout(closeContactModal, 1500);
+        } else {
+          throw new Error(data.message);
+        }
+      } catch {
+        btn.textContent = 'Failed — try again';
+        btn.disabled = false;
+        setTimeout(() => { btn.textContent = 'Send message'; btn.style.opacity = ''; }, 3000);
+      }
     }
   </script>
 
