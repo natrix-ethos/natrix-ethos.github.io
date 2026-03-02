@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GOAN — Jenny Keller</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <style>
+    :root {
+      --color-1: 0 100% 63%;
+      --color-2: 270 100% 63%;
+      --color-3: 210 100% 63%;
+      --color-4: 195 100% 63%;
+      --color-5: 90 100% 63%;
+      --speed: 2s;
+    }
+
+    @keyframes rainbow {
+      0% { background-position: 0%; }
+      100% { background-position: 200%; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 8px rgba(121,87,255,0.4); }
+      50%       { box-shadow: 0 0 18px rgba(121,87,255,0.8); }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: #080808; }
+    ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+
+    .fade-a  { animation: fadeUp 0.7s ease 0.0s both; }
+    .fade-b  { animation: fadeUp 0.7s ease 0.12s both; }
+    .fade-c  { animation: fadeUp 0.7s ease 0.24s both; }
+    .fade-d  { animation: fadeUp 0.7s ease 0.38s both; }
+
+    /* Markers layer */
+    #markers-layer {
+      position: absolute;
+      top: 0; left: 0;
+      pointer-events: none;
+    }
+
+    .av {
+      position: absolute;
+      pointer-events: auto;
+      cursor: pointer;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+
+    .av-img-wrap {
+      position: relative;
+      width: 36px;
+      height: 36px;
+    }
+
+    .av img,
+    .av .fallback {
+      display: block;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(121,87,255,0.7);
+      box-shadow: 0 0 8px rgba(121,87,255,0.4), 0 2px 6px rgba(0,0,0,0.7);
+      object-fit: cover;
+      background: #0d0d1e;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .av .fallback {
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-family: monospace;
+      font-weight: 600;
+      color: rgba(121,87,255,0.9);
+    }
+
+    .av:hover img,
+    .av:hover .fallback {
+      border-color: rgba(255,255,255,0.9);
+      box-shadow: 0 0 16px rgba(121,87,255,0.9), 0 2px 10px rgba(0,0,0,0.9);
+      animation: pulseGlow 1.5s ease-in-out infinite;
+    }
+
+    .av .tip {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 5px);
+      transform: translateX(-50%);
+      white-space: nowrap;
+      font-size: 9px;
+      font-family: monospace;
+      color: rgba(255,255,255,0.8);
+      background: rgba(8,8,8,0.88);
+      padding: 2px 7px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.07);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s;
+      z-index: 10;
+    }
+
+    .av:hover .tip { opacity: 1; }
+
+    /* Glow card */
+    .glow-card {
+      position: relative;
+      transition: border-color 0.3s, background-color 0.3s;
+      overflow: hidden;
+    }
+
+    .glow-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(500px circle at var(--mx,50%) var(--my,50%), rgba(121,87,255,0.09), transparent 40%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+
+    .glow-card:hover::before { opacity: 1; }
+  </style>
+</head>
+
+<body class="bg-[#080808] text-zinc-100 overflow-x-hidden min-h-screen">
+
+  <!-- Background grid -->
+  <div class="pointer-events-none fixed inset-0 z-0"
+    style="background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px;">
+  </div>
+
+  <!-- Ambient blobs -->
+  <div class="pointer-events-none fixed top-[-20%] left-[5%] w-[600px] h-[600px] rounded-full opacity-20"
+    style="background: radial-gradient(circle, rgba(121,87,255,0.22) 0%, transparent 70%);">
+  </div>
+  <div class="pointer-events-none fixed bottom-[-15%] right-[5%] w-[450px] h-[450px] rounded-full opacity-10"
+    style="background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);">
+  </div>
+
+  <!-- Nav -->
+  <nav class="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 md:py-5 backdrop-blur-md bg-[#080808]/70 border-b border-white/[0.04]">
+    <a href="index.html"
+      class="text-xs font-mono text-zinc-600 tracking-widest uppercase hover:text-zinc-400 transition-colors flex items-center gap-1.5">
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+        stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19 12H5M12 19l-7-7 7-7" />
+      </svg>
+      natrix-ethos
+    </a>
+    <span class="text-sm font-semibold tracking-[0.25em] text-zinc-200">GOAN</span>
+    <div class="flex items-center gap-2">
+      <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+      <span class="hidden sm:inline text-xs font-mono text-zinc-500" id="node-count">63 nodes</span>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="relative z-10 flex flex-col items-center text-center pt-32 pb-10 px-8">
+    <p class="text-[10px] font-mono text-zinc-600 tracking-[0.25em] uppercase mb-5 fade-a">
+      Global Open Access Network
+    </p>
+    <h1
+      class="text-7xl md:text-9xl font-semibold tracking-tight mb-5 fade-b"
+      style="letter-spacing:-0.04em; background: linear-gradient(135deg, #ffffff 0%, rgba(255,255,255,0.55) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;">
+      GOAN
+    </h1>
+    <p class="text-sm text-zinc-500 max-w-sm leading-relaxed mb-10 fade-c">
+      People, systems, and signals — operating from every timezone. No office, no borders. Just execution.
+    </p>
+
+    <!-- Stats -->
+    <div class="flex items-center gap-8 fade-d">
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-zinc-100 tabular-nums">63</p>
+        <p class="text-[9px] font-mono text-zinc-600 tracking-widest uppercase mt-1">Cities</p>
+      </div>
+      <div class="w-px h-8 bg-white/[0.06]"></div>
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-zinc-100 tabular-nums">6</p>
+        <p class="text-[9px] font-mono text-zinc-600 tracking-widest uppercase mt-1">Continents</p>
+      </div>
+      <div class="w-px h-8 bg-white/[0.06]"></div>
+      <div class="text-center">
+        <p class="text-2xl font-semibold text-zinc-100 tabular-nums">0</p>
+        <p class="text-[9px] font-mono text-zinc-600 tracking-widest uppercase mt-1">Borders</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Globe -->
+  <section class="relative z-10 flex justify-center px-4 pb-6">
+    <div id="globe-wrap" style="position:relative; width:100%; max-width:800px;">
+      <canvas id="goan-canvas" style="display:block; width:100%; border-radius:1.25rem; cursor:grab;"></canvas>
+      <div id="markers-layer"></div>
+      <p class="text-center text-[10px] font-mono text-zinc-700 mt-3">Drag to rotate · Scroll to zoom</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative z-10 text-center py-12 px-8 border-t border-white/[0.04] mt-6">
+    <div class="flex flex-col md:flex-row items-center justify-between max-w-7xl mx-auto gap-4">
+      <p class="text-xs font-mono text-zinc-700">Freedom by Design. © 2026</p>
+      <a href="index.html"
+        class="text-xs font-mono text-zinc-600 hover:text-zinc-400 transition-colors flex items-center gap-1.5">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7" />
+        </svg>
+        Back to natrix-ethos
+      </a>
+      <div class="flex items-center gap-2">
+        <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+        <span class="text-xs font-mono text-zinc-600">All nodes nominal</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const MARKERS = [
+      { lat: 40.7128, lng: -74.006,   src: "https://assets.aceternity.com/avatars/1.webp",  label: "New York" },
+      { lat: 51.5074, lng: -0.1278,   src: "https://assets.aceternity.com/avatars/2.webp",  label: "London" },
+      { lat: 35.6762, lng: 139.6503,  src: "https://assets.aceternity.com/avatars/3.webp",  label: "Tokyo" },
+      { lat: -33.8688, lng: 151.2093, src: "https://assets.aceternity.com/avatars/4.webp",  label: "Sydney" },
+      { lat: 48.8566, lng: 2.3522,    src: "https://assets.aceternity.com/avatars/5.webp",  label: "Paris" },
+      { lat: 28.6139, lng: 77.209,    src: "https://assets.aceternity.com/avatars/6.webp",  label: "New Delhi" },
+      { lat: 55.7558, lng: 37.6173,   src: "https://assets.aceternity.com/avatars/7.webp",  label: "Moscow" },
+      { lat: -22.9068, lng: -43.1729, src: "https://assets.aceternity.com/avatars/8.webp",  label: "Rio de Janeiro" },
+      { lat: 31.2304, lng: 121.4737,  src: "https://assets.aceternity.com/avatars/9.webp",  label: "Shanghai" },
+      { lat: 25.2048, lng: 55.2708,   src: "https://assets.aceternity.com/avatars/10.webp", label: "Dubai" },
+      { lat: -34.6037, lng: -58.3816, src: "https://assets.aceternity.com/avatars/11.webp", label: "Buenos Aires" },
+      { lat: 1.3521, lng: 103.8198,   src: "https://assets.aceternity.com/avatars/12.webp", label: "Singapore" },
+      { lat: 37.5665, lng: 126.978,   src: "https://assets.aceternity.com/avatars/13.webp", label: "Seoul" },
+      { lat: 30.0444, lng: 31.2357,   src: "https://assets.aceternity.com/avatars/14.webp", label: "Cairo" },
+      { lat: 6.5244, lng: 3.3792,     src: "https://assets.aceternity.com/avatars/15.webp", label: "Lagos" },
+      { lat: -1.2921, lng: 36.8219,   src: "https://assets.aceternity.com/avatars/16.webp", label: "Nairobi" },
+      { lat: -26.2041, lng: 28.0473,  src: "https://assets.aceternity.com/avatars/17.webp", label: "Johannesburg" },
+      { lat: 33.5731, lng: -7.5898,   src: "https://assets.aceternity.com/avatars/18.webp", label: "Casablanca" },
+      { lat: 19.4326, lng: -99.1332,  src: "https://assets.aceternity.com/avatars/19.webp", label: "Mexico City" },
+      { lat: -12.0464, lng: -77.0428, src: "https://assets.aceternity.com/avatars/20.webp", label: "Lima" },
+      { lat: 4.711, lng: -74.0721,    src: "https://assets.aceternity.com/avatars/21.webp", label: "Bogota" },
+      { lat: -33.4489, lng: -70.6693, src: "https://assets.aceternity.com/avatars/22.webp", label: "Santiago" },
+      { lat: 23.1136, lng: -82.3666,  src: "https://assets.aceternity.com/avatars/23.webp", label: "Havana" },
+      { lat: 41.0082, lng: 28.9784,   src: "https://assets.aceternity.com/avatars/24.webp", label: "Istanbul" },
+      { lat: 35.6892, lng: 51.389,    src: "https://assets.aceternity.com/avatars/25.webp", label: "Tehran" },
+      { lat: 24.8607, lng: 67.0011,   src: "https://assets.aceternity.com/avatars/26.webp", label: "Karachi" },
+      { lat: 23.8103, lng: 90.4125,   src: "https://assets.aceternity.com/avatars/27.webp", label: "Dhaka" },
+      { lat: 22.5726, lng: 88.3639,   src: "https://assets.aceternity.com/avatars/28.webp", label: "Kolkata" },
+      { lat: 19.076, lng: 72.8777,    src: "https://assets.aceternity.com/avatars/29.webp", label: "Mumbai" },
+      { lat: 13.7563, lng: 100.5018,  src: "https://assets.aceternity.com/avatars/30.webp", label: "Bangkok" },
+      { lat: -6.2088, lng: 106.8456,  src: "https://assets.aceternity.com/avatars/31.webp", label: "Jakarta" },
+      { lat: 14.5995, lng: 120.9842,  src: "https://assets.aceternity.com/avatars/32.webp", label: "Manila" },
+      { lat: 25.033, lng: 121.5654,   src: "https://assets.aceternity.com/avatars/33.webp", label: "Taipei" },
+      { lat: 10.8231, lng: 106.6297,  src: "https://assets.aceternity.com/avatars/34.webp", label: "Ho Chi Minh City" },
+      { lat: 3.139, lng: 101.6869,    src: "https://assets.aceternity.com/avatars/35.webp", label: "Kuala Lumpur" },
+      { lat: 6.9271, lng: 79.8612,    src: "https://assets.aceternity.com/avatars/36.webp", label: "Colombo" },
+      { lat: 27.7172, lng: 85.324,    src: "https://assets.aceternity.com/avatars/37.webp", label: "Kathmandu" },
+      { lat: 41.2995, lng: 69.2401,   src: "https://assets.aceternity.com/avatars/38.webp", label: "Tashkent" },
+      { lat: 43.222, lng: 76.8512,    src: "https://assets.aceternity.com/avatars/39.webp", label: "Almaty" },
+      { lat: 47.8864, lng: 106.9057,  src: "https://assets.aceternity.com/avatars/40.webp", label: "Ulaanbaatar" },
+      { lat: 34.5553, lng: 69.2075,   src: "https://assets.aceternity.com/avatars/41.webp", label: "Kabul" },
+      { lat: 33.3152, lng: 44.3661,   src: "https://assets.aceternity.com/avatars/42.webp", label: "Baghdad" },
+      { lat: 24.7136, lng: 46.6753,   src: "https://assets.aceternity.com/avatars/43.webp", label: "Riyadh" },
+      { lat: 25.2854, lng: 51.531,    src: "https://assets.aceternity.com/avatars/44.webp", label: "Doha" },
+      { lat: 31.9454, lng: 35.9284,   src: "https://assets.aceternity.com/avatars/45.webp", label: "Amman" },
+      { lat: 33.8938, lng: 35.5018,   src: "https://assets.aceternity.com/avatars/46.webp", label: "Beirut" },
+      { lat: 50.4501, lng: 30.5234,   src: "https://assets.aceternity.com/avatars/47.webp", label: "Kyiv" },
+      { lat: 52.2297, lng: 21.0122,   src: "https://assets.aceternity.com/avatars/48.webp", label: "Warsaw" },
+      { lat: 50.0755, lng: 14.4378,   src: "https://assets.aceternity.com/avatars/49.webp", label: "Prague" },
+      { lat: 47.4979, lng: 19.0402,   src: "https://assets.aceternity.com/avatars/50.webp", label: "Budapest" },
+      { lat: 44.4268, lng: 26.1025,   src: "https://assets.aceternity.com/avatars/51.webp", label: "Bucharest" },
+      { lat: 59.3293, lng: 18.0686,   src: "https://assets.aceternity.com/avatars/52.webp", label: "Stockholm" },
+      { lat: 59.9139, lng: 10.7522,   src: "https://assets.aceternity.com/avatars/53.webp", label: "Oslo" },
+      { lat: 60.1699, lng: 24.9384,   src: "https://assets.aceternity.com/avatars/54.webp", label: "Helsinki" },
+      { lat: 55.6761, lng: 12.5683,   src: "https://assets.aceternity.com/avatars/55.webp", label: "Copenhagen" },
+      { lat: 37.9838, lng: 23.7275,   src: "https://assets.aceternity.com/avatars/56.webp", label: "Athens" },
+      { lat: 48.2082, lng: 16.3738,   src: "https://assets.aceternity.com/avatars/57.webp", label: "Vienna" },
+      { lat: 50.8503, lng: 4.3517,    src: "https://assets.aceternity.com/avatars/58.webp", label: "Brussels" },
+      { lat: 38.7223, lng: -9.1393,   src: "https://assets.aceternity.com/avatars/59.webp", label: "Lisbon" },
+      { lat: 52.3676, lng: 4.9041,    src: "https://assets.aceternity.com/avatars/60.webp", label: "Amsterdam" },
+      { lat: 47.3769, lng: 8.5417,    src: "https://assets.aceternity.com/avatars/61.webp", label: "Zurich" },
+      { lat: 41.9028, lng: 12.4964,   src: "https://assets.aceternity.com/avatars/62.webp", label: "Rome" },
+      { lat: 45.4642, lng: 9.19,      src: "https://assets.aceternity.com/avatars/63.webp", label: "Milan" },
+    ];
+
+    // Glow card mouse tracking
+    document.querySelectorAll('.glow-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+        card.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+      });
+    });
+
+    (function initGlobe() {
+      const canvas = document.getElementById('goan-canvas');
+      const wrap   = document.getElementById('globe-wrap');
+      const layer  = document.getElementById('markers-layer');
+      const ctx    = canvas.getContext('2d');
+
+      const W = wrap.clientWidth || 800;
+      const H = Math.round(W * 0.78);
+      const baseRadius = Math.min(W, H) / 2.08;
+      const dpr = window.devicePixelRatio || 1;
+
+      canvas.width  = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      ctx.scale(dpr, dpr);
+
+      layer.style.width  = W + 'px';
+      layer.style.height = H + 'px';
+
+      const proj = d3.geoOrthographic()
+        .scale(baseRadius)
+        .translate([W / 2, H / 2])
+        .clipAngle(90);
+
+      const path      = d3.geoPath().projection(proj).context(ctx);
+      const graticule = d3.geoGraticule()();
+
+      // Build avatar DOM elements
+      const avEls = MARKERS.map(m => {
+        const div = document.createElement('div');
+        div.className = 'av';
+        div.style.display = 'none';
+
+        const wrap = document.createElement('div');
+        wrap.className = 'av-img-wrap';
+
+        const img = document.createElement('img');
+        img.src = m.src;
+        img.alt = m.label;
+        img.onerror = () => {
+          img.style.display = 'none';
+          fb.style.display  = 'flex';
+        };
+
+        const fb = document.createElement('div');
+        fb.className = 'fallback';
+        fb.style.display = 'none';
+        fb.textContent = m.label[0];
+
+        wrap.appendChild(img);
+        wrap.appendChild(fb);
+
+        const tip = document.createElement('span');
+        tip.className = 'tip';
+        tip.textContent = m.label;
+
+        div.appendChild(wrap);
+        div.appendChild(tip);
+        layer.appendChild(div);
+        return div;
+      });
+
+      // Load countries GeoJSON
+      let countries = null;
+      fetch('https://raw.githubusercontent.com/martynafford/natural-earth-geojson/refs/heads/master/110m/cultural/ne_110m_admin_0_countries.json')
+        .then(r => r.json())
+        .then(data => { countries = data; })
+        .catch(() => {});
+
+      const rot = [-10, -25]; // start: Atlantic/Europe face
+      let auto  = true;
+
+      function render() {
+        ctx.clearRect(0, 0, W, H);
+        const sc = proj.scale();
+        const sf = sc / baseRadius;
+
+        // Atmosphere glow halo
+        const halo = ctx.createRadialGradient(W/2, H/2, sc * 0.88, W/2, H/2, sc * 1.18);
+        halo.addColorStop(0, 'transparent');
+        halo.addColorStop(1, 'rgba(121,87,255,0.13)');
+        ctx.beginPath();
+        ctx.arc(W/2, H/2, sc * 1.18, 0, Math.PI * 2);
+        ctx.fillStyle = halo;
+        ctx.fill();
+
+        // Ocean
+        ctx.beginPath();
+        ctx.arc(W/2, H/2, sc, 0, Math.PI * 2);
+        const ocean = ctx.createRadialGradient(W/2 - sc*0.25, H/2 - sc*0.2, 0, W/2, H/2, sc);
+        ocean.addColorStop(0, '#08082a');
+        ocean.addColorStop(1, '#020210');
+        ctx.fillStyle = ocean;
+        ctx.fill();
+
+        // Graticule
+        ctx.beginPath();
+        path(graticule);
+        ctx.strokeStyle = 'rgba(255,255,255,0.035)';
+        ctx.lineWidth = 0.4 * sf;
+        ctx.stroke();
+
+        // Countries
+        if (countries) {
+          countries.features.forEach(f => {
+            ctx.beginPath();
+            path(f);
+            ctx.fillStyle   = 'rgba(121,87,255,0.06)';
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(121,87,255,0.22)';
+            ctx.lineWidth   = 0.55 * sf;
+            ctx.stroke();
+          });
+        }
+
+        // Globe border
+        ctx.beginPath();
+        ctx.arc(W/2, H/2, sc, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(121,87,255,0.18)';
+        ctx.lineWidth   = 1.5 * sf;
+        ctx.stroke();
+
+        // Update avatar marker positions (back-to-front for correct z)
+        const center = [-rot[0], -rot[1]];
+        const indexed = MARKERS.map((m, i) => ({
+          i,
+          dist: d3.geoDistance([m.lng, m.lat], center)
+        })).sort((a, b) => b.dist - a.dist);
+
+        indexed.forEach(({ i, dist }) => {
+          const el = avEls[i];
+          const m  = MARKERS[i];
+
+          if (dist >= Math.PI / 2) {
+            el.style.display = 'none';
+            return;
+          }
+
+          const p = proj([m.lng, m.lat]);
+          if (!p) { el.style.display = 'none'; return; }
+
+          const depth   = Math.cos(dist);            // 1 = front center, 0 = edge
+          const scale   = 0.5 + 0.5 * depth;
+          const opacity = 0.25 + 0.75 * depth;
+
+          el.style.display   = 'block';
+          el.style.left      = p[0] + 'px';
+          el.style.top       = p[1] + 'px';
+          el.style.transform = `translate(-50%, -50%) scale(${scale.toFixed(3)})`;
+          el.style.opacity   = opacity.toFixed(3);
+          el.style.zIndex    = Math.round(depth * 100);
+        });
+      }
+
+      // Animation loop
+      (function animate() {
+        if (auto) {
+          rot[0] += 0.16;
+          proj.rotate(rot);
+        }
+        render();
+        requestAnimationFrame(animate);
+      })();
+
+      // Mouse drag
+      canvas.addEventListener('mousedown', e => {
+        auto = false;
+        canvas.style.cursor = 'grabbing';
+        const sx = e.clientX, sy = e.clientY, sr = [...rot];
+
+        function onMove(me) {
+          rot[0] = sr[0] + (me.clientX - sx) * 0.35;
+          rot[1] = Math.max(-90, Math.min(90, sr[1] - (me.clientY - sy) * 0.35));
+          proj.rotate(rot);
+        }
+        function onUp() {
+          document.removeEventListener('mousemove', onMove);
+          document.removeEventListener('mouseup',   onUp);
+          canvas.style.cursor = 'grab';
+          setTimeout(() => { auto = true; }, 2500);
+        }
+        document.addEventListener('mousemove', onMove);
+        document.addEventListener('mouseup',   onUp);
+      });
+
+      // Touch drag
+      canvas.addEventListener('touchstart', e => {
+        if (e.touches.length !== 1) return;
+        auto = false;
+        const t0 = e.touches[0];
+        const sx = t0.clientX, sy = t0.clientY, sr = [...rot];
+
+        function onMove(te) {
+          if (te.touches.length !== 1) return;
+          const t = te.touches[0];
+          rot[0] = sr[0] + (t.clientX - sx) * 0.35;
+          rot[1] = Math.max(-90, Math.min(90, sr[1] - (t.clientY - sy) * 0.35));
+          proj.rotate(rot);
+        }
+        function onEnd() {
+          canvas.removeEventListener('touchmove', onMove);
+          canvas.removeEventListener('touchend',  onEnd);
+          setTimeout(() => { auto = true; }, 2500);
+        }
+        canvas.addEventListener('touchmove', onMove, { passive: true });
+        canvas.addEventListener('touchend',  onEnd);
+      }, { passive: true });
+
+      // Scroll zoom
+      canvas.addEventListener('wheel', e => {
+        e.preventDefault();
+        const factor = e.deltaY > 0 ? 0.92 : 1.08;
+        proj.scale(Math.max(baseRadius * 0.5, Math.min(baseRadius * 3, proj.scale() * factor)));
+      }, { passive: false });
+    })();
+  </script>
+
+</body>
+
+</html>
