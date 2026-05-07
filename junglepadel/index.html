@@ -1163,6 +1163,9 @@
     transition: transform 160ms var(--ease-out), background 200ms ease;
   }
   .t-btn svg { width: 20px; height: 20px; }
+  /* Force hidden SVGs to actually disappear (some browsers don't honor the
+     `hidden` attribute on SVG elements consistently). */
+  .t-btn svg[hidden] { display: none; }
   .t-btn.ghost {
     background: rgba(251,246,233,.06);
     color: rgba(251,246,233,.85);
@@ -1574,6 +1577,16 @@
     }
     .pairings-preview .row .vs { text-align: center; }
     .pairings-preview .row .right { text-align: right; }
+
+    /* Timer: bigger ring, smaller digits so they don't poke out at this zoom */
+    .timer-clock {
+      width: min(360px, 64vh);
+      padding: 36px;
+    }
+    .timer-digits {
+      font-size: clamp(48px, 6vw, 78px);
+    }
+    .timer-ring-bg, .timer-ring-fg { stroke-width: 5; }
   }
 
   /* For taller phones in landscape (iPhone Pro Max-class, height ~ 430) /
