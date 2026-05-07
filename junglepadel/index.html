@@ -1,0 +1,2828 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Jungle Padel · Tournament</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..900;1,9..40,400..900&family=JetBrains+Mono:wght@400..800&display=swap" rel="stylesheet">
+<style>
+  /* =============================================================
+     JUNGLE PADEL — Tournament Console
+     Landscape app for big-screen mirroring at Jungle Padel Bali
+     Fonts mirror junglepadel.com:
+       · DM Sans (Google Fonts) — body & UI
+       · "Hate Your Writing"  — hand-drawn brand display, self-hosted
+     ============================================================= */
+  @font-face {
+    font-family: "Hate Your Writing";
+    src: url("HateYourWriting.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  :root {
+    /* Colors — pulled from brand: deep jungle green + signature lime */
+    --ink:      #0E1A12;
+    --forest:   #1B3024;
+    --leaf:     #2E5236;
+    --moss:     #4D7A55;
+    --lime:     #C8E66B;
+    --lime-hot: #D6F277;
+    --cream:    #F2EBDB;
+    --bone:     #FBF6E9;
+    --paper:    #FFFCF1;
+    --clay:     #C97A4A;
+    --mist:     rgba(27, 48, 36, 0.10);
+    --hairline: rgba(27, 48, 36, 0.18);
+
+    --r-sm: 10px;
+    --r-md: 18px;
+    --r-lg: 26px;
+    --r-pill: 999px;
+
+    --shadow-soft: 0 1px 0 rgba(27,48,36,.06), 0 14px 30px -18px rgba(27,48,36,.25);
+    --shadow-card: 0 1px 0 rgba(27,48,36,.05), 0 22px 50px -28px rgba(27,48,36,.28);
+
+    /* Strong, intentional easings (Emil-style) */
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    font-family: "DM Sans", system-ui, sans-serif;
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--cream);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Paper + grain texture (subtle) */
+  body::before {
+    content: "";
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(1200px 700px at 85% -10%, rgba(200,230,107,0.18), transparent 60%),
+      radial-gradient(900px 600px at -10% 110%, rgba(46,82,54,0.10), transparent 55%);
+    pointer-events: none; z-index: 0;
+  }
+  body::after {
+    content: "";
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 0.05  0 0 0 0 0.1  0 0 0 0 0.05  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='0.08'/></svg>");
+    mix-blend-mode: multiply;
+    pointer-events: none; opacity: .6; z-index: 0;
+  }
+
+  /* ───────── Decorative botanical SVG corners ───────── */
+  .botanical {
+    position: fixed; pointer-events: none; z-index: 1;
+    color: var(--leaf);
+    opacity: .12;
+  }
+  .botanical.tl { top: -40px; left: -30px; transform: rotate(-12deg); width: 280px; }
+  .botanical.br { bottom: -60px; right: -50px; transform: rotate(170deg); width: 320px; }
+
+  /* ───────── App shell ───────── */
+  .app {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100vh;
+    padding: 22px 32px 28px;
+    gap: 18px;
+  }
+
+  /* ───────── Top bar ───────── */
+  .topbar {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 14px 22px 14px 18px;
+    background: var(--forest);
+    color: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .topbar::after {
+    /* subtle leaf shimmer behind brand */
+    content: "";
+    position: absolute; inset: 0;
+    background: radial-gradient(600px 200px at 0% 50%, rgba(200,230,107,.18), transparent 60%);
+    pointer-events: none;
+  }
+
+  .brand {
+    display: flex; align-items: center;
+    position: relative;
+  }
+  .brand-mark {
+    height: 64px;
+    flex: none;
+    display: flex; align-items: center;
+  }
+  .brand-mark img {
+    height: 100%;
+    width: auto;
+    display: block;
+    object-fit: contain;
+  }
+
+  /* Tabs */
+  .tabs {
+    display: inline-flex;
+    background: rgba(255,252,241,0.06);
+    border: 1px solid rgba(251,246,233,0.10);
+    padding: 5px;
+    border-radius: var(--r-pill);
+    backdrop-filter: blur(4px);
+  }
+  .tab {
+    appearance: none; border: 0; cursor: pointer;
+    background: transparent; color: rgba(251,246,233,0.7);
+    font-family: "DM Sans"; font-weight: 600;
+    font-size: 14.5px; letter-spacing: 0.04em;
+    padding: 10px 22px; border-radius: var(--r-pill);
+    transition: color 200ms ease, background 250ms ease, transform 140ms var(--ease-out);
+  }
+  .tab:hover { color: var(--paper); }
+  .tab:active { transform: scale(0.97); }
+  .tab.is-active {
+    background: var(--lime);
+    color: var(--forest);
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 8px 18px -8px rgba(200,230,107,.6);
+  }
+
+  /* Status (right side) */
+  .status {
+    display: flex; flex-direction: column; align-items: flex-end; gap: 4px;
+    text-align: right;
+  }
+  .status-line1 {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: "Hate Your Writing"; font-size: 26px;
+    line-height: 1;
+    color: var(--lime);
+    letter-spacing: 0.02em;
+  }
+  .status-line1 .sep {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--lime); opacity: .6;
+  }
+  .status-line2 {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-size: 16px; color: rgba(251,246,233,.85);
+  }
+  .status-line2 .timer-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--clay);
+    box-shadow: 0 0 0 0 rgba(201,122,74,0.6);
+    animation: pulse 1.6s ease-out infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(201,122,74,0.55); }
+    70%  { box-shadow: 0 0 0 12px rgba(201,122,74,0); }
+    100% { box-shadow: 0 0 0 0 rgba(201,122,74,0); }
+  }
+  .status-line2 .label {
+    text-transform: uppercase; letter-spacing: 0.18em; font-size: 10.5px;
+    opacity: .55;
+  }
+
+  /* ───────── Main view container ───────── */
+  .views { position: relative; }
+  .view { display: none; animation: fade .4s ease both; }
+  .view.is-active { display: block; }
+  @keyframes fade {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ============================================================
+     ROUNDS VIEW — the hero, mirrored to the big screen
+     ============================================================ */
+  .rounds-shell {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-card);
+    padding: 28px 36px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .rounds-shell::before {
+    /* subtle horizontal hairline between courts */
+    content: "";
+    position: absolute; left: 36px; right: 36px; top: 78px;
+    height: 1px; background: var(--hairline);
+    opacity: 0;
+  }
+
+  .rounds-header {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding-bottom: 18px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .rounds-header .lhs { display: flex; align-items: baseline; gap: 18px; }
+  .round-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--forest); color: var(--lime);
+    border-radius: var(--r-pill);
+    padding: 8px 16px;
+    font-family: "DM Sans"; font-weight: 600;
+    font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+  }
+  .round-pill .num {
+    font-family: "JetBrains Mono"; font-weight: 700;
+    background: var(--lime); color: var(--forest);
+    padding: 2px 8px; border-radius: var(--r-pill);
+    font-size: 12px; letter-spacing: 0.04em;
+  }
+  .rounds-title {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .rounds-title em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--leaf);
+  }
+  .rounds-title-text {
+    outline: 0;
+    padding: 4px 10px;
+    margin: -4px -10px;
+    border-radius: 10px;
+    cursor: text;
+    transition: background .15s ease, box-shadow .15s ease;
+    border-bottom: 1.5px dashed transparent;
+  }
+  .rounds-title-text:hover {
+    background: rgba(200,230,107,.25);
+    border-bottom-color: var(--moss);
+  }
+  .rounds-title-text:focus {
+    background: var(--bone);
+    border-bottom-color: var(--leaf);
+    box-shadow: 0 0 0 3px rgba(200,230,107,.4);
+  }
+  .rounds-title .pencil {
+    width: 18px; height: 18px;
+    color: var(--moss);
+    opacity: 0;
+    transition: opacity .2s ease;
+    flex: none;
+  }
+  .rounds-title:hover .pencil { opacity: 0.7; }
+  .rounds-meta {
+    display: flex; align-items: center; gap: 22px;
+    font-size: 13px; color: var(--leaf);
+    letter-spacing: 0.04em;
+  }
+  .rounds-meta .item { display: inline-flex; align-items: center; gap: 8px; }
+  .rounds-meta .label {
+    text-transform: uppercase; letter-spacing: 0.18em;
+    font-size: 10.5px; color: var(--moss);
+  }
+  .rounds-meta .value {
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-weight: 600; color: var(--ink);
+  }
+
+  /* Court rows — 3 stacked horizontal rows for full-width readability */
+  .courts {
+    display: grid;
+    grid-auto-rows: 1fr;
+    margin-top: 8px;
+  }
+  .court {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 32px;
+    padding: 26px 4px;
+    border-bottom: 1px dashed var(--hairline);
+    position: relative;
+  }
+  .court:last-of-type { border-bottom: none; }
+
+  .court-tag {
+    position: absolute;
+    top: 6px; left: 50%;
+    transform: translateX(-50%);
+    display: inline-flex; align-items: center;
+    font-family: "DM Sans"; font-weight: 600;
+    color: var(--moss);
+    font-size: 12px;
+    line-height: 1;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    background: var(--paper);
+    padding: 0 12px;
+  }
+
+  /* Team blocks */
+  .team {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 16px 18px;
+  }
+  .team.right { align-items: flex-end; text-align: right; }
+  .team .player {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 26px; line-height: 1.1;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .team.right .player { flex-direction: row-reverse; }
+  .team .player .avatar {
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--lime); color: var(--forest);
+    display: grid; place-items: center;
+    font-family: "DM Sans"; font-weight: 700;
+    font-size: 13px; letter-spacing: 0.02em;
+    flex: none;
+    box-shadow: inset 0 -2px 0 rgba(0,0,0,.07);
+  }
+  .team .player .avatar.alt { background: var(--cream); color: var(--leaf); }
+  .team .player .avatar.dark { background: var(--leaf); color: var(--lime); }
+  .team .player .avatar.clay { background: var(--clay); color: var(--paper); }
+
+  .team .badge {
+    display: inline-block;
+    margin-top: 4px;
+    font-family: "DM Sans"; font-weight: 600;
+    font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--moss);
+  }
+
+  /* Score block in the middle */
+  .score {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+    gap: 18px;
+    background: var(--cream);
+    padding: 18px 22px;
+    border-radius: var(--r-md);
+    box-shadow: inset 0 0 0 1px rgba(27,48,36,0.06), inset 0 -3px 0 rgba(27,48,36,0.04);
+  }
+  .score-side {
+    display: grid;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    width: 132px;
+    justify-items: center;
+  }
+  .score-num {
+    font-family: "JetBrains Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+    font-size: 76px;
+    line-height: 1;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 0 8px;
+    border-radius: 8px;
+    transition: background .15s ease, color .15s ease;
+    user-select: none;
+    min-width: 88px;
+    text-align: center;
+  }
+  .score-num:hover { background: rgba(200,230,107,.35); }
+  .score-num.is-leading { color: var(--leaf); }
+  .score-num.is-empty   { color: rgba(27,48,36,.32); }
+
+  .score-controls { display: inline-flex; gap: 8px; }
+  .score-btn {
+    appearance: none; border: 0; cursor: pointer;
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: var(--paper);
+    box-shadow: inset 0 0 0 1.5px var(--leaf);
+    color: var(--leaf);
+    font-family: "DM Sans"; font-weight: 700;
+    font-size: 22px; line-height: 1;
+    display: grid; place-items: center;
+    transition: transform 140ms var(--ease-out), background 150ms ease, color 150ms ease;
+  }
+  .score-btn:hover {
+    background: var(--lime); color: var(--forest); box-shadow: inset 0 0 0 1.5px var(--leaf);
+  }
+  .score-btn:active { transform: scale(0.92); }
+  .score-btn.minus { font-size: 26px; padding-bottom: 4px; }
+
+  .score-divider {
+    width: 14px;
+    height: 76px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    font-size: 0;          /* hide the literal ":" so we can render two clean dots */
+  }
+  .score-divider::before,
+  .score-divider::after {
+    content: "";
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--moss);
+  }
+
+  /* Bottom action bar */
+  .actionbar {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 22px;
+    border-top: 1px solid var(--hairline);
+  }
+  .progress {
+    display: flex; flex-direction: column; gap: 8px; flex: 1;
+    max-width: 460px;
+  }
+  .progress .row {
+    display: flex; justify-content: space-between;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--moss);
+  }
+  .progress .row .v {
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    color: var(--ink); letter-spacing: .04em;
+  }
+  .progress .bar {
+    height: 8px; border-radius: 99px;
+    background: var(--mist);
+    overflow: hidden;
+    position: relative;
+  }
+  .progress .fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 33%;
+    background: linear-gradient(90deg, var(--leaf), var(--lime));
+    border-radius: 99px;
+    transition: width .4s ease;
+  }
+  .progress .ticks {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    pointer-events: none;
+  }
+  .progress .ticks span {
+    border-right: 1px dashed rgba(255,255,255,.45);
+  }
+  .progress .ticks span:last-child { border-right: 0; }
+
+  .round-nav { display: inline-flex; align-items: center; gap: 10px; }
+
+  .next-btn, .prev-btn {
+    appearance: none; border: 0; cursor: pointer;
+    font-family: "DM Sans"; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    border-radius: var(--r-pill);
+    display: inline-flex; align-items: center; gap: 12px;
+    transition: transform 160ms var(--ease-out), background 200ms ease, opacity 200ms ease;
+    position: relative;
+  }
+  .next-btn {
+    background: var(--forest);
+    color: var(--lime);
+    font-size: 16px;
+    padding: 18px 30px;
+    box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 16px 40px -18px rgba(27,48,36,.5);
+    overflow: hidden;
+  }
+  .next-btn:hover { background: var(--leaf); }
+  .next-btn:active { transform: scale(0.97); }
+
+  .prev-btn {
+    background: var(--bone);
+    color: var(--leaf);
+    font-size: 13px;
+    padding: 14px 18px;
+    box-shadow: inset 0 0 0 1.5px var(--hairline);
+  }
+  .prev-btn:hover { background: var(--cream); color: var(--ink); }
+  .prev-btn:active { transform: scale(0.97); }
+  .prev-btn .arrow {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--leaf);
+    display: grid; place-items: center;
+    font-size: 13px;
+  }
+  .prev-btn:disabled,
+  .next-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+  .next-btn .arrow {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--lime); color: var(--forest);
+    display: grid; place-items: center;
+    font-size: 14px;
+  }
+
+  /* ============================================================
+     TOURNAMENT (setup) VIEW
+     ============================================================ */
+  .setup-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: 22px;
+  }
+  .setup-grid > * { min-width: 0; }
+  .panel { min-width: 0; }
+  .panel {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 28px 32px;
+    box-shadow: var(--shadow-card);
+  }
+  .panel h2 {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    margin: 0 0 4px;
+    color: var(--ink);
+  }
+  .panel h2 em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--leaf);
+  }
+  .panel .lede {
+    font-size: 14px; color: var(--moss);
+    margin: 0 0 22px;
+    max-width: 56ch;
+  }
+
+  .field {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 22px;
+  }
+  .field-label {
+    font-size: 11.5px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--moss);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .field-label .hint {
+    font-family: "JetBrains Mono"; letter-spacing: .04em;
+    color: var(--ink); font-size: 12px;
+  }
+
+  /* Format selector — pill group */
+  .format-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .format-card {
+    cursor: pointer;
+    background: var(--bone);
+    border: 1.5px solid var(--hairline);
+    border-radius: var(--r-md);
+    padding: 16px 16px 14px;
+    transition: border-color .15s ease, background .2s ease, transform .12s ease;
+    text-align: left;
+    appearance: none; font: inherit; color: inherit;
+  }
+  .format-card:hover { border-color: var(--moss); }
+  .format-card.is-active {
+    border-color: var(--leaf);
+    background: var(--paper);
+    box-shadow: 0 0 0 4px rgba(200,230,107,.4);
+  }
+  .format-card .ttl {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 600;
+    font-size: 17px; line-height: 1.15;
+    margin-bottom: 4px;
+  }
+  .format-card.is-active .ttl em {
+    font-style: italic; color: var(--leaf);
+  }
+  .format-card .desc {
+    font-size: 12px; color: var(--moss); line-height: 1.4;
+  }
+  .format-card .icon {
+    width: 30px; height: 30px;
+    margin-bottom: 12px;
+    color: var(--leaf);
+  }
+
+  /* Partners toggle (rotating / fixed) */
+  .partners-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .partners-card {
+    cursor: pointer;
+    appearance: none; font: inherit; color: inherit;
+    background: var(--bone);
+    border: 1.5px solid var(--hairline);
+    border-radius: var(--r-md);
+    padding: 14px 16px;
+    text-align: left;
+    display: flex; align-items: center; gap: 14px;
+    transition: border-color .15s ease, background .2s ease;
+  }
+  .partners-card:hover { border-color: var(--moss); }
+  .partners-card.is-active {
+    border-color: var(--leaf);
+    background: var(--paper);
+    box-shadow: 0 0 0 4px rgba(200,230,107,.4);
+  }
+  .partners-card .partners-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--leaf);
+    display: grid; place-items: center;
+    flex: none;
+  }
+  .partners-card.is-active .partners-icon {
+    background: var(--lime);
+    color: var(--forest);
+  }
+  .partners-card .partners-icon svg { width: 22px; height: 22px; }
+  .partners-card .ttl {
+    font-family: "DM Sans"; font-weight: 600;
+    font-size: 17px; line-height: 1.1;
+  }
+  .partners-card .desc {
+    font-size: 12px; color: var(--moss); margin-top: 3px; line-height: 1.35;
+  }
+
+  /* Pair builder (only shown for fixed partners) */
+  .pairs-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .pair-row {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center; gap: 10px;
+    background: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+    padding: 8px 10px;
+  }
+  .pair-row .seed {
+    font-family: "Hate Your Writing"; font-size: 22px;
+    color: var(--lime);
+    background: var(--forest);
+    border-radius: 50%;
+    width: 28px; height: 28px;
+    display: grid; place-items: center;
+    line-height: 1;
+  }
+  .pair-row input {
+    border: 0; background: transparent;
+    font-family: "DM Sans"; font-weight: 500;
+    font-size: 14.5px; color: var(--ink);
+    outline: none; min-width: 0; width: 100%;
+  }
+  .pair-row input::placeholder { color: rgba(46,82,54,.45); }
+  .pair-row .amp {
+    font-family: "DM Sans"; font-style: italic;
+    color: var(--moss); font-size: 18px;
+  }
+
+  /* Numeric pill chooser (courts + points + minutes)
+     Allow the row to wrap when it can't fit, but keep the pill row bg
+     consistent by using flex layout. */
+  .pill-group {
+    display: flex;
+    flex-wrap: wrap;
+    background: var(--bone);
+    border-radius: var(--r-pill);
+    padding: 5px;
+    gap: 4px;
+    border: 1px solid var(--hairline);
+    max-width: 100%;
+  }
+  .pill { flex: 1 0 auto; text-align: center; }
+  .pill {
+    appearance: none; border: 0; cursor: pointer;
+    background: transparent;
+    font-family: "JetBrains Mono"; font-weight: 600;
+    font-size: 14px; color: var(--leaf);
+    padding: 10px 18px; border-radius: var(--r-pill);
+    transition: background .15s ease, color .15s ease;
+  }
+  .pill:hover { color: var(--ink); }
+  .pill.is-active {
+    background: var(--forest); color: var(--lime);
+    box-shadow: 0 1px 0 rgba(0,0,0,.05);
+  }
+  .pill.other {
+    border: 1px dashed var(--hairline);
+    color: var(--moss);
+    padding: 6px 6px 6px 14px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .pill.other .other-num {
+    appearance: none; -moz-appearance: textfield;
+    border: 0; background: transparent;
+    font: inherit; font-family: "JetBrains Mono"; font-weight: 600;
+    color: var(--ink);
+    width: 0; padding: 0;
+    text-align: center;
+    outline: none;
+    transition: width .25s cubic-bezier(.25,.8,.4,1), padding .25s, opacity .2s;
+    opacity: 0;
+  }
+  .pill.other .other-num::-webkit-outer-spin-button,
+  .pill.other .other-num::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  .pill.other.is-active {
+    background: var(--forest); color: var(--lime); border-color: var(--forest);
+    border-style: solid;
+    padding: 6px 14px 6px 14px;
+  }
+  .pill.other.is-active .lbl {
+    color: var(--lime); opacity: .55;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-family: "DM Sans"; font-weight: 600;
+  }
+  .pill.other.is-active .other-num {
+    width: 60px; padding: 0 8px;
+    color: var(--lime); opacity: 1;
+    border-left: 1px solid rgba(200,230,107,.25);
+    margin-left: 4px;
+  }
+  .pill.other .other-num::placeholder { color: rgba(200,230,107,.45); }
+
+  /* Two-column field row (players + courts side by side) */
+  .field.two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px;
+    align-items: start;
+  }
+  .field.two-col > div { display: flex; flex-direction: column; gap: 10px; }
+
+  /* Time input */
+  .time-input {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+    padding: 12px 18px;
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-size: 16px;
+  }
+  .time-input input {
+    border: 0; background: transparent;
+    font: inherit; color: var(--ink);
+    width: 90px; text-align: center;
+    outline: none;
+  }
+  .time-input .sub {
+    font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: var(--moss);
+    border-left: 1px solid var(--hairline);
+    padding-left: 12px;
+  }
+
+  /* Players grid */
+  .players-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px 14px;
+  }
+  .players-grid > *, .pairs-grid > * { min-width: 0; }
+  .player-input {
+    display: flex; align-items: center; gap: 9px;
+    background: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    padding: 7px 12px 7px 10px;
+    transition:
+      transform 140ms var(--ease-out),
+      border-color 140ms ease,
+      background 200ms ease,
+      box-shadow 140ms ease;
+  }
+  .player-input:focus-within {
+    border-color: var(--leaf);
+    background: var(--paper);
+    box-shadow: 0 0 0 3px rgba(200,230,107,.35), 0 6px 14px -8px rgba(27,48,36,.18);
+    transform: translateY(-1px);
+  }
+  .player-input .seed {
+    font-family: "JetBrains Mono"; font-weight: 700;
+    font-size: 10.5px; color: var(--moss);
+    width: 20px; text-align: center;
+    letter-spacing: 0.04em;
+  }
+  .player-input input {
+    border: 0; background: transparent;
+    font: inherit; outline: none;
+    flex: 1;
+    font-family: "DM Sans"; font-weight: 500;
+    font-size: 14.5px; color: var(--ink);
+    min-width: 0;
+  }
+  .player-input input::placeholder { color: rgba(46,82,54,.45); }
+  .player-input .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--lime);
+    flex: none;
+    transition: background 140ms ease, transform 140ms var(--ease-out);
+  }
+  .player-input.empty .dot { background: var(--mist); }
+  .player-input:focus-within .dot { transform: scale(1.4); }
+
+  .start-btn {
+    appearance: none; border: 0; cursor: pointer;
+    width: 100%;
+    background: var(--lime);
+    color: var(--forest);
+    font-family: "DM Sans"; font-weight: 700;
+    font-size: 17px; letter-spacing: 0.16em; text-transform: uppercase;
+    padding: 22px;
+    margin-top: 8px;
+    border-radius: var(--r-md);
+    box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 22px 50px -22px rgba(200,230,107,.7);
+    display: inline-flex; align-items: center; justify-content: center; gap: 14px;
+    transition: transform 160ms var(--ease-out), background 200ms ease;
+  }
+  .start-btn:hover { background: var(--lime-hot); }
+  .start-btn:active { transform: scale(0.985); }
+  .start-btn .arrow {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--forest); color: var(--lime);
+    display: grid; place-items: center;
+  }
+
+  /* Big summary on right side */
+  .summary-card {
+    background: var(--forest);
+    color: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 32px 36px;
+    box-shadow: var(--shadow-card);
+    position: relative;
+    overflow: hidden;
+  }
+  .summary-card::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(400px 240px at 100% 0%, rgba(200,230,107,.12), transparent 60%);
+    pointer-events: none;
+  }
+  .summary-card .label-row {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 11.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: rgba(251,246,233,.55);
+  }
+  .summary-card .big {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 700;
+    font-size: 48px; line-height: 1.05;
+    margin: 8px 0 4px;
+    color: var(--lime);
+    letter-spacing: -0.01em;
+    outline: 0;
+    padding: 4px 8px;
+    margin-left: -8px; margin-right: -8px;
+    border-radius: 10px;
+    cursor: text;
+    border-bottom: 1.5px dashed transparent;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  .summary-card .big:hover {
+    background: rgba(200,230,107,.10);
+    border-bottom-color: rgba(200,230,107,.35);
+  }
+  .summary-card .big:focus {
+    background: rgba(200,230,107,.14);
+    border-bottom-color: var(--lime);
+  }
+  .summary-card .big em {
+    font-style: italic; color: var(--paper); font-weight: 600;
+  }
+  .summary-card .pretty {
+    font-family: "Hate Your Writing";
+    color: var(--lime);
+    letter-spacing: 0.02em;
+    font-size: 26px;
+    line-height: 1;
+    margin-top: 8px;
+  }
+
+  .summary-stats {
+    margin-top: 22px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(251,246,233,.12);
+    border-radius: var(--r-md);
+    overflow: hidden;
+  }
+  .summary-stat {
+    background: var(--forest);
+    padding: 16px 18px;
+  }
+  .summary-stat .k {
+    font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(251,246,233,.55);
+  }
+  .summary-stat .v {
+    margin-top: 6px;
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-weight: 700; font-size: 22px;
+    color: var(--lime);
+  }
+  .summary-stat .v small {
+    font-family: "DM Sans"; font-weight: 500;
+    font-size: 12px; color: rgba(251,246,233,.6);
+    margin-left: 4px;
+  }
+
+  .pairings-preview {
+    margin-top: 22px;
+    border-top: 1px dashed rgba(251,246,233,.15);
+    padding-top: 18px;
+  }
+  .pairings-preview .ttl {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 11.5px; letter-spacing: .2em; text-transform: uppercase;
+    color: rgba(251,246,233,.55);
+    margin-bottom: 12px;
+  }
+  .pairings-preview .ttl em {
+    font-style: normal;
+    font-family: "JetBrains Mono"; letter-spacing: .04em;
+    color: var(--lime);
+  }
+  .pairings-preview .row {
+    display: grid;
+    grid-template-columns: 92px minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center; gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(251,246,233,.06);
+    color: var(--paper);
+  }
+  .pairings-preview .row:last-child { border-bottom: 0; }
+  .pairings-preview .row .court {
+    width: 92px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 12px;
+    background: var(--lime);
+    color: var(--forest);
+    border-radius: var(--r-pill);
+    font-family: "DM Sans";
+    line-height: 1;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,.08),
+      0 2px 6px -2px rgba(27,48,36,.25);
+  }
+  .pairings-preview .row .court::before {
+    content: "Court";
+    font-weight: 600;
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+  .pairings-preview .row .court .n {
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: -0.01em;
+  }
+  .pairings-preview .row .names {
+    font-family: "DM Sans"; font-weight: 600;
+    font-size: 16px;
+    line-height: 1.15;
+    color: var(--paper);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .pairings-preview .row .vs {
+    text-align: center;
+    font-family: "DM Sans"; font-style: italic; font-weight: 500;
+    color: rgba(251,246,233,.5);
+    font-size: 14px;
+    padding: 0 4px;
+  }
+  .pairings-preview .row .right { text-align: right; }
+
+  /* ============================================================
+     TIMER VIEW — Big screen round timer
+     ============================================================ */
+  .timer-shell {
+    display: block;
+    min-height: calc(100vh - 130px);
+  }
+  .timer-stage {
+    background: var(--forest);
+    color: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 36px 40px;
+    box-shadow: var(--shadow-card);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .timer-stage::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(700px 400px at 100% 0%, rgba(200,230,107,.12), transparent 60%),
+      radial-gradient(500px 360px at 0% 100%, rgba(200,230,107,.08), transparent 60%);
+    pointer-events: none;
+  }
+
+  .timer-meta-top {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 18px;
+    position: relative; z-index: 1;
+  }
+  .timer-meta-top .round-pill {
+    background: var(--lime); color: var(--forest);
+  }
+  .timer-meta-top .round-pill .num {
+    background: var(--forest); color: var(--lime);
+  }
+  .timer-format {
+    font-family: "Hate Your Writing";
+    font-size: 28px; color: var(--lime);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .timer-format em { font-style: normal; color: rgba(251,246,233,.45); padding: 0 6px; }
+
+  .timer-clock-wrap {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 28px;
+    margin: 8px 0;
+  }
+  .timer-clock {
+    position: relative;
+    width: min(420px, 56vh);
+    aspect-ratio: 1 / 1;
+    display: grid; place-items: center;
+    /* Reserve a smaller circular zone for the digits so they breathe inside
+       the ring rather than touching its inner stroke */
+    padding: 28px;
+  }
+  .timer-ring {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    transform: rotate(-90deg);
+    overflow: visible;
+    pointer-events: none;
+  }
+  .timer-ring-bg, .timer-ring-fg { fill: none; }
+  .timer-ring-bg { stroke: rgba(251,246,233,0.10); stroke-width: 6; }
+  .timer-ring-fg {
+    stroke: var(--lime);
+    stroke-width: 6;
+    stroke-linecap: round;
+    stroke-dasharray: 578;   /* ≈ 2 π r where r=92 */
+    stroke-dashoffset: 0;
+    filter: drop-shadow(0 0 18px rgba(200,230,107,.35));
+    transition: stroke-dashoffset 0.5s linear, stroke 0.3s ease;
+  }
+  .timer-digits {
+    font-family: "JetBrains Mono", monospace;
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+    font-weight: 700;
+    font-size: clamp(56px, 7.5vw, 96px);
+    line-height: 1;
+    color: var(--paper);
+    letter-spacing: -0.02em;
+    text-align: center;
+    position: relative; z-index: 1;
+    display: inline-flex;
+    align-items: center;
+  }
+  .timer-digits .colon {
+    color: var(--lime);
+    padding: 0 0.06em;
+    transform: translateY(-0.06em);
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0.35; } }
+  .timer-clock-wrap.is-paused .colon { animation: none; opacity: 0.55; }
+  .timer-clock-wrap.is-low .timer-digits { color: var(--clay); }
+  .timer-clock-wrap.is-low .timer-ring-fg { stroke: var(--clay); }
+
+  .timer-sub {
+    text-align: center;
+    font-size: 12px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: rgba(251,246,233,.55);
+  }
+
+  .timer-controls {
+    display: flex; align-items: center; justify-content: center; gap: 14px;
+    position: relative; z-index: 1;
+  }
+  .t-btn {
+    appearance: none; cursor: pointer; border: 0;
+    display: inline-flex; align-items: center; gap: 12px;
+    padding: 16px 26px;
+    border-radius: var(--r-pill);
+    font-family: "DM Sans"; font-weight: 700;
+    font-size: 14.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    transition: transform 160ms var(--ease-out), background 200ms ease;
+  }
+  .t-btn svg { width: 20px; height: 20px; }
+  .t-btn.ghost {
+    background: rgba(251,246,233,.06);
+    color: rgba(251,246,233,.85);
+    box-shadow: inset 0 0 0 1px rgba(251,246,233,.14);
+  }
+  .t-btn.ghost:hover { background: rgba(251,246,233,.12); color: var(--paper); }
+  .t-btn.primary {
+    background: var(--lime);
+    color: var(--forest);
+    box-shadow: 0 1px 0 rgba(0,0,0,.05), 0 18px 40px -16px rgba(200,230,107,.6);
+    padding: 18px 32px;
+    font-size: 15px;
+  }
+  .t-btn.primary:hover { background: var(--lime-hot); }
+  .t-btn:active { transform: scale(0.97); }
+
+  .timer-side {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 26px 24px;
+    box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column;
+  }
+  .timer-side-title {
+    font-family: "DM Sans"; font-weight: 700;
+    font-size: 22px; line-height: 1.1; margin: 0 0 4px;
+    color: var(--ink);
+  }
+  .timer-side-list {
+    margin-top: 18px;
+    display: flex; flex-direction: column; gap: 12px;
+    flex: 1;
+  }
+  .timer-side-row {
+    background: var(--bone);
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    column-gap: 10px; row-gap: 8px;
+    align-items: center;
+  }
+  .timer-side-row > :nth-child(1) {
+    /* court tag spans the whole top row */
+    grid-column: 1 / -1;
+    font-family: "Hate Your Writing"; font-size: 20px;
+    color: var(--leaf); letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .timer-side-row .pair {
+    font-family: "DM Sans", sans-serif;
+    font-weight: 500;
+    font-size: 14px; color: var(--ink);
+    line-height: 1.25;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .timer-side-row > :nth-child(4) { text-align: right; }
+  .timer-side-row .vs {
+    text-align: center;
+    font-style: italic; font-family: "DM Sans"; color: var(--moss);
+    font-size: 12px;
+    line-height: 1;
+  }
+  .timer-tip {
+    margin-top: 16px;
+    padding: 12px 14px;
+    background: var(--cream);
+    border-radius: var(--r-md);
+    font-size: 12px; color: var(--moss); line-height: 1.5;
+  }
+  .timer-tip strong { color: var(--leaf); letter-spacing: 0.06em; }
+
+  /* ============================================================
+     SCORE VIEW — Leaderboard
+     ============================================================ */
+  .score-shell {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-card);
+    padding: 28px 36px 32px;
+  }
+  .score-head {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 18px; margin-bottom: 16px;
+  }
+  .score-head h2 {
+    font-family: "DM Sans"; font-weight: 700;
+    font-size: 36px; line-height: 1; margin: 0;
+  }
+  .score-head h2 em {
+    font-style: italic;
+    font-weight: 600;
+    color: var(--leaf);
+  }
+  .score-head .legend {
+    display: flex; gap: 18px;
+    font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--moss);
+  }
+  .score-head .legend span {
+    display: inline-flex; gap: 6px;
+  }
+
+  .leaderboard {
+    width: 100%; border-collapse: collapse;
+  }
+  .leaderboard thead th {
+    text-align: left;
+    font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--moss); font-weight: 600;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .leaderboard thead th.center { text-align: center; }
+  .leaderboard thead th.right  { text-align: right; }
+  .leaderboard td {
+    padding: 14px;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 16px;
+    vertical-align: middle;
+  }
+  .leaderboard tr:last-child td { border-bottom: 0; }
+  .leaderboard td.rank {
+    width: 44px;
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-weight: 700; font-size: 14px;
+    color: var(--moss);
+  }
+  .leaderboard tr.top td.rank {
+    color: var(--leaf);
+  }
+  .leaderboard tr.top-1 td.rank::before {
+    content: "★";
+    color: var(--lime);
+    margin-right: 4px;
+  }
+  .leaderboard td.player {
+    font-family: "DM Sans"; font-weight: 500;
+    font-size: 19px;
+  }
+  .leaderboard td.player .av {
+    display: inline-grid; place-items: center;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: var(--cream); color: var(--leaf);
+    font-family: "DM Sans"; font-weight: 700; font-size: 11px;
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+  .leaderboard tr.top-1 td.player .av { background: var(--lime); color: var(--forest); }
+  .leaderboard tr.top-2 td.player .av { background: var(--leaf);  color: var(--lime); }
+  .leaderboard tr.top-3 td.player .av { background: var(--clay);  color: var(--paper); }
+  .leaderboard td.center { text-align: center; }
+  .leaderboard td.right  { text-align: right; }
+  .leaderboard td .num {
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .leaderboard td.points .num {
+    font-size: 22px; color: var(--ink); font-weight: 700;
+  }
+  .leaderboard td.diff .num.pos { color: var(--leaf); }
+  .leaderboard td.diff .num.neg { color: var(--clay); }
+  .leaderboard td.spark {
+    width: 130px;
+  }
+  .leaderboard td.spark svg {
+    width: 100%; height: 30px;
+    display: block;
+  }
+
+  /* ───── Numpad modal ───── */
+  .numpad-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(14,26,18,0.55);
+    backdrop-filter: blur(6px);
+    display: grid; place-items: center;
+    animation: fade .2s ease;
+    padding: 30px;
+  }
+  .numpad-overlay[hidden] { display: none; }
+  .numpad {
+    background: var(--paper);
+    border-radius: var(--r-lg);
+    padding: 26px 28px 28px;
+    width: min(720px, 92vw);
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,.45);
+    animation: pop .25s cubic-bezier(.2,.7,.3,1.2);
+  }
+  @keyframes pop {
+    from { opacity: 0; transform: translateY(8px) scale(.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .numpad header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .numpad .who {
+    font-family: "DM Sans"; font-weight: 600;
+    font-size: 24px; line-height: 1.1; color: var(--ink);
+  }
+  .numpad .who small {
+    display: block;
+    font-family: "Hate Your Writing";
+    font-size: 22px; color: var(--leaf);
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+  }
+  .numpad .closebtn {
+    appearance: none; border: 0; cursor: pointer;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--leaf);
+    font-size: 22px; line-height: 1;
+    display: grid; place-items: center;
+    transition: background .15s ease;
+  }
+  .numpad .closebtn:hover { background: var(--mist); }
+
+  .numpad-meta {
+    display: flex; gap: 12px; align-items: center;
+    margin-bottom: 14px;
+    font-size: 11.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--moss);
+  }
+  .numpad-meta .preview {
+    margin-left: auto;
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-weight: 700; font-size: 18px; color: var(--ink);
+    background: var(--cream);
+    padding: 6px 14px; border-radius: var(--r-pill);
+    letter-spacing: 0.04em;
+  }
+  .numpad-meta .preview .o { color: var(--moss); }
+  .numpad-meta .preview .sep { margin: 0 4px; color: var(--moss); }
+
+  .numpad-grid {
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    gap: 8px;
+  }
+  .numpad-grid button {
+    appearance: none; cursor: pointer;
+    border: 1.5px solid var(--hairline);
+    background: var(--bone);
+    color: var(--ink);
+    font-family: "JetBrains Mono"; font-variant-numeric: tabular-nums;
+    font-weight: 700; font-size: 22px;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    transition:
+      transform 140ms var(--ease-out),
+      background 150ms ease,
+      color 150ms ease,
+      border-color 150ms ease;
+  }
+  .numpad-grid button:hover {
+    background: var(--lime); border-color: var(--leaf); color: var(--forest);
+  }
+  .numpad-grid button:active { transform: scale(0.94); }
+  .numpad-grid button.is-current {
+    background: var(--forest); color: var(--lime); border-color: var(--forest);
+  }
+  .numpad-grid button.partner {
+    background: var(--paper);
+    color: var(--moss);
+    border-style: dashed;
+    cursor: not-allowed;
+  }
+
+  /* ───── Utility ───── */
+  .row-spaced { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+
+  /* ─────────────────────────────────────────────────────────────
+     RESPONSIVE — the design is optimized for landscape big-screen
+     mirroring, but it should also degrade gracefully on phones
+     and tablets. Three breakpoints: < 1100, < 768, < 480.
+     ───────────────────────────────────────────────────────────── */
+  @media (max-width: 1100px) {
+    .app { padding: 16px 18px 22px; gap: 14px; }
+
+    .topbar {
+      grid-template-columns: auto 1fr;
+      grid-template-rows: auto auto;
+      row-gap: 12px;
+      padding: 12px 14px;
+    }
+    .brand-mark { height: 48px; }
+    .status { grid-column: 1 / -1; align-items: flex-start; text-align: left; }
+    .status-line1 { font-size: 22px; }
+    .tabs { grid-column: 1 / -1; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    /* Setup grid stacks */
+    .setup-grid { grid-template-columns: minmax(0, 1fr); }
+    .panel { padding: 22px 22px; }
+
+    /* Players grid: 2 columns instead of 3 */
+    .players-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    /* Rounds shell tighter */
+    .rounds-shell { padding: 22px 20px 24px; }
+    .rounds-header { flex-direction: column; align-items: flex-start; gap: 14px; }
+    .rounds-title { font-size: 28px; }
+    .rounds-meta { width: 100%; }
+
+    /* Round nav stacks */
+    .actionbar { flex-direction: column; align-items: stretch; gap: 18px; }
+    .progress { max-width: none; }
+    .round-nav { width: 100%; justify-content: space-between; }
+    .next-btn { flex: 1; justify-content: center; padding: 16px 22px; font-size: 14.5px; }
+  }
+
+  @media (max-width: 768px) {
+    /* Two-col setup field stacks (the bento was overflowing here) */
+    .field.two-col { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+
+    /* Pairs grid: single column on phone */
+    .pairs-grid { grid-template-columns: minmax(0, 1fr); }
+
+    /* Court rows stack: team A | score | team B vertically */
+    .court {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto auto;
+      gap: 12px;
+      padding: 28px 4px 22px;
+    }
+    .court-tag { top: 4px; }
+    .team { padding: 6px 0; align-items: flex-start; }
+    .team.right { align-items: flex-start; text-align: left; }
+    .team.right .player { flex-direction: row; }
+    .team .player { font-size: 22px; }
+    .score { padding: 14px 18px; }
+    .score-num { font-size: 56px; min-width: 64px; }
+    .score-side { width: 96px; }
+
+    /* Numpad shrinks to 6 cols on phone */
+    .numpad-grid { grid-template-columns: repeat(6, 1fr); }
+    .numpad-grid button { font-size: 18px; border-radius: 12px; }
+
+    /* Pairings preview rows: chip on top, names beneath */
+    .pairings-preview .row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: auto auto auto auto;
+      row-gap: 6px;
+    }
+    .pairings-preview .row .court { width: max-content; padding: 0 14px; }
+    .pairings-preview .row .vs { text-align: left; padding: 2px 0; }
+    .pairings-preview .row .right { text-align: left; }
+
+    /* Summary card body shrinks */
+    .summary-card { padding: 24px 22px; }
+    .summary-card .big { font-size: 36px; }
+    .summary-stats { grid-template-columns: 1fr 1fr; }
+
+    /* Score view scrolls horizontally if needed */
+    .score-shell { padding: 22px 18px; overflow-x: auto; }
+    .score-head { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .score-head h2 { font-size: 26px; }
+    .leaderboard td.player { font-size: 16px; }
+
+    /* Timer view tightens */
+    .timer-stage { padding: 24px 20px; }
+    .timer-meta-top { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .timer-format { font-size: 22px; }
+    .timer-clock { width: min(86vw, 320px); padding: 18px; }
+    .timer-controls { flex-wrap: wrap; gap: 10px; }
+    .t-btn { padding: 14px 18px; font-size: 13px; }
+  }
+
+  /* ─────────────────────────────────────────────────────────────
+     PHONE LANDSCAPE — "big-screen mirroring" mode.
+     When a phone is rotated horizontal, we zoom the page out so the
+     phone shows MORE content per inch. The TV mirrors what the phone
+     displays — so a denser phone view = a comfortably-sized TV view.
+
+     Detection: orientation: landscape + small physical height.
+     Phones in landscape have height ~ 320–500. iPads/laptops have
+     height ≥ 700. We only target phones.
+     ───────────────────────────────────────────────────────────── */
+  @media (orientation: landscape) and (max-height: 500px) {
+    html {
+      zoom: 0.62;          /* big-screen density — tune 0.55–0.75 to taste */
+    }
+    /* When zoomed, the body's effective viewport is wider —
+       force the desktop layout instead of the responsive collapses. */
+    .topbar { grid-template-columns: 1fr auto 1fr; grid-template-rows: auto; }
+    .status { grid-column: auto; align-items: flex-end; text-align: right; }
+    .tabs   { grid-column: auto; overflow: visible; }
+    .setup-grid { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); }
+    .players-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .field.two-col { grid-template-columns: 1fr 1fr; }
+    .court { grid-template-columns: 1fr auto 1fr; grid-template-rows: auto; }
+    .team.right { align-items: flex-end; text-align: right; }
+    .team.right .player { flex-direction: row-reverse; }
+    .actionbar { flex-direction: row; align-items: center; }
+    .progress { max-width: 460px; }
+    .round-nav { width: auto; }
+    .next-btn { flex: none; }
+    .pairings-preview .row {
+      grid-template-columns: 92px minmax(0,1fr) auto minmax(0,1fr);
+      grid-template-rows: auto;
+    }
+    .pairings-preview .row .vs { text-align: center; }
+    .pairings-preview .row .right { text-align: right; }
+  }
+
+  /* For taller phones in landscape (iPhone Pro Max-class, height ~ 430) /
+     small foldables (height up to ~ 700), use a milder zoom. */
+  @media (orientation: landscape) and (min-height: 501px) and (max-height: 700px) {
+    html { zoom: 0.78; }
+  }
+
+  /* Reverse hint: in portrait on a phone, give bigger touch targets so
+     name entry feels comfortable. */
+  @media (orientation: portrait) and (max-width: 600px) {
+    .player-input { padding: 11px 12px; }
+    .player-input input { font-size: 16px; } /* prevents iOS zoom-on-focus */
+    .pair-row input { font-size: 16px; }
+    .end-time-input, .time-input input { font-size: 16px; }
+    .pill { padding: 11px 14px; font-size: 14px; }
+  }
+
+  @media (max-width: 480px) {
+    .app { padding: 12px 12px 18px; }
+
+    /* Numpad: 5 cols on small phones */
+    .numpad-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .numpad { padding: 18px; }
+
+    /* Players grid: 1 column */
+    .players-grid { grid-template-columns: minmax(0, 1fr); }
+
+    /* Pill text/padding shrinks slightly to fit */
+    .pill { padding: 9px 12px; font-size: 13px; }
+
+    /* Tabs lighter */
+    .tab { padding: 8px 14px; font-size: 13px; }
+
+    /* Topbar status simplifies */
+    .status-line1 { font-size: 18px; gap: 8px; }
+    .status-line2 { font-size: 13px; gap: 8px; }
+
+    /* Round pill shrinks */
+    .round-pill { padding: 6px 12px; font-size: 11px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Decorative botanical SVGs in corners -->
+<svg class="botanical tl" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M100 195 C 100 140, 50 110, 20 90 M100 195 C 100 140, 150 110, 180 90"/>
+  <path d="M100 180 C 100 130, 60 100, 30 70 M100 180 C 100 130, 140 100, 170 70"/>
+  <path d="M100 170 C 100 120, 70 90, 50 50 M100 170 C 100 120, 130 90, 150 50"/>
+  <path d="M100 160 C 100 110, 85 60, 80 20 M100 160 C 100 110, 115 60, 120 20"/>
+  <path d="M100 195 L 100 0"/>
+</svg>
+<svg class="botanical br" viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M100 195 C 100 140, 50 110, 20 90 M100 195 C 100 140, 150 110, 180 90"/>
+  <path d="M100 180 C 100 130, 60 100, 30 70 M100 180 C 100 130, 140 100, 170 70"/>
+  <path d="M100 170 C 100 120, 70 90, 50 50 M100 170 C 100 120, 130 90, 150 50"/>
+  <path d="M100 195 L 100 0"/>
+</svg>
+
+<div class="app">
+
+  <!-- ─────────────── Top bar ─────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <img src="Full%20logo.png" alt="Jungle Padel" />
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab" data-tab="tournament" role="tab">Tournament</button>
+      <button class="tab is-active" data-tab="rounds" role="tab">Rounds</button>
+      <button class="tab" data-tab="timer" role="tab">Timer</button>
+      <button class="tab" data-tab="score" role="tab">Score</button>
+    </nav>
+
+    <div class="status">
+      <div class="status-line1" id="status-format">
+        <span>Americano</span>
+        <span class="sep"></span>
+        <span>Round <span id="status-round-num">4</span> / 12</span>
+      </div>
+      <div class="status-line2">
+        <span class="timer-dot"></span>
+        <span class="label">Ends in</span>
+        <span id="countdown">01:24:32</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─────────────── Views ─────────────── -->
+  <main class="views">
+
+    <!-- =====================================================
+         ROUNDS — Live scoring (the hero / mirrored screen)
+         ===================================================== -->
+    <section class="view is-active" id="view-rounds">
+      <div class="rounds-shell">
+
+        <div class="rounds-header">
+          <div class="lhs">
+            <span class="round-pill">
+              Round <span class="num" id="round-of-num">04 · 12</span>
+            </span>
+            <h1 class="rounds-title">
+              <span class="rounds-title-text" contenteditable="true" spellcheck="false"
+                    data-placeholder="Tournament name">Americano</span>
+              <em>·</em>
+              <span id="rounds-title-meta" style="font-style:italic;color:var(--leaf);
+                    font-weight: 600;">32&nbsp;pts per round</span>
+              <svg class="pencil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                <path d="M14 4l6 6L9 21H3v-6L14 4z"/>
+              </svg>
+            </h1>
+          </div>
+          <div class="rounds-meta">
+            <span class="item">
+              <span class="label">Courts</span>
+              <span class="value" id="meta-courts">3</span>
+            </span>
+            <span class="item">
+              <span class="label">Players</span>
+              <span class="value" id="meta-players">12</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="courts" id="courts"><!-- injected --></div>
+
+        <div class="actionbar">
+          <div class="progress">
+            <div class="row">
+              <span>Tournament progress</span>
+              <span class="v"><span id="round-now">4</span>/12 rounds</span>
+            </div>
+            <div class="bar">
+              <div class="fill" id="progress-fill"></div>
+              <div class="ticks">
+                <span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+            <div class="row">
+              <span id="round-time-info">Started — · Ends —</span>
+              <span class="v" id="per-round-info">~ — min/round</span>
+            </div>
+          </div>
+          <div class="round-nav">
+            <button class="prev-btn" id="prev-round-btn" aria-label="Previous round">
+              <span class="arrow">←</span>
+              <span>Previous</span>
+            </button>
+            <button class="next-btn" id="next-round-btn">
+              <span>Confirm &amp; next round</span>
+              <span class="arrow">→</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TOURNAMENT — Setup
+         ===================================================== -->
+    <section class="view" id="view-tournament">
+      <div class="setup-grid">
+
+        <div class="panel">
+          <h2>Set up your <em>tournament</em></h2>
+          <p class="lede">
+            Pick a format, drop in your players, and we'll auto-generate every round's pairings.
+            Everyone partners with everyone — that's the Americano promise.
+          </p>
+
+          <!-- FORMAT -->
+          <div class="field">
+            <div class="field-label">
+              <span>Format</span>
+              <span class="hint" id="format-hint">Best for 8–16 players</span>
+            </div>
+            <div class="format-group" id="format-group">
+              <button class="format-card is-active" data-format="points">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3 2"/>
+                </svg>
+                <div class="ttl">Americano <em>· points</em></div>
+                <div class="desc">First team to a target score wins the round.</div>
+              </button>
+              <button class="format-card" data-format="time">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <rect x="3" y="5" width="18" height="14" rx="2"/>
+                  <path d="M7 5V3M17 5V3M3 10h18"/>
+                </svg>
+                <div class="ttl">Americano <em>· timed</em></div>
+                <div class="desc">Rounds end on the clock, highest score wins.</div>
+              </button>
+              <button class="format-card" data-format="kotc">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <path d="M4 17l3-9 5 6 5-6 3 9z"/>
+                  <path d="M4 20h16"/>
+                </svg>
+                <div class="ttl">King <em>of the court</em></div>
+                <div class="desc">Winners stay, losers rotate down. Last court standing wins.</div>
+              </button>
+            </div>
+          </div>
+
+          <!-- PARTNERS -->
+          <div class="field">
+            <div class="field-label">
+              <span>Partners</span>
+              <span class="hint" id="partners-hint">Everyone partners with everyone</span>
+            </div>
+            <div class="partners-toggle" id="partners-toggle">
+              <button class="partners-card is-active" data-partners="rotating">
+                <div class="partners-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M3 12a9 9 0 0 1 15-6.7M21 4v5h-5"/>
+                    <path d="M21 12a9 9 0 0 1-15 6.7M3 20v-5h5"/>
+                  </svg>
+                </div>
+                <div class="partners-body">
+                  <div class="ttl">Rotating</div>
+                  <div class="desc">Pairings change every round — true Americano.</div>
+                </div>
+              </button>
+              <button class="partners-card" data-partners="fixed">
+                <div class="partners-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <circle cx="9"  cy="8" r="3"/>
+                    <circle cx="15" cy="8" r="3"/>
+                    <path d="M4 20c.5-3.5 3-5 8-5s7.5 1.5 8 5"/>
+                  </svg>
+                </div>
+                <div class="partners-body">
+                  <div class="ttl">Fixed</div>
+                  <div class="desc">Pairs stay together; opponents rotate each round.</div>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <!-- POINTS / MINUTES -->
+          <div class="field">
+            <div class="field-label">
+              <span id="target-label">Points · per round</span>
+              <span class="hint" id="target-hint"></span>
+            </div>
+            <div class="pill-group" id="target-group">
+              <button class="pill" data-val="8">8</button>
+              <button class="pill" data-val="16">16</button>
+              <button class="pill" data-val="24">24</button>
+              <button class="pill is-active" data-val="32">32</button>
+              <button class="pill other" data-val="other">
+                <span class="lbl">Other</span>
+                <input class="other-num" type="number" min="1" max="999" placeholder="?" />
+              </button>
+            </div>
+          </div>
+
+          <!-- PLAYERS + COURTS (linked: 4 players per court) -->
+          <div class="field two-col">
+            <div>
+              <div class="field-label">
+                <span>Players</span>
+                <span class="hint" id="players-hint">12 players · 3 courts</span>
+              </div>
+              <div class="pill-group" id="players-group">
+                <button class="pill" data-val="4">4</button>
+                <button class="pill" data-val="8">8</button>
+                <button class="pill is-active" data-val="12">12</button>
+                <button class="pill" data-val="16">16</button>
+                <button class="pill" data-val="20">20</button>
+              </div>
+            </div>
+            <div>
+              <div class="field-label">
+                <span>Courts</span>
+                <span class="hint">auto · 4 per court</span>
+              </div>
+              <div class="pill-group" id="courts-group">
+                <button class="pill" data-val="1">1</button>
+                <button class="pill" data-val="2">2</button>
+                <button class="pill is-active" data-val="3">3</button>
+                <button class="pill" data-val="4">4</button>
+                <button class="pill" data-val="5">5</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- END TIME -->
+          <div class="field">
+            <div class="field-label"><span>Tournament ends at</span></div>
+            <div class="time-input">
+              <input id="end-time-input" type="text" value="21:30" maxlength="5" />
+              <span class="sub" id="end-time-sub">Today · ~ 12 rounds</span>
+            </div>
+          </div>
+
+          <button class="start-btn">
+            <span>Generate pairings &amp; start</span>
+            <span class="arrow">→</span>
+          </button>
+        </div>
+
+        <div>
+          <div class="summary-card">
+            <div class="label-row">
+              <span>Tonight</span>
+              <span id="now-stamp" style="margin-left:auto;font-family:'JetBrains Mono';color:var(--lime)">— · —</span>
+            </div>
+            <div class="big" id="summary-title" contenteditable="true" spellcheck="false"
+                 data-placeholder="Tournament name">Americano</div>
+            <div class="pretty" id="summary-pretty">32 points per round · 3 courts · 12 players</div>
+
+            <div class="summary-stats">
+              <div class="summary-stat">
+                <div class="k">Rounds</div>
+                <div class="v">12</div>
+              </div>
+              <div class="summary-stat">
+                <div class="k">Avg / round</div>
+                <div class="v">14<small>min</small></div>
+              </div>
+              <div class="summary-stat">
+                <div class="k">Total play</div>
+                <div class="v">2:48<small>hrs</small></div>
+              </div>
+              <div class="summary-stat">
+                <div class="k">Per round</div>
+                <div class="v" id="summary-stat-target">32<small>pts</small></div>
+              </div>
+            </div>
+
+            <div class="pairings-preview">
+              <div class="ttl">
+                <span>Round 1 preview</span>
+                <em>auto-generated</em>
+              </div>
+              <div id="preview-rows"><!-- injected --></div>
+            </div>
+          </div>
+
+          <div class="panel" style="margin-top:22px">
+            <h2 style="font-size:22px" id="roster-title">Players <em>· 12 of 12</em></h2>
+            <p class="lede" style="margin-bottom:18px" id="roster-lede">
+              Drop in a name for each seed. We'll mix them so every player meets every other.
+            </p>
+            <div class="players-grid" id="players-grid" data-mode="rotating"><!-- injected --></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         TIMER — Big countdown for timed-format rounds
+         ===================================================== -->
+    <section class="view" id="view-timer">
+      <div class="timer-shell">
+        <div class="timer-stage">
+          <div class="timer-meta-top">
+            <span class="round-pill">
+              Round <span class="num" id="timer-round-num">04 · 12</span>
+            </span>
+            <span class="timer-format" id="timer-format-label">
+              Americano <em>·</em> 15&nbsp;min per round
+            </span>
+          </div>
+
+          <div class="timer-clock-wrap" id="timer-clock-wrap">
+            <div class="timer-clock">
+              <svg class="timer-ring" viewBox="0 0 200 200" aria-hidden="true">
+                <circle class="timer-ring-bg" cx="100" cy="100" r="92"/>
+                <circle class="timer-ring-fg" id="timer-ring-fg" cx="100" cy="100" r="92"/>
+              </svg>
+              <div class="timer-digits">
+                <span id="timer-minutes">15</span><span class="colon">:</span><span id="timer-seconds">00</span>
+              </div>
+            </div>
+            <div class="timer-sub" id="timer-state">PAUSED · TAP PLAY TO START</div>
+          </div>
+
+          <div class="timer-controls">
+            <button class="t-btn ghost" id="timer-reset" aria-label="Reset round">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/>
+              </svg>
+              <span>Reset</span>
+            </button>
+            <button class="t-btn primary" id="timer-toggle" aria-label="Start or pause">
+              <svg id="timer-icon-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+              <svg id="timer-icon-pause" viewBox="0 0 24 24" fill="currentColor" hidden><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg>
+              <span id="timer-toggle-label">Start round</span>
+            </button>
+            <button class="t-btn ghost" id="timer-end" aria-label="End round and advance">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 4l11 8-11 8zM18 4v16"/>
+              </svg>
+              <span>End round</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =====================================================
+         SCORE — Leaderboard
+         ===================================================== -->
+    <section class="view" id="view-score">
+      <div class="score-shell">
+        <div class="score-head">
+          <h2>Live <em>standings</em></h2>
+          <div class="legend">
+            <span>P · Played</span>
+            <span>W · Won</span>
+            <span>+/− · Diff</span>
+            <span>Pts · Points</span>
+          </div>
+        </div>
+
+        <table class="leaderboard">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Player</th>
+              <th class="center">P</th>
+              <th class="center">W</th>
+              <th class="center">+/−</th>
+              <th class="right">Pts</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboard"><!-- injected --></tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ─────────── Numpad modal (score entry) ─────────── -->
+<div class="numpad-overlay" id="numpad" hidden>
+  <div class="numpad" role="dialog" aria-modal="true" aria-label="Enter score">
+    <header>
+      <div>
+        <small id="numpad-court">Court 1</small>
+        <div class="who" id="numpad-who">Anika &amp; Bram</div>
+      </div>
+      <button class="closebtn" id="numpad-close" aria-label="Close">×</button>
+    </header>
+    <div class="numpad-meta">
+      <span id="numpad-mode">Tap a score · 0 to <span id="numpad-target">32</span></span>
+      <span class="preview">
+        <span id="numpad-prev-self">0</span>
+        <span class="sep">:</span>
+        <span class="o" id="numpad-prev-other">0</span>
+      </span>
+    </div>
+    <div class="numpad-grid" id="numpad-grid"><!-- injected --></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   STATE
+   ============================================================ */
+const PLAYERS = [
+  "Anika", "Bram",  "Cisco", "Dewi",
+  "Eka",   "Finn",  "Gita",  "Hugo",
+  "Ines",  "Joko",  "Kira",  "Luca"
+];
+
+/* Rotation table: 12 players → 3 courts × 4 / round.
+   For demo purposes, a hand-curated rotation that's varied each round.
+   Indices reference PLAYERS array. Format per round:
+   [ [c1A1,c1A2, c1B1,c1B2], [c2...], [c3...] ] */
+const ROTATION = [
+  /* R1  */ [[0,1, 2,3],   [4,5, 6,7],   [8,9, 10,11]],
+  /* R2  */ [[0,4, 1,8],   [2,5, 3,9],   [6,10, 7,11]],
+  /* R3  */ [[0,8, 4,11],  [1,5, 9,2],   [3,7, 6,10]],
+  /* R4  */ [[0,5, 8,7],   [1,9, 4,3],   [2,11, 6,10]],
+  /* R5  */ [[0,3, 6,11],  [1,7, 2,10],  [4,9, 5,8]],
+  /* R6  */ [[0,2, 9,7],   [4,10, 1,11], [3,8, 5,6]],
+  /* R7  */ [[0,6, 5,11],  [1,10, 3,4],  [2,8, 7,9]],
+  /* R8  */ [[0,10, 3,5],  [1,6, 4,2],   [7,11, 8,9]],
+  /* R9  */ [[0,7, 2,11],  [3,10, 5,9],  [1,4, 6,8]],
+  /* R10 */ [[0,9, 1,3],   [2,7, 4,8],   [5,11, 6,10]],
+  /* R11 */ [[0,11, 6,9],  [1,2, 5,10],  [3,4, 7,8]],
+  /* R12 */ [[0,1, 7,5],   [2,4, 11,10], [3,6, 8,9]]
+];
+
+/* Default end time = current time + 2:48 (≈ a 12-round Americano), rounded to next quarter hour */
+function defaultEndTime() {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() + 168); /* 2h 48m */
+  /* round up to nearest 15 min */
+  const m = d.getMinutes();
+  d.setMinutes(m + ((15 - (m % 15)) % 15), 0, 0);
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+function nowHHMM() {
+  const d = new Date();
+  return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
+
+const STATE = {
+  format: "points",
+  partners: "rotating",
+  target: 32,
+  players: 12,
+  courts: 3,
+  startTime: nowHHMM(),
+  endTime: defaultEndTime(),
+  totalRounds: 12,
+  currentRound: 4,
+  scores: {} /* keyed by `r{round}c{court}{a|b}` */,
+  /* fake accumulated leaderboard points for each player */
+  leaderboard: [
+    { name: "Joko",  p: 3, w: 3, diff: 24, pts: 78, form: [12, 15, 18, 22, 27, 33, 41, 50, 60, 72, 78] },
+    { name: "Anika", p: 3, w: 2, diff: 14, pts: 71, form: [11, 14, 19, 24, 28, 32, 38, 44, 52, 63, 71] },
+    { name: "Hugo",  p: 3, w: 2, diff: 9,  pts: 64, form: [10, 13, 16, 22, 26, 30, 34, 41, 49, 58, 64] },
+    { name: "Eka",   p: 3, w: 2, diff: 5,  pts: 60, form: [9, 13, 15, 20, 24, 28, 32, 38, 46, 54, 60] },
+    { name: "Cisco", p: 3, w: 1, diff: 0,  pts: 56, form: [8, 12, 14, 18, 22, 28, 31, 36, 44, 50, 56] },
+    { name: "Dewi",  p: 3, w: 2, diff: 3,  pts: 55, form: [10, 11, 13, 18, 22, 25, 30, 35, 42, 49, 55] },
+    { name: "Kira",  p: 3, w: 1, diff: -2, pts: 52, form: [9, 11, 14, 17, 21, 24, 28, 33, 40, 46, 52] },
+    { name: "Bram",  p: 3, w: 1, diff: -3, pts: 50, form: [8, 12, 13, 16, 20, 23, 27, 32, 38, 44, 50] },
+    { name: "Gita",  p: 3, w: 1, diff: -6, pts: 47, form: [7, 11, 13, 15, 18, 22, 26, 30, 36, 42, 47] },
+    { name: "Luca",  p: 3, w: 1, diff: -9, pts: 44, form: [8, 10, 12, 14, 17, 20, 24, 28, 34, 39, 44] },
+    { name: "Finn",  p: 3, w: 0, diff:-13, pts: 40, form: [6, 8,  10, 13, 17, 20, 23, 27, 31, 36, 40] },
+    { name: "Ines",  p: 3, w: 0, diff:-22, pts: 33, form: [5, 8,   9, 12, 14, 17, 20, 23, 27, 30, 33] }
+  ]
+};
+
+/* Pre-seed scores for round 4 so screen looks lived-in */
+STATE.scores["r4c1a"] = 18; STATE.scores["r4c1b"] = 14;
+STATE.scores["r4c2a"] = 11; STATE.scores["r4c2b"] = 21;
+STATE.scores["r4c3a"] = 16; STATE.scores["r4c3b"] = 16;
+
+/* ============================================================
+   RENDERING — Rounds view (courts)
+   ============================================================ */
+const initials = (name) => name.split(/\s+/).map(s => s[0]).join("").slice(0,2).toUpperCase();
+const AVATAR_VARIANTS = ["", "alt", "dark", "clay"];
+
+function renderCourts() {
+  const root = document.getElementById("courts");
+  const r = STATE.currentRound;
+  const round = ROTATION[r - 1].slice(0, STATE.courts);
+  const target = STATE.target;
+  let html = "";
+
+  round.forEach((court, ci) => {
+    const [a1, a2, b1, b2] = court;
+    const courtNum = ci + 1;
+    const sa = STATE.scores[`r${r}c${courtNum}a`] ?? 0;
+    const sb = STATE.scores[`r${r}c${courtNum}b`] ?? 0;
+    const aLead = sa > sb;
+    const bLead = sb > sa;
+
+    html += `
+      <div class="court" data-court="${courtNum}">
+        <span class="court-tag">Court ${courtNum}</span>
+
+        <div class="team left">
+          <div class="player">
+            <span class="avatar">${initials(PLAYERS[a1])}</span>
+            <span>${PLAYERS[a1]}</span>
+          </div>
+          <div class="player">
+            <span class="avatar alt">${initials(PLAYERS[a2])}</span>
+            <span>${PLAYERS[a2]}</span>
+          </div>
+        </div>
+
+        <div class="score">
+          <div class="score-side">
+            <span class="score-num ${aLead ? 'is-leading' : ''} ${sa===0 ? 'is-empty':''}"
+                  data-score-key="r${r}c${courtNum}a">${sa}</span>
+            <div class="score-controls">
+              <button class="score-btn minus" data-act="dec" data-target="r${r}c${courtNum}a" aria-label="decrement">−</button>
+              <button class="score-btn"       data-act="inc" data-target="r${r}c${courtNum}a" aria-label="increment">+</button>
+            </div>
+          </div>
+          <div class="score-divider">:</div>
+          <div class="score-side">
+            <span class="score-num ${bLead ? 'is-leading' : ''} ${sb===0 ? 'is-empty':''}"
+                  data-score-key="r${r}c${courtNum}b">${sb}</span>
+            <div class="score-controls">
+              <button class="score-btn minus" data-act="dec" data-target="r${r}c${courtNum}b" aria-label="decrement">−</button>
+              <button class="score-btn"       data-act="inc" data-target="r${r}c${courtNum}b" aria-label="increment">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="team right">
+          <div class="player">
+            <span class="avatar dark">${initials(PLAYERS[b1])}</span>
+            <span>${PLAYERS[b1]}</span>
+          </div>
+          <div class="player">
+            <span class="avatar clay">${initials(PLAYERS[b2])}</span>
+            <span>${PLAYERS[b2]}</span>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  root.innerHTML = html;
+}
+
+/* ─── Score interaction ─────────────────────────────────────────
+   In points-mode Americano both scores always sum to STATE.target,
+   so changing one side auto-calculates the other.
+   In timed / king-of-the-court modes each side is independent. */
+function partnerKey(key) {
+  return key.endsWith("a") ? key.slice(0, -1) + "b" : key.slice(0, -1) + "a";
+}
+function setScore(key, value) {
+  const cap = STATE.target;
+  value = Math.max(0, Math.min(cap, value));
+  STATE.scores[key] = value;
+  if (STATE.format === "points") {
+    STATE.scores[partnerKey(key)] = cap - value;
+  }
+}
+
+document.addEventListener("click", (e) => {
+  /* +/− buttons */
+  const btn = e.target.closest(".score-btn");
+  if (btn) {
+    const key = btn.dataset.target;
+    const cur = STATE.scores[key] ?? 0;
+    setScore(key, btn.dataset.act === "inc" ? cur + 1 : cur - 1);
+    renderCourts();
+    return;
+  }
+  /* Score number → open numpad */
+  const num = e.target.closest(".score-num");
+  if (num) openNumpad(num.dataset.scoreKey);
+});
+
+/* ─── Numpad modal ─────────────────────────────────────────── */
+let activeKey = null;
+
+function openNumpad(key) {
+  activeKey = key;
+  const r = STATE.currentRound;
+  const courtNum = parseInt(key.match(/c(\d+)/)[1], 10);
+  const side = key.endsWith("a") ? "a" : "b";
+  const round = ROTATION[r - 1];
+  const [a1, a2, b1, b2] = round[courtNum - 1];
+  const sideNames = side === "a"
+    ? `${PLAYERS[a1]} & ${PLAYERS[a2]}`
+    : `${PLAYERS[b1]} & ${PLAYERS[b2]}`;
+  const otherNames = side === "a"
+    ? `${PLAYERS[b1]} & ${PLAYERS[b2]}`
+    : `${PLAYERS[a1]} & ${PLAYERS[a2]}`;
+
+  document.getElementById("numpad-court").textContent = `Court ${courtNum}`;
+  document.getElementById("numpad-who").innerHTML = sideNames;
+  document.getElementById("numpad-target").textContent = STATE.target;
+  document.getElementById("numpad-mode").innerHTML =
+    STATE.format === "points"
+      ? `Tap a score · 0 to <span id="numpad-target">${STATE.target}</span> · opponent auto-calculates`
+      : `Tap a score · 0 to <span id="numpad-target">${STATE.target}</span>`;
+
+  renderNumpadGrid();
+  document.getElementById("numpad").hidden = false;
+}
+function closeNumpad() {
+  document.getElementById("numpad").hidden = true;
+  activeKey = null;
+}
+function renderNumpadGrid() {
+  const grid = document.getElementById("numpad-grid");
+  const cur  = STATE.scores[activeKey] ?? 0;
+  const partner = STATE.scores[partnerKey(activeKey)] ?? 0;
+  const cap  = STATE.target;
+  let html = "";
+  for (let n = 0; n <= cap; n++) {
+    const isCur = n === cur;
+    /* In points mode, the partner number is the "auto" pair shown on the opposite side. */
+    html += `<button class="${isCur ? 'is-current' : ''}" data-val="${n}">${n}</button>`;
+  }
+  grid.innerHTML = html;
+
+  /* Live preview */
+  document.getElementById("numpad-prev-self").textContent = cur;
+  document.getElementById("numpad-prev-other").textContent = STATE.format === "points" ? (cap - cur) : partner;
+}
+
+document.getElementById("numpad-close").addEventListener("click", closeNumpad);
+document.getElementById("numpad").addEventListener("click", (e) => {
+  if (e.target.id === "numpad") closeNumpad();
+});
+document.getElementById("numpad-grid").addEventListener("click", (e) => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  setScore(activeKey, parseInt(b.dataset.val, 10));
+  renderNumpadGrid();
+  renderCourts();
+});
+document.addEventListener("keydown", (e) => {
+  if (document.getElementById("numpad").hidden) return;
+  if (e.key === "Escape") closeNumpad();
+  if (/^[0-9]$/.test(e.key)) {
+    /* numeric typing buffer */
+    const cur = (STATE.scores[activeKey] ?? 0).toString();
+    const next = parseInt(cur + e.key, 10);
+    if (next <= STATE.target) {
+      setScore(activeKey, next);
+      renderNumpadGrid(); renderCourts();
+    }
+  }
+  if (e.key === "Backspace") {
+    const cur = (STATE.scores[activeKey] ?? 0).toString();
+    setScore(activeKey, parseInt(cur.slice(0, -1) || "0", 10));
+    renderNumpadGrid(); renderCourts();
+  }
+});
+
+/* ============================================================
+   Round counter, progress bar, top status sync
+   ============================================================ */
+function renderRoundChrome() {
+  const r = STATE.currentRound, T = STATE.totalRounds;
+  document.getElementById("round-of-num").textContent =
+    String(r).padStart(2, "0") + " · " + T;
+  document.getElementById("round-now").textContent = r;
+  document.getElementById("status-round-num").textContent = r;
+  document.getElementById("progress-fill").style.width = ((r - 1) / T * 100) + "%";
+  /* Enable/disable round nav */
+  const prev = document.getElementById("prev-round-btn");
+  const next = document.getElementById("next-round-btn");
+  if (prev) prev.disabled = r <= 1;
+  if (next) next.disabled = r >= T;
+  /* Live courts/players counters in the rounds header */
+  const mc = document.getElementById("meta-courts");  if (mc) mc.textContent = STATE.courts;
+  const mp = document.getElementById("meta-players"); if (mp) mp.textContent = STATE.players;
+}
+
+function goToRound(n) {
+  STATE.currentRound = Math.max(1, Math.min(STATE.totalRounds, n));
+  renderCourts();
+  renderRoundChrome();
+  renderTimerSide();
+  TIMER.remaining = ROUND_LENGTH_S; TIMER.running = false; renderTimer();
+}
+document.getElementById("next-round-btn").addEventListener("click", () => {
+  if (STATE.currentRound < STATE.totalRounds) goToRound(STATE.currentRound + 1);
+});
+document.getElementById("prev-round-btn").addEventListener("click", () => {
+  if (STATE.currentRound > 1) goToRound(STATE.currentRound - 1);
+});
+
+/* ============================================================
+   Top tabs
+   ============================================================ */
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("is-active"));
+    document.querySelectorAll(".view").forEach(x => x.classList.remove("is-active"));
+    t.classList.add("is-active");
+    document.getElementById("view-" + t.dataset.tab).classList.add("is-active");
+  });
+});
+
+/* ============================================================
+   Setup view — pill groups + format + players
+   ============================================================ */
+/* Generic pill-group activation. Skips groups with custom handlers. */
+const CUSTOM_GROUPS = new Set(["players-group", "courts-group", "target-group"]);
+document.querySelectorAll(".pill-group").forEach(group => {
+  if (CUSTOM_GROUPS.has(group.id)) return;
+  group.addEventListener("click", (e) => {
+    const pill = e.target.closest(".pill");
+    if (!pill) return;
+    group.querySelectorAll(".pill").forEach(p => p.classList.remove("is-active"));
+    pill.classList.add("is-active");
+  });
+});
+
+/* ─── Target group (points / minutes / matchtime) with "Other" input ── */
+const targetGroup = document.getElementById("target-group");
+const otherPill   = targetGroup.querySelector(".pill.other");
+const otherInput  = otherPill.querySelector(".other-num");
+
+function activateTargetPill(pill) {
+  targetGroup.querySelectorAll(".pill").forEach(p => p.classList.remove("is-active"));
+  pill.classList.add("is-active");
+  /* Update STATE.target so the Rounds & numpad views stay in sync */
+  let val;
+  if (pill === otherPill) {
+    val = parseInt(otherInput.value, 10);
+    if (!val || val <= 0) val = STATE.target;
+    setTimeout(() => otherInput.focus(), 50);
+  } else {
+    val = parseInt(pill.dataset.val, 10);
+  }
+  STATE.target = val;
+  renderCourts();
+  renderMeta();
+}
+
+targetGroup.addEventListener("click", (e) => {
+  /* Don't toggle if user clicked inside the input */
+  if (e.target === otherInput) return;
+  const pill = e.target.closest(".pill");
+  if (!pill) return;
+  activateTargetPill(pill);
+});
+
+otherInput.addEventListener("input", () => {
+  if (!otherPill.classList.contains("is-active")) activateTargetPill(otherPill);
+  const v = parseInt(otherInput.value, 10);
+  if (v > 0) {
+    STATE.target = v;
+    renderCourts();
+    renderMeta();
+  }
+});
+otherInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === "Escape") otherInput.blur();
+});
+
+/* ─── Players ↔ Courts bidirectional linking (4 players per court) ─── */
+const playersGroup = document.getElementById("players-group");
+const courtsGroup  = document.getElementById("courts-group");
+
+function setPlayersAndCourts(players) {
+  const courts = Math.max(1, Math.round(players / 4));
+  STATE.players = players;
+  STATE.courts  = courts;
+  /* Sync pill UI */
+  playersGroup.querySelectorAll(".pill").forEach(p =>
+    p.classList.toggle("is-active", parseInt(p.dataset.val, 10) === players));
+  courtsGroup.querySelectorAll(".pill").forEach(p =>
+    p.classList.toggle("is-active", parseInt(p.dataset.val, 10) === courts));
+  /* Hint text */
+  document.getElementById("players-hint").textContent =
+    `${players} players · ${courts} court${courts > 1 ? "s" : ""}`;
+  /* Live views follow the new court count */
+  if (typeof renderCourts === "function") renderCourts();
+  if (typeof renderTimerSide === "function") renderTimerSide();
+  if (typeof renderPlayers === "function") renderPlayers();
+  if (typeof renderPreview === "function") renderPreview();
+  if (typeof renderMeta === "function")    renderMeta();
+}
+playersGroup.addEventListener("click", (e) => {
+  const pill = e.target.closest(".pill"); if (!pill) return;
+  setPlayersAndCourts(parseInt(pill.dataset.val, 10));
+});
+courtsGroup.addEventListener("click", (e) => {
+  const pill = e.target.closest(".pill"); if (!pill) return;
+  setPlayersAndCourts(parseInt(pill.dataset.val, 10) * 4);
+});
+
+document.getElementById("format-group").addEventListener("click", (e) => {
+  const card = e.target.closest(".format-card");
+  if (!card) return;
+  document.querySelectorAll(".format-card").forEach(c => c.classList.remove("is-active"));
+  card.classList.add("is-active");
+  STATE.format = card.dataset.format;
+  const f = STATE.format;
+  const label = document.getElementById("target-label");
+  const hint  = document.getElementById("target-hint");
+
+  /* Pill values for each format. Last entry is always the "Other" custom input. */
+  const PRESETS = {
+    points: { label: "Points · per round",       hint: "",                                         vals: [8, 16, 24, 32] },
+    time:   { label: "Minutes · per round",      hint: "Round ends on the clock",                  vals: [10, 15, 20, 25] },
+    kotc:   { label: "Match length · minutes",   hint: "Winner stays · loser rotates each match", vals: [3, 5, 7, 10] }
+  };
+  const preset = PRESETS[f];
+  label.textContent = preset.label;
+  hint.textContent  = preset.hint;
+  const pills = document.querySelectorAll("#target-group .pill");
+  pills.forEach((p, i) => {
+    if (p.classList.contains("other")) return;
+    p.dataset.val = preset.vals[i];
+    p.textContent = preset.vals[i];
+  });
+
+  /* Default-activate the last preset (most common) and update STATE.target */
+  pills.forEach(p => p.classList.remove("is-active"));
+  const def = pills[preset.vals.length - 1];
+  def.classList.add("is-active");
+  STATE.target = preset.vals[preset.vals.length - 1];
+  renderCourts();
+  renderMeta();
+});
+
+/* Players grid — swaps between rotating (N seeds) and fixed (N/2 pair rows).
+   Number of rows tracks STATE.players (4, 8, 12, 16, 20, 24). */
+function renderPlayers() {
+  const root  = document.getElementById("players-grid");
+  const title = document.getElementById("roster-title");
+  const lede  = document.getElementById("roster-lede");
+  const mode  = STATE.partners;
+  const count = STATE.players;
+  let html = "";
+
+  if (mode === "fixed") {
+    const pairCount = count / 2;
+    root.classList.remove("players-grid");
+    root.classList.add("pairs-grid");
+    title.innerHTML = `Pairs <em>· ${pairCount} of ${pairCount}</em>`;
+    lede.textContent =
+      "Lock in your duos. Pairs stay together; opponents rotate every round.";
+    for (let i = 0; i < pairCount; i++) {
+      const a = PLAYERS[i*2]   || "";
+      const b = PLAYERS[i*2+1] || "";
+      html += `
+        <div class="pair-row">
+          <span class="seed">${i+1}</span>
+          <input type="text" placeholder="Player A" value="${a}" />
+          <span class="amp">&amp;</span>
+          <input type="text" placeholder="Player B" value="${b}" />
+        </div>`;
+    }
+  } else {
+    root.classList.add("players-grid");
+    root.classList.remove("pairs-grid");
+    title.innerHTML = `Players <em>· ${count} of ${count}</em>`;
+    lede.textContent =
+      "Drop in a name for each seed. We'll mix them so every player meets every other.";
+    for (let i = 0; i < count; i++) {
+      const v = PLAYERS[i] || "";
+      html += `
+        <label class="player-input ${v ? '' : 'empty'}">
+          <span class="seed">${String(i + 1).padStart(2, "0")}</span>
+          <input type="text" placeholder="Player name" value="${v}" />
+          <span class="dot"></span>
+        </label>`;
+    }
+  }
+  root.innerHTML = html;
+}
+
+/* ─── Format-aware meta labels (live everywhere) ────────────────── */
+function metaUnit(short) {
+  if (STATE.format === "points") return short ? "pts" : "points";
+  if (STATE.format === "time")   return "min";
+  return "min"; /* kotc */
+}
+function metaSuffix() {
+  if (STATE.format === "kotc") return "per match";
+  return "per round";
+}
+function renderMeta() {
+  const titleMeta = document.getElementById("rounds-title-meta");
+  if (titleMeta) {
+    titleMeta.innerHTML = `${STATE.target}&nbsp;${metaUnit(true)} ${metaSuffix()}`;
+  }
+  const pretty = document.getElementById("summary-pretty");
+  if (pretty) {
+    pretty.textContent =
+      `${STATE.target} ${metaUnit(false)} ${metaSuffix()} · ` +
+      `${STATE.courts} court${STATE.courts > 1 ? "s" : ""} · ` +
+      `${STATE.players} players`;
+  }
+  const stat = document.getElementById("summary-stat-target");
+  if (stat) {
+    stat.innerHTML = `${STATE.target}<small>${metaUnit(true)}</small>`;
+  }
+}
+
+/* ─── Round 1 preview (Tournament tab summary card) ─────────────────
+   Reads from ROTATION[0] but slices to STATE.courts so it reflects
+   the chosen player/court count. */
+function renderPreview() {
+  const root = document.getElementById("preview-rows");
+  if (!root) return;
+  const round = (ROTATION[0] || []).slice(0, STATE.courts);
+  let html = "";
+  round.forEach((c, i) => {
+    const [a1, a2, b1, b2] = c;
+    const teamA = `${PLAYERS[a1] || "—"} & ${PLAYERS[a2] || "—"}`;
+    const teamB = `${PLAYERS[b1] || "—"} & ${PLAYERS[b2] || "—"}`;
+    html += `
+      <div class="row">
+        <span class="court"><span class="n">${i + 1}</span></span>
+        <span class="names">${teamA}</span>
+        <span class="vs">vs</span>
+        <span class="names right">${teamB}</span>
+      </div>`;
+  });
+  /* If court count exceeds the rotation we have, fill with dashes */
+  for (let i = round.length; i < STATE.courts; i++) {
+    html += `
+      <div class="row">
+        <span class="court"><span class="n">${i + 1}</span></span>
+        <span class="names" style="opacity:.5">— & —</span>
+        <span class="vs">vs</span>
+        <span class="names right" style="opacity:.5">— & —</span>
+      </div>`;
+  }
+  root.innerHTML = html;
+}
+
+/* ─── Tournament name sync (edit in either spot, both update) ───── */
+const titleEditEls = () => [
+  document.querySelector(".rounds-title-text"),
+  document.getElementById("summary-title")
+].filter(Boolean);
+
+function setTournamentName(text, originEl) {
+  STATE.name = text;
+  titleEditEls().forEach(el => {
+    if (el !== originEl && el.textContent !== text) el.textContent = text;
+  });
+}
+titleEditEls().forEach(el => {
+  el.addEventListener("input", () => setTournamentName(el.textContent, el));
+  el.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); el.blur(); }
+  });
+});
+
+/* Partners toggle */
+document.getElementById("partners-toggle").addEventListener("click", (e) => {
+  const card = e.target.closest(".partners-card");
+  if (!card) return;
+  document.querySelectorAll(".partners-card").forEach(c => c.classList.remove("is-active"));
+  card.classList.add("is-active");
+  STATE.partners = card.dataset.partners;
+  document.getElementById("partners-hint").textContent =
+    STATE.partners === "fixed"
+      ? "Pairs stay together all night"
+      : "Everyone partners with everyone";
+  /* Fixed partners → 5-round round robin among 6 pairs.
+     Rotating → 12 rounds (n-1 for 12 players). */
+  STATE.totalRounds = STATE.partners === "fixed" ? 5 : 12;
+  if (STATE.currentRound > STATE.totalRounds) STATE.currentRound = STATE.totalRounds;
+  renderPlayers();
+  renderPreview();
+  renderRoundChrome();
+  renderCourts();
+  renderTimerSide();
+});
+
+/* ============================================================
+   Leaderboard (Score view)
+   ============================================================ */
+function renderLeaderboard() {
+  const root = document.getElementById("leaderboard");
+  const sorted = [...STATE.leaderboard].sort((a, b) => b.pts - a.pts);
+  let html = "";
+  sorted.forEach((row, i) => {
+    const rank = i + 1;
+    const klass =
+      rank === 1 ? "top top-1" :
+      rank === 2 ? "top top-2" :
+      rank === 3 ? "top top-3" : "";
+    const diffSign = row.diff > 0 ? `+${row.diff}` : row.diff;
+    const diffClass = row.diff > 0 ? "pos" : (row.diff < 0 ? "neg" : "");
+    html += `
+      <tr class="${klass}">
+        <td class="rank">${String(rank).padStart(2, "0")}</td>
+        <td class="player">
+          <span class="av">${initials(row.name)}</span>${row.name}
+        </td>
+        <td class="center"><span class="num">${row.p}</span></td>
+        <td class="center"><span class="num">${row.w}</span></td>
+        <td class="center diff"><span class="num ${diffClass}">${diffSign}</span></td>
+        <td class="right points"><span class="num">${row.pts}</span></td>
+      </tr>`;
+  });
+  root.innerHTML = html;
+}
+
+/* ============================================================
+   Round Timer (Timer tab)
+   ============================================================ */
+const ROUND_LENGTH_S = 15 * 60; // 15 minutes per timed round (demo default)
+const RING_CIRC = 578;          // matches stroke-dasharray on .timer-ring-fg
+const TIMER = { remaining: ROUND_LENGTH_S, running: false, intervalId: null };
+
+function fmtTimer(t) {
+  const m = Math.floor(t / 60), s = t % 60;
+  return [String(m).padStart(2, "0"), String(s).padStart(2, "0")];
+}
+function renderTimer() {
+  const [m, s] = fmtTimer(TIMER.remaining);
+  document.getElementById("timer-minutes").textContent = m;
+  document.getElementById("timer-seconds").textContent = s;
+  /* ring */
+  const pct = TIMER.remaining / ROUND_LENGTH_S;
+  document.getElementById("timer-ring-fg")
+    .style.strokeDashoffset = (RING_CIRC * (1 - pct)).toString();
+  /* low-time / paused styling */
+  const wrap = document.getElementById("timer-clock-wrap");
+  wrap.classList.toggle("is-low", TIMER.remaining <= 30 && TIMER.remaining > 0);
+  wrap.classList.toggle("is-paused", !TIMER.running);
+  /* round label */
+  document.getElementById("timer-round-num").textContent =
+    String(STATE.currentRound).padStart(2, "0") + " · " + STATE.totalRounds;
+
+  /* state caption */
+  const cap = document.getElementById("timer-state");
+  if (TIMER.remaining === 0) cap.textContent = "ROUND OVER · TAP END ROUND";
+  else if (TIMER.running)    cap.textContent = "PLAYING · TAP TO PAUSE";
+  else                       cap.textContent = "PAUSED · TAP PLAY TO START";
+
+  /* play / pause icon */
+  document.getElementById("timer-icon-play").hidden  = TIMER.running;
+  document.getElementById("timer-icon-pause").hidden = !TIMER.running;
+  document.getElementById("timer-toggle-label").textContent =
+    TIMER.running ? "Pause" : (TIMER.remaining < ROUND_LENGTH_S ? "Resume" : "Start round");
+}
+function tickTimer() {
+  if (!TIMER.running) return;
+  if (TIMER.remaining <= 0) { TIMER.running = false; renderTimer(); return; }
+  TIMER.remaining--;
+  renderTimer();
+}
+document.getElementById("timer-toggle").addEventListener("click", () => {
+  if (TIMER.remaining === 0) {
+    TIMER.remaining = ROUND_LENGTH_S;
+  }
+  TIMER.running = !TIMER.running;
+  renderTimer();
+});
+document.getElementById("timer-reset").addEventListener("click", () => {
+  TIMER.remaining = ROUND_LENGTH_S;
+  TIMER.running = false;
+  renderTimer();
+});
+document.getElementById("timer-end").addEventListener("click", () => {
+  TIMER.running = false;
+  TIMER.remaining = ROUND_LENGTH_S;
+  if (STATE.currentRound < STATE.totalRounds) STATE.currentRound++;
+  renderCourts(); renderRoundChrome(); renderTimerSide(); renderTimer();
+});
+setInterval(tickTimer, 1000);
+
+function renderTimerSide() { /* removed — left as a no-op so existing callers still work */ }
+
+/* ============================================================
+   Tournament time logic — start, end, "ends in" countdown,
+   per-round average. Reads STATE.startTime + STATE.endTime so
+   editing the end-time input is reflected immediately.
+   ============================================================ */
+function parseHHMM(s) {
+  const m = /^(\d{1,2}):(\d{2})$/.exec(s.trim());
+  if (!m) return null;
+  const h = +m[1], mi = +m[2];
+  if (h > 23 || mi > 59) return null;
+  return { h, m: mi };
+}
+function dateForToday(hhmm) {
+  const p = parseHHMM(hhmm); if (!p) return null;
+  const d = new Date();
+  d.setHours(p.h, p.m, 0, 0);
+  /* If end is earlier than start, assume it crosses midnight */
+  return d;
+}
+function fmtHHMMSS(totalS) {
+  totalS = Math.max(0, totalS | 0);
+  const h = Math.floor(totalS / 3600);
+  const m = Math.floor((totalS % 3600) / 60);
+  const s = totalS % 60;
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+}
+
+function renderTimeLabels() {
+  /* Bottom progress row */
+  const info = document.getElementById("round-time-info");
+  if (info) {
+    info.textContent = `Started ${STATE.startTime} · Ends ${STATE.endTime}`;
+  }
+  /* Per-round average */
+  const start = dateForToday(STATE.startTime);
+  let end = dateForToday(STATE.endTime);
+  if (start && end && end <= start) end = new Date(end.getTime() + 24 * 3600 * 1000);
+  const per = document.getElementById("per-round-info");
+  if (per && start && end) {
+    const minutes = Math.round((end - start) / 60000 / STATE.totalRounds);
+    per.textContent = `~ ${minutes} min/round`;
+  }
+  /* Tournament setup sub */
+  const sub = document.getElementById("end-time-sub");
+  if (sub) sub.textContent = `Today · ~ ${STATE.totalRounds} rounds`;
+}
+
+function tickCountdown() {
+  const now = new Date();
+  let end = dateForToday(STATE.endTime);
+  if (!end) return;
+  /* If end already passed today and is within the same hour-class as start, roll to tomorrow */
+  if (end <= now) end = new Date(end.getTime() + 24 * 3600 * 1000);
+  const remaining = Math.floor((end - now) / 1000);
+  const el = document.getElementById("countdown");
+  if (el) el.textContent = fmtHHMMSS(remaining);
+}
+setInterval(tickCountdown, 1000);
+tickCountdown();
+
+/* End-time input → STATE.endTime (live update) */
+const endInput = document.getElementById("end-time-input");
+if (endInput) {
+  endInput.value = STATE.endTime;
+  endInput.addEventListener("input", () => {
+    if (parseHHMM(endInput.value)) {
+      STATE.endTime = endInput.value.trim();
+      renderTimeLabels();
+      tickCountdown();
+    }
+  });
+  endInput.addEventListener("blur", () => {
+    /* Snap back to last valid value if user leaves it broken */
+    if (!parseHHMM(endInput.value)) endInput.value = STATE.endTime;
+  });
+}
+
+/* ============================================================
+   Live "now" stamp on the summary card (DD MMM · HH:MM)
+   ============================================================ */
+function tickNowStamp() {
+  const el = document.getElementById("now-stamp");
+  if (!el) return;
+  const d = new Date();
+  const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = months[d.getMonth()];
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mi = String(d.getMinutes()).padStart(2, "0");
+  el.textContent = `${dd} ${mm} · ${hh}:${mi}`;
+}
+tickNowStamp();
+setInterval(tickNowStamp, 30 * 1000);
+
+/* ============================================================
+   Boot
+   ============================================================ */
+setPlayersAndCourts(STATE.players);
+renderCourts();
+renderRoundChrome();
+renderPlayers();
+renderPreview();
+renderMeta();
+renderLeaderboard();
+renderTimerSide();
+renderTimer();
+renderTimeLabels();
+</script>
+</body>
+</html>
