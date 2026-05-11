@@ -1,0 +1,99 @@
+/* Island Sports Club Bali — brand tokens
+ * Source: iscbali.com (scraped 2026-05-11)
+ * Scope: clubs/island-sports-club/ fork only. Do not import into root index.html.
+ */
+
+/* Setimo via Adobe Fonts (kit wce1lmm) — weights 400/700 + italics.
+ * For best performance, also add this in <head>:
+ *   <link rel="stylesheet" href="https://use.typekit.net/wce1lmm.css">
+ * The @import below is the fallback so brand.css works standalone.
+ */
+@import url('https://use.typekit.net/wce1lmm.css');
+@import url('https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  /* Palette */
+  --isc-teal:        #305C67;  /* text, links, secondary button */
+  --isc-orange:      #EB714F;  /* primary CTA, accent */
+  --isc-neutral:     #6C757D;  /* muted / supporting */
+  --isc-white:       #FFFFFF;  /* background */
+  --isc-black:       #0E1A1D;
+
+  /* Semantic aliases */
+  --isc-bg:          var(--isc-white);
+  --isc-text:        var(--isc-teal);
+  --isc-link:        var(--isc-teal);
+  --isc-primary:     var(--isc-orange);
+  --isc-secondary:   var(--isc-teal);
+  --isc-accent:      var(--isc-orange);
+  --isc-muted:       var(--isc-neutral);
+
+  /* Type */
+  --isc-font-heading: "setimo", "League Spartan", sans-serif;
+  --isc-font-body:    "League Spartan", system-ui, sans-serif;
+  --isc-font-mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  --isc-fs-h1:   64px;
+  --isc-fs-h2:   32px;
+  --isc-fs-h3:   24px;
+  --isc-fs-body: 27.2px;
+  --isc-fs-sm:   16px;
+
+  --isc-lh-tight: 1.05;
+  --isc-lh-body:  1.45;
+
+  /* Spacing — 4px base unit */
+  --isc-space-1:  4px;
+  --isc-space-2:  8px;
+  --isc-space-3:  12px;
+  --isc-space-4:  16px;
+  --isc-space-6:  24px;
+  --isc-space-8:  32px;
+  --isc-space-12: 48px;
+  --isc-space-16: 64px;
+
+  /* Radii — primary button is full pill, secondary is sharp */
+  --isc-r-sm:     6px;
+  --isc-r-md:     6px;
+  --isc-r-sharp:  0px;
+  --isc-r-pill:   60px;
+
+  /* Easings */
+  --isc-ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+  --isc-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Buttons */
+.isc-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--isc-space-2);
+  font-family: var(--isc-font-body);
+  font-weight: 600;
+  font-size: var(--isc-fs-sm);
+  letter-spacing: 0.02em;
+  padding: 14px 28px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 180ms var(--isc-ease-out),
+              color 180ms var(--isc-ease-out),
+              transform 180ms var(--isc-ease-out);
+}
+.isc-btn:active { transform: scale(0.97); }
+
+.isc-btn--primary {
+  background: var(--isc-orange);
+  color: var(--isc-white);
+  border-color: var(--isc-orange);
+  border-radius: var(--isc-r-pill);
+}
+.isc-btn--primary:hover { background: #d96241; border-color: #d96241; }
+
+.isc-btn--secondary {
+  background: var(--isc-teal);
+  color: var(--isc-white);
+  border-radius: var(--isc-r-sharp);
+}
+.isc-btn--secondary:hover { background: #244852; }
