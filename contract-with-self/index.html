@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contract With Self — Syntheke</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237957ff'/%3E%3Ctext x='16' y='22' text-anchor='middle' font-family='sans-serif' font-weight='600' font-size='16' fill='white'%3ES%3C/text%3E%3C/svg%3E" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --color-1: 0 100% 63%;
+    --color-2: 270 100% 63%;
+    --color-3: 210 100% 63%;
+    --color-4: 195 100% 63%;
+    --color-5: 90 100% 63%;
+    --speed: 2s;
+  }
+
+  /* ── Animations (from index.html) ────────────────────────── */
+  @keyframes rainbow { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+  @keyframes availablePulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.7); } }
+  @keyframes svgDotBlink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+  .rainbow-btn {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 2.75rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 9999px;
+    border: 0.08rem solid transparent;
+    background:
+      linear-gradient(#0d0d0d, #0d0d0d),
+      linear-gradient(#0d0d0d 50%, rgba(13, 13, 13, 0.5) 80%, rgba(13, 13, 13, 0)),
+      linear-gradient(90deg, hsl(var(--color-1)), hsl(var(--color-5)), hsl(var(--color-3)), hsl(var(--color-4)), hsl(var(--color-2)));
+    background-size: auto, auto, 200%;
+    background-clip: padding-box, border-box, border-box;
+    background-origin: border-box;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    animation: rainbow var(--speed) infinite linear;
+    transition: opacity 0.2s, transform 0.2s;
+    overflow: visible;
+  }
+  .rainbow-btn::before {
+    content: '';
+    position: absolute; bottom: -20%; left: 50%; z-index: -1;
+    height: 20%; width: 60%;
+    transform: translateX(-50%);
+    background: linear-gradient(90deg, hsl(var(--color-1)), hsl(var(--color-5)), hsl(var(--color-3)), hsl(var(--color-4)), hsl(var(--color-2)));
+    background-size: 200%;
+    filter: blur(0.8rem);
+    animation: rainbow var(--speed) infinite linear;
+  }
+  .rainbow-btn:hover { opacity: 0.9; }
+  .rainbow-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  .available-dot { animation: availablePulse 2s ease-in-out infinite; }
+  .svg-live-dot { animation: svgDotBlink 1.5s ease-in-out infinite; }
+
+  .marquee-track { animation: marquee 40s linear infinite; }
+  @keyframes marquee { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+  /* Glow card hover (from index.html) */
+  .glow-card {
+    position: relative;
+    transition: border-color 0.3s, background-color 0.3s;
+    overflow: hidden;
+  }
+  .glow-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: inherit;
+    background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(121, 87, 255, 0.08), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+  }
+  .glow-card:hover::before { opacity: 1; }
+  .glow-card:hover { border-color: rgba(255, 255, 255, 0.08) !important; }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: #080808; }
+  ::-webkit-scrollbar-thumb { background: #2a2a2a; border-radius: 2px; }
+
+  html { scroll-behavior: smooth; }
+
+  /* Fade-up */
+  .fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── Form fields ─────────────────────────────────────────── */
+  .field-label {
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #71717a;
+    margin-bottom: 8px;
+  }
+  .field {
+    width: 100%;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    color: #e4e4e7;
+    padding: 11px 14px;
+    font-size: 14px;
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    transition: border-color 0.25s ease, background 0.25s;
+    outline: none;
+  }
+  .field::placeholder { color: #52525b; }
+  .field:focus { border-color: rgba(121,87,255,0.45); background: rgba(121,87,255,0.04); }
+  textarea.field { resize: none; line-height: 1.55; }
+  select.field {
+    appearance: none; -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  select.field option { background: #121214; color: #e4e4e7; }
+
+  .ghost-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 18px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: #d4d4d8;
+    font-size: 13px;
+    font-weight: 600;
+    transition: border-color 0.25s, background 0.25s;
+    cursor: pointer;
+  }
+  .ghost-btn:hover { border-color: rgba(255,255,255,0.15); background: rgba(255,255,255,0.08); }
+
+  .icon-btn {
+    width: 30px; height: 30px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 8px;
+    color: #71717a;
+    transition: color 0.2s, background 0.2s;
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .icon-btn:hover { color: #ef4444; background: rgba(239,68,68,0.08); border-color: rgba(239,68,68,0.18); }
+
+  .tag-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px 5px;
+    border-radius: 9999px;
+    border: 1px solid rgba(121,87,255,0.2);
+    background: rgba(121,87,255,0.1);
+    color: #7957ff;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+  .tag-chip button { color: rgba(121,87,255,0.7); transition: color 0.2s; }
+  .tag-chip button:hover { color: #fff; }
+
+  .counter {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    color: #3f3f46;
+    letter-spacing: 0.04em;
+  }
+  .counter.warn { color: #f59e0b; }
+  .counter.over { color: #ef4444; }
+
+  /* Progress bar */
+  .progress-bar { height: 1px; background: #7957ff; transition: width 0.35s ease; }
+
+  /* ── A4 document view ───────────────────────────────────── */
+  .doc-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: #1a1a1d;
+    overflow-y: auto;
+    display: none;
+  }
+  .doc-overlay.open { display: block; }
+
+  .doc-toolbar {
+    position: sticky; top: 0; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px;
+    background: rgba(13,13,15,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .doc-toolbar-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px;
+    border-radius: 9999px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    color: #e4e4e7;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .doc-toolbar-btn:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.18); }
+  .doc-toolbar-btn.primary {
+    background: #fff;
+    color: #0d0d0d;
+    border-color: #fff;
+    font-weight: 600;
+  }
+  .doc-toolbar-btn.primary:hover { background: #f4f4f5; }
+
+  .doc-stage {
+    padding: 28px 16px 80px;
+    display: flex; justify-content: center;
+  }
+
+  /* A4: 210mm x 297mm at 96dpi ≈ 794px x 1123px */
+  .a4 {
+    width: 794px;
+    min-height: 1123px;
+    background: #fff;
+    color: #18181b;
+    padding: 80px 90px 100px;
+    box-shadow: 0 30px 80px -10px rgba(0,0,0,0.6), 0 10px 30px -10px rgba(0,0,0,0.4);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    line-height: 1.55;
+    position: relative;
+    border-radius: 2px;
+  }
+
+  .a4 .doc-header {
+    text-align: center;
+    border-bottom: 1px solid #e4e4e7;
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+  }
+  .a4 .doc-eyebrow {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
+    color: #7957ff;
+    font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .a4 .doc-title {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0a0a0a;
+    line-height: 1.05;
+  }
+  .a4 .doc-sub {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #71717a;
+    font-style: italic;
+  }
+  .a4 .article {
+    margin-bottom: 30px;
+  }
+  .a4 .article-eyebrow {
+    display: flex; align-items: baseline; gap: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: #7957ff;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .a4 .article-eyebrow .rule { flex: 1; height: 1px; background: #e4e4e7; transform: translateY(-3px); }
+  .a4 .article-title {
+    font-size: 19px;
+    font-weight: 700;
+    color: #0a0a0a;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .a4 p { font-size: 14px; color: #27272a; margin-bottom: 9px; }
+  .a4 .meta-row { font-size: 13px; color: #3f3f46; margin-bottom: 6px; }
+  .a4 .meta-row .label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #71717a;
+    display: inline-block;
+    min-width: 92px;
+  }
+  .a4 ol.commitments { list-style: none; padding: 0; margin: 12px 0 0; }
+  .a4 ol.commitments > li {
+    border-top: 1px solid #e4e4e7;
+    padding: 14px 0;
+  }
+  .a4 ol.commitments > li:first-child { border-top: none; padding-top: 4px; }
+  .a4 .c-line {
+    display: flex; gap: 14px; align-items: baseline;
+    font-size: 14px;
+    color: #18181b;
+    margin-bottom: 6px;
+  }
+  .a4 .c-num {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 11px;
+    color: #7957ff;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    min-width: 22px;
+  }
+  .a4 .c-what { font-weight: 600; flex: 1; }
+  .a4 .c-meta {
+    margin-left: 36px;
+    font-size: 12.5px;
+    color: #52525b;
+  }
+  .a4 .c-meta em { color: #3f3f46; }
+  .a4 .values-list {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 6px;
+  }
+  .a4 .value-pill {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10.5px;
+    padding: 3px 9px 4px;
+    border-radius: 9999px;
+    background: #f4f4f5;
+    color: #3f3f46;
+    border: 1px solid #e4e4e7;
+    letter-spacing: 0.04em;
+  }
+  .a4 .signature-block {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 40px;
+    align-items: end;
+  }
+  .a4 .sig-line {
+    border-top: 1px solid #18181b;
+    padding-top: 8px;
+  }
+  .a4 .sig-name {
+    font-size: 22px;
+    font-weight: 600;
+    font-style: italic;
+    color: #0a0a0a;
+    margin-bottom: 8px;
+    letter-spacing: -0.005em;
+  }
+  .a4 .sig-label {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #71717a;
+  }
+  .a4 .doc-footer {
+    margin-top: 50px;
+    padding-top: 14px;
+    border-top: 1px solid #e4e4e7;
+    display: flex; justify-content: space-between;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #a1a1aa;
+  }
+
+  /* ── Print ──────────────────────────────────────────────── */
+  @media print {
+    @page { size: A4; margin: 0; }
+    html, body { background: #fff !important; }
+    body > *:not(#doc-overlay) { display: none !important; }
+    .doc-overlay { position: static; background: #fff; display: block !important; }
+    .doc-toolbar { display: none !important; }
+    .doc-stage { padding: 0 !important; }
+    .a4 {
+      box-shadow: none !important;
+      border-radius: 0 !important;
+      width: 210mm;
+      min-height: 297mm;
+      padding: 22mm 24mm 24mm;
+      page-break-after: avoid;
+    }
+  }
+</style>
+</head>
+
+<body class="bg-[#080808] text-zinc-100 overflow-x-hidden">
+
+<!-- Progress -->
+<div class="fixed top-0 left-0 right-0 z-[60] h-px">
+  <div id="progress" class="progress-bar" style="width:0%"></div>
+</div>
+
+<!-- Background grid (from index.html) -->
+<div class="pointer-events-none fixed inset-0 z-0"
+  style="background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px;">
+</div>
+
+<!-- Ambient glow blobs (from index.html) -->
+<div class="pointer-events-none fixed top-[-20%] left-[10%] w-[500px] h-[500px] rounded-full opacity-20"
+  style="background: radial-gradient(circle, rgba(121,87,255,0.2) 0%, transparent 70%);"></div>
+<div class="pointer-events-none fixed bottom-[-10%] right-[5%] w-[400px] h-[400px] rounded-full opacity-10"
+  style="background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%);"></div>
+
+<!-- ── Navigation ────────────────────────────────────────── -->
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#080808]/70 border-b border-white/[0.04]">
+  <div class="max-w-3xl mx-auto px-6 md:px-10 py-4 md:py-5 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-xs font-mono text-zinc-600 tracking-widest uppercase">natrix-ethos</span>
+      <span class="text-zinc-700 text-xs">·</span>
+      <span class="text-xs font-mono text-zinc-400 tracking-widest uppercase">Syntheke</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div class="w-1.5 h-1.5 rounded-full bg-[#7957ff]"></div>
+      <span class="hidden sm:inline text-xs font-mono text-zinc-500 tracking-widest uppercase">Document № 01 — Contract</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────── -->
+<section class="relative z-10 px-6 md:px-10 max-w-3xl mx-auto pt-32 md:pt-40 pb-16">
+  <div class="mb-6 flex items-center gap-2 fade-up">
+    <div class="available-dot w-2 h-2 rounded-full bg-[#7957ff]"></div>
+    <span class="text-xs font-mono text-[#7957ff] tracking-widest uppercase">Personal Jurisprudence</span>
+  </div>
+  <h1 class="text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.05] mb-8 fade-up" style="transition-delay:0.1s">
+    A contract<br>
+    <span class="text-zinc-500">with yourself.</span>
+  </h1>
+  <p class="text-base md:text-lg text-zinc-400 leading-relaxed max-w-xl mb-2 fade-up" style="transition-delay:0.2s">
+    The most binding agreement you'll ever write. Define what you commit to, why it matters, and who you're becoming. Then sign and print.
+  </p>
+</section>
+
+<!-- ── Form ──────────────────────────────────────────────── -->
+<main class="relative z-10 px-6 md:px-10 max-w-3xl mx-auto pb-24">
+
+  <!-- Article I — Identity -->
+  <section class="fade-up mb-6">
+    <div class="mb-4">
+      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-3">Article 01 — Identity</p>
+      <h2 class="text-2xl md:text-3xl font-semibold text-zinc-100 leading-snug">Who is signing?</h2>
+    </div>
+    <div class="glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6 md:p-8">
+      <div class="grid sm:grid-cols-2 gap-x-6 gap-y-5">
+        <div class="sm:col-span-2">
+          <label class="field-label">Full name</label>
+          <input id="f-name" class="field" type="text" placeholder="As you wish to be remembered" autocomplete="off" />
+        </div>
+        <div>
+          <label class="field-label">Date of birth</label>
+          <input id="f-dob" class="field" type="date" />
+        </div>
+        <div>
+          <label class="field-label">Effective from</label>
+          <input id="f-date" class="field" type="date" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article II — Commitments -->
+  <section class="fade-up mb-6 mt-14">
+    <div class="mb-4">
+      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-3">Article 02 — Commitments</p>
+      <h2 class="text-2xl md:text-3xl font-semibold text-zinc-100 leading-snug">What you swear to do.</h2>
+      <p class="text-sm text-zinc-500 leading-relaxed mt-3 max-w-lg">Specific. Measurable. Few. A handful of true commitments outweighs a list of wishes.</p>
+    </div>
+    <div id="commitments" class="space-y-4"></div>
+    <button id="add-commitment" class="mt-4 ghost-btn w-full sm:w-auto">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Add another commitment
+    </button>
+  </section>
+
+  <!-- Article III — Accountability -->
+  <section class="fade-up mb-6 mt-14">
+    <div class="mb-4">
+      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-3">Article 03 — Accountability</p>
+      <h2 class="text-2xl md:text-3xl font-semibold text-zinc-100 leading-snug">How you'll keep the watch.</h2>
+      <p class="text-sm text-zinc-500 leading-relaxed mt-3 max-w-lg">A promise without a witness drifts. Decide in advance how you'll see yourself, and what you'll do when you fall short.</p>
+    </div>
+    <div class="glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6 md:p-8">
+      <div class="space-y-5">
+        <div>
+          <label class="field-label">I will track my progress by</label>
+          <textarea id="f-track" class="field" rows="2" placeholder="e.g. A bullet journal, a Sunday morning ritual, a calendar mark…" maxlength="250"></textarea>
+          <div class="text-right counter mt-1" id="c-track">0 / 250</div>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-x-6 gap-y-5">
+          <div>
+            <label class="field-label">Check-in cadence</label>
+            <select id="f-cadence" class="field">
+              <option>Daily — morning</option>
+              <option>Daily — evening</option>
+              <option selected>Weekly</option>
+              <option>Bi-weekly</option>
+            </select>
+          </div>
+          <div></div>
+          <div class="sm:col-span-2">
+            <label class="field-label">If I break this promise, I will</label>
+            <textarea id="f-recovery" class="field" rows="2" placeholder="e.g. Acknowledge it without judgment, reflect briefly, recommit the next day…" maxlength="250"></textarea>
+            <div class="text-right counter mt-1" id="c-recovery">0 / 250</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Article IV — Becoming -->
+  <section class="fade-up mb-6 mt-14">
+    <div class="mb-4">
+      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-3">Article 04 — Becoming</p>
+      <h2 class="text-2xl md:text-3xl font-semibold text-zinc-100 leading-snug">Who you're becoming.</h2>
+      <p class="text-sm text-zinc-500 leading-relaxed mt-3 max-w-lg">Outcomes pass. Identity holds. Name the person these promises shape, and the values that anchor them.</p>
+    </div>
+    <div class="glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6 md:p-8">
+      <div class="space-y-6">
+        <div>
+          <label class="field-label">By honoring these commitments, I am becoming</label>
+          <textarea id="f-becoming" class="field" rows="3" placeholder="e.g. A person who keeps her word. Disciplined, curious, present…" maxlength="300"></textarea>
+          <div class="text-right counter mt-1" id="c-becoming">0 / 300</div>
+        </div>
+        <div>
+          <label class="field-label">North Star values <span class="text-zinc-700 normal-case tracking-normal">— 3 to 5</span></label>
+          <div class="field" style="padding: 8px 10px;">
+            <div id="value-tags" class="flex flex-wrap gap-1.5 mb-1"></div>
+            <div class="flex items-center gap-2">
+              <input id="value-input" class="bg-transparent border-0 outline-none flex-1 text-sm placeholder:text-zinc-600 text-zinc-100 px-1 py-1" type="text" placeholder="Type a value, press Enter" />
+              <span id="value-count" class="counter">0 / 5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Action bar -->
+  <section class="fade-up mt-16 pt-8 border-t border-white/[0.05]">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5">
+      <div>
+        <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-1.5">Final act</p>
+        <p class="text-base text-zinc-300">Read once. Sign once. Mean it.</p>
+      </div>
+      <div class="flex items-center gap-3 flex-wrap">
+        <button id="reset-btn" class="ghost-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 9 8 9"/></svg>
+          Clear
+        </button>
+        <button id="sign-btn" class="rainbow-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17.5V21h3.5L17.81 9.69l-3.5-3.5L3 17.5z"/><path d="M14.31 6.19l3.5 3.5"/><path d="M18 14l3 3-3 3"/></svg>
+          Sign the contract
+        </button>
+      </div>
+    </div>
+    <p id="sign-hint" class="text-xs font-mono text-zinc-600 mt-3 text-right">Fill in your name, a commitment, and a becoming statement to sign.</p>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="relative z-10 border-t border-white/[0.04]">
+  <div class="max-w-3xl mx-auto px-6 md:px-10 py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+    <div>
+      <p class="text-sm text-zinc-400">Be to become.</p>
+      <p class="text-[10px] font-mono text-zinc-700 tracking-widest uppercase mt-1">© 2026 natrix-ethos · syntheke</p>
+    </div>
+    <a href="https://natrix-ethos.github.io" class="text-[10px] font-mono text-zinc-600 hover:text-zinc-400 transition-colors tracking-widest uppercase">natrix-ethos ↗</a>
+  </div>
+</footer>
+
+<!-- ── A4 Document Overlay ─────────────────────────────── -->
+<div id="doc-overlay" class="doc-overlay">
+  <div class="doc-toolbar">
+    <div class="flex items-center gap-3">
+      <button id="back-btn" class="doc-toolbar-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        Back to edit
+      </button>
+      <span class="hidden sm:inline text-xs font-mono text-zinc-500 tracking-widest uppercase">Preview · A4 (210 × 297 mm)</span>
+    </div>
+    <button id="print-btn" class="doc-toolbar-btn primary">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      Print / Save as PDF
+    </button>
+  </div>
+
+  <div class="doc-stage">
+    <article class="a4" id="a4-doc">
+      <header class="doc-header">
+        <div class="doc-eyebrow">Personal Jurisprudence · № 01</div>
+        <h1 class="doc-title">Contract with Self</h1>
+        <p class="doc-sub">A binding agreement, entered freely, witnessed by the signatory alone.</p>
+      </header>
+
+      <section class="article">
+        <div class="article-eyebrow"><span>Article I</span><span class="rule"></span><span>Preamble</span></div>
+        <p>This contract is hereby formalized and entered into by <strong id="d-name">[ your name ]</strong>, born <strong id="d-dob">[ date of birth ]</strong>, and sworn into effect on <strong id="d-date">[ effective date ]</strong>.</p>
+        <p>I, the undersigned, conscientiously affirm the declarations and actions stipulated herein as the foundation of my deliberate becoming. I acknowledge these promises as fundamental, not aspirational.</p>
+      </section>
+
+      <section class="article">
+        <div class="article-eyebrow"><span>Article II</span><span class="rule"></span><span>Core Commitments</span></div>
+        <p>I, <strong id="d-name-2">[ your name ]</strong>, do solemnly commit to the following:</p>
+        <ol class="commitments" id="d-commitments"></ol>
+      </section>
+
+      <section class="article">
+        <div class="article-eyebrow"><span>Article III</span><span class="rule"></span><span>Accountability &amp; Recovery</span></div>
+        <p class="meta-row"><span class="label">Tracking</span><span id="d-track">—</span></p>
+        <p class="meta-row"><span class="label">Cadence</span><span id="d-cadence">Weekly</span></p>
+        <p class="meta-row"><span class="label">Recovery</span><span id="d-recovery">—</span></p>
+      </section>
+
+      <section class="article">
+        <div class="article-eyebrow"><span>Article IV</span><span class="rule"></span><span>Identity &amp; Values</span></div>
+        <p>By honoring these commitments, I am becoming <strong id="d-becoming">—</strong>.</p>
+        <p class="meta-row" style="margin-top:10px"><span class="label">North Star</span></p>
+        <div class="values-list" id="d-values"></div>
+      </section>
+
+      <section class="article" style="margin-top:32px">
+        <p>I affirm conscious agreement to the terms herein. This document stands as testament to my resolve, and is honored in equal measure by consistent action and self-compassion.</p>
+      </section>
+
+      <div class="signature-block">
+        <div>
+          <p class="sig-name" id="d-signature">—</p>
+          <div class="sig-line"></div>
+          <p class="sig-label">Affirming signature</p>
+        </div>
+        <div>
+          <p class="sig-name" id="d-sig-date" style="font-style:normal; font-weight:500;">—</p>
+          <div class="sig-line"></div>
+          <p class="sig-label">Date of execution</p>
+        </div>
+      </div>
+
+      <div class="doc-footer">
+        <span>Syntheke · natrix-ethos</span>
+        <span>Document № 01 — Contract with Self</span>
+      </div>
+    </article>
+  </div>
+</div>
+
+<script>
+/* ── State ──────────────────────────────────────────────── */
+const state = {
+  name: '',
+  dob: '',
+  date: new Date().toISOString().slice(0, 10),
+  commitments: [
+    { what: '', why: '', cadence: 'Daily', metric: '' },
+    { what: '', why: '', cadence: 'Daily', metric: '' },
+    { what: '', why: '', cadence: 'Daily', metric: '' },
+  ],
+  track: '',
+  cadence: 'Weekly',
+  recovery: '',
+  becoming: '',
+  values: [],
+};
+
+const STORAGE_KEY = 'cws_v3_state';
+function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e){} }
+function load() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) Object.assign(state, JSON.parse(raw));
+  } catch(e){}
+}
+load();
+
+function escapeHtml(s) { return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso + 'T00:00:00');
+  if (isNaN(d)) return iso;
+  return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+/* ── Commitments rendering ─────────────────────────────── */
+const commitmentsRoot = document.getElementById('commitments');
+function renderCommitments() {
+  commitmentsRoot.innerHTML = '';
+  state.commitments.forEach((c, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6';
+    wrap.innerHTML = `
+      <div class="flex items-center justify-between mb-5">
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full border bg-[#7957ff]/10 text-[#7957ff] border-[#7957ff]/20 tracking-widest uppercase">№ ${String(i+1).padStart(2,'0')}</span>
+          <span class="text-sm font-semibold text-zinc-200">Commitment</span>
+        </div>
+        ${state.commitments.length > 1 ? `<button data-remove="${i}" class="icon-btn" aria-label="Remove">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>` : ''}
+      </div>
+      <div class="grid gap-5">
+        <div>
+          <label class="field-label">What I commit to</label>
+          <input data-c="${i}" data-k="what" class="field" type="text" maxlength="300" placeholder="e.g. Train for thirty minutes, five days a week" value="${escapeHtml(c.what)}" />
+        </div>
+        <div class="grid sm:grid-cols-2 gap-x-6 gap-y-5">
+          <div>
+            <label class="field-label">Why this matters</label>
+            <input data-c="${i}" data-k="why" class="field" type="text" maxlength="200" placeholder="e.g. Resilience, energy, longevity" value="${escapeHtml(c.why)}" />
+          </div>
+          <div>
+            <label class="field-label">Frequency</label>
+            <select data-c="${i}" data-k="cadence" class="field">
+              ${['Daily','Weekly','Monthly','Custom'].map(o => `<option ${c.cadence===o?'selected':''}>${o}</option>`).join('')}
+            </select>
+          </div>
+          <div class="sm:col-span-2">
+            <label class="field-label">How I'll know I did it</label>
+            <input data-c="${i}" data-k="metric" class="field" type="text" maxlength="200" placeholder="e.g. Logged in fitness app · ticked on wall calendar" value="${escapeHtml(c.metric)}" />
+          </div>
+        </div>
+      </div>
+    `;
+    commitmentsRoot.appendChild(wrap);
+  });
+
+  commitmentsRoot.querySelectorAll('[data-c]').forEach(el => {
+    el.addEventListener('input', e => {
+      const i = +e.target.dataset.c;
+      const k = e.target.dataset.k;
+      state.commitments[i][k] = e.target.value;
+      save(); updateProgress();
+    });
+  });
+  commitmentsRoot.querySelectorAll('[data-remove]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const i = +e.currentTarget.dataset.remove;
+      state.commitments.splice(i, 1);
+      save(); renderCommitments(); updateProgress();
+    });
+  });
+
+  // Bind hover glow
+  commitmentsRoot.querySelectorAll('.glow-card').forEach(bindGlow);
+}
+
+/* ── Glow card cursor tracking ─────────────────────────── */
+function bindGlow(card) {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    card.style.setProperty('--mx', ((e.clientX - r.left)/r.width*100) + '%');
+    card.style.setProperty('--my', ((e.clientY - r.top)/r.height*100) + '%');
+  });
+}
+document.querySelectorAll('.glow-card').forEach(bindGlow);
+
+/* ── Field bindings ────────────────────────────────────── */
+function bindField(id, key, counterId, max) {
+  const el = document.getElementById(id);
+  el.value = state[key] || '';
+  if (key === 'date' && !state.date) {
+    state.date = new Date().toISOString().slice(0,10);
+    el.value = state.date;
+  }
+  el.addEventListener('input', () => {
+    state[key] = el.value;
+    save();
+    if (counterId) {
+      const c = document.getElementById(counterId);
+      const len = el.value.length;
+      c.textContent = `${len} / ${max}`;
+      c.classList.toggle('warn', len > max * 0.85 && len <= max);
+      c.classList.toggle('over', len > max);
+    }
+    updateProgress();
+  });
+}
+bindField('f-name', 'name');
+bindField('f-dob', 'dob');
+bindField('f-date', 'date');
+bindField('f-track', 'track', 'c-track', 250);
+bindField('f-cadence', 'cadence');
+bindField('f-recovery', 'recovery', 'c-recovery', 250);
+bindField('f-becoming', 'becoming', 'c-becoming', 300);
+
+['c-track','c-recovery','c-becoming'].forEach((id, i) => {
+  const max = [250, 250, 300][i];
+  const key = ['track','recovery','becoming'][i];
+  document.getElementById(id).textContent = `${(state[key]||'').length} / ${max}`;
+});
+
+/* ── Values tagging ────────────────────────────────────── */
+const valueInput = document.getElementById('value-input');
+const valueTags = document.getElementById('value-tags');
+const valueCount = document.getElementById('value-count');
+function renderValues() {
+  valueTags.innerHTML = '';
+  state.values.forEach((v, i) => {
+    const t = document.createElement('span');
+    t.className = 'tag-chip';
+    t.innerHTML = `${escapeHtml(v)} <button data-vi="${i}" aria-label="remove">×</button>`;
+    valueTags.appendChild(t);
+  });
+  valueTags.querySelectorAll('[data-vi]').forEach(b => {
+    b.addEventListener('click', e => {
+      state.values.splice(+e.currentTarget.dataset.vi, 1);
+      save(); renderValues(); updateProgress();
+    });
+  });
+  valueCount.textContent = `${state.values.length} / 5`;
+  valueInput.disabled = state.values.length >= 5;
+  valueInput.placeholder = state.values.length >= 5 ? 'Five is plenty.' : 'Type a value, press Enter';
+}
+valueInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const v = valueInput.value.trim().replace(/,$/, '');
+    if (v && state.values.length < 5 && !state.values.includes(v)) {
+      state.values.push(v);
+      valueInput.value = '';
+      save(); renderValues(); updateProgress();
+    }
+  } else if (e.key === 'Backspace' && !valueInput.value && state.values.length) {
+    state.values.pop();
+    save(); renderValues(); updateProgress();
+  }
+});
+
+/* ── Add commitment ────────────────────────────────────── */
+document.getElementById('add-commitment').addEventListener('click', () => {
+  if (state.commitments.length >= 10) return;
+  state.commitments.push({ what: '', why: '', cadence: 'Daily', metric: '' });
+  save(); renderCommitments(); updateProgress();
+});
+
+/* ── Progress + sign gating ────────────────────────────── */
+const signBtn = document.getElementById('sign-btn');
+const signHint = document.getElementById('sign-hint');
+function updateProgress() {
+  let total = 6, filled = 0;
+  if (state.name.trim()) filled++;
+  if (state.dob) filled++;
+  if (state.commitments.some(c => c.what.trim())) filled++;
+  if (state.track.trim()) filled++;
+  if (state.becoming.trim()) filled++;
+  if (state.values.length >= 3) filled++;
+  document.getElementById('progress').style.width = (filled/total*100) + '%';
+
+  const ready = state.name.trim() && state.commitments.some(c => c.what.trim()) && state.becoming.trim();
+  signBtn.disabled = !ready;
+  signHint.style.display = ready ? 'none' : '';
+}
+
+/* ── Build A4 document from state ──────────────────────── */
+function buildDoc() {
+  const setTxt = (id, val, fallback) => {
+    const el = document.getElementById(id);
+    if (val) { el.textContent = val; el.style.color = ''; }
+    else { el.textContent = fallback; el.style.color = '#a1a1aa'; }
+  };
+  setTxt('d-name', state.name.trim(), '[ your name ]');
+  setTxt('d-name-2', state.name.trim(), '[ your name ]');
+  setTxt('d-dob', state.dob ? fmtDate(state.dob) : '', '[ date of birth ]');
+  setTxt('d-date', state.date ? fmtDate(state.date) : '', '[ effective date ]');
+  setTxt('d-track', state.track.trim(), '—');
+  setTxt('d-cadence', state.cadence, 'Weekly');
+  setTxt('d-recovery', state.recovery.trim(), '—');
+  setTxt('d-becoming', state.becoming.trim(), '—');
+  setTxt('d-signature', state.name.trim(), '—');
+  setTxt('d-sig-date', state.date ? fmtDate(state.date) : '', '—');
+
+  // Commitments
+  const ol = document.getElementById('d-commitments');
+  ol.innerHTML = '';
+  const filled = state.commitments.filter(c => c.what.trim());
+  if (filled.length === 0) {
+    ol.innerHTML = '<li style="color:#a1a1aa; font-style:italic;">No commitments yet.</li>';
+  } else {
+    filled.forEach((c, i) => {
+      const num = ['I','II','III','IV','V','VI','VII','VIII','IX','X'][i] || (i+1);
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="c-line">
+          <span class="c-num">§ ${num}</span>
+          <span class="c-what">${escapeHtml(c.what)}.</span>
+        </div>
+        ${c.why ? `<div class="c-meta"><em>Reason —</em> ${escapeHtml(c.why)}.</div>` : ''}
+        <div class="c-meta"><em>${escapeHtml(c.cadence)}</em>${c.metric ? ' · ' + escapeHtml(c.metric) : ''}</div>
+      `;
+      ol.appendChild(li);
+    });
+  }
+
+  // Values
+  const vl = document.getElementById('d-values');
+  vl.innerHTML = '';
+  if (state.values.length === 0) {
+    vl.innerHTML = '<span style="color:#a1a1aa; font-style:italic; font-size:13px;">— not specified</span>';
+  } else {
+    state.values.forEach(v => {
+      const p = document.createElement('span');
+      p.className = 'value-pill';
+      p.textContent = v;
+      vl.appendChild(p);
+    });
+  }
+}
+
+/* ── Sign → open A4 overlay ────────────────────────────── */
+const overlay = document.getElementById('doc-overlay');
+signBtn.addEventListener('click', () => {
+  if (signBtn.disabled) return;
+  buildDoc();
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  overlay.scrollTop = 0;
+});
+document.getElementById('back-btn').addEventListener('click', () => {
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+});
+document.getElementById('print-btn').addEventListener('click', () => window.print());
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && overlay.classList.contains('open')) {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+/* ── Reset ─────────────────────────────────────────────── */
+document.getElementById('reset-btn').addEventListener('click', () => {
+  if (!confirm('Clear the contract? This cannot be undone.')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+});
+
+/* ── Scroll reveal ─────────────────────────────────────── */
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
+
+/* ── Boot ──────────────────────────────────────────────── */
+if (!state.date) state.date = new Date().toISOString().slice(0,10);
+document.getElementById('f-date').value = state.date;
+if (state.dob) document.getElementById('f-dob').value = state.dob;
+renderCommitments();
+renderValues();
+updateProgress();
+</script>
+</body>
+</html>
