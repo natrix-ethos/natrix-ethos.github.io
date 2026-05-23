@@ -1,0 +1,1713 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Island Sports Club · Tournament Console — Proposal</title>
+
+<!-- Fonts — match clubs/island-sports-club/start.html so the proposal reads in the same stack as the live app:
+     · Setimo (Adobe Typekit, kit wce1lmm) — display
+     · League Spartan (Google Fonts) — body & UI
+     · JetBrains Mono (Google Fonts) — numerals -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://use.typekit.net">
+<link rel="stylesheet" href="https://use.typekit.net/wce1lmm.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+
+<link rel="stylesheet" href="brand-overrides.css" />
+<style>
+  /* =============================================================
+     Island Sports Club — Tournament Console Proposal
+     Editorial zine layout: six numbered spreads, asymmetric grids,
+     teal-dominant surfaces with a single marigold accent.
+     Orange (#EB714F) is reserved for in-app warnings only and does
+     not appear on this proposal page.
+     ============================================================= */
+
+  :root {
+    /* ── ISC palette ───────── */
+    --ink:        #0E1A1D;
+    --forest:     #305C67;   /* ISC teal — body text / deep surfaces */
+    --leaf:       #244852;   /* deeper teal — secondary surface */
+    --moss:       #6C757D;   /* neutral muted */
+    --lime:       #F5C842;   /* ISC marigold — primary accent */
+    --lime-hot:   #E0B232;   /* marigold hover */
+    --gold-deep:  #C99A1A;   /* deep marigold — for accent text on cream */
+    --cream:      #FAFAF7;   /* warm white — page wash */
+    --bone:       #F4F1EA;   /* tinted bone */
+    --paper:      #FFFFFF;
+    --clay:       var(--gold-deep);  /* legacy alias — kept marigold, not orange */
+
+    --mist:     rgba(14,26,29,0.08);
+    --hairline: rgba(14,26,29,0.16);
+
+    /* Type — ISC stack via brand-overrides.css imports */
+    --font-sans:    "League Spartan", system-ui, sans-serif;
+    --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+    --font-display: "setimo", "League Spartan", sans-serif;
+
+    /* Radii — ISC keeps everything sharp; CTAs pill */
+    --r-sm:   6px;
+    --r-md:   6px;
+    --r-lg:   6px;
+    --r-pill: 60px;
+
+    --shadow-soft: 0 1px 0 rgba(14,26,29,.06), 0 14px 30px -18px rgba(14,26,29,.22);
+    --shadow-card: 0 1px 0 rgba(14,26,29,.05), 0 22px 50px -28px rgba(14,26,29,.25);
+
+    --ease-out:    cubic-bezier(0.23, 1, 0.32, 1);
+    --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+    --max:    1320px;
+    --gutter: 7vw;
+    --rule:   1px solid rgba(14,26,29,0.16);
+    --rule-paper: 1px solid rgba(255,255,255,0.10);
+  }
+
+  /* Print — preserve gradients and teal surfaces, kill page breaks inside spreads. */
+  @media print {
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    html, body { background: var(--cream); }
+    .spread { page-break-inside: avoid; break-inside: avoid; }
+    .cover, .spread { min-height: auto; }
+    .reveal { animation: none !important; opacity: 1 !important; }
+  }
+
+  /* ───────── Base ───────── */
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--forest);
+    font-family: var(--font-sans);
+    font-size: 17px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* ───────── Spread primitive ───────── */
+  .spread {
+    padding: 96px var(--gutter) 96px;
+    position: relative;
+    overflow: hidden;
+  }
+  .spread {
+    background:
+      radial-gradient(900px 500px at 95% -10%, rgba(245,200,66,0.08), transparent 60%),
+      radial-gradient(700px 600px at -10% 110%, rgba(48,92,103,0.05), transparent 55%),
+      var(--cream);
+  }
+  .spread.is-teal {
+    background:
+      radial-gradient(900px 600px at 100% 0%, rgba(245,200,66,0.12), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgba(245,200,66,0.05), transparent 55%),
+      var(--forest);
+    color: var(--paper);
+  }
+  .spread .inner {
+    max-width: var(--max);
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+
+  .g12 { display: grid; grid-template-columns: repeat(12, 1fr); gap: 32px; }
+
+  /* ───────── Magazine markers ───────── */
+  .section-mark {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--leaf);
+    display: inline-flex; align-items: center; gap: 14px;
+  }
+  .section-mark::before {
+    content: ""; width: 40px; height: 1px; background: currentColor; opacity: .5;
+  }
+  .is-teal .section-mark { color: var(--lime); }
+
+  /* ───────── Typography ───────── */
+  h1, h2, h3, h4 { margin: 0; font-weight: 400; }
+
+  /* Match the headline voice from iscbali.com (see "ISLAND KITCHEN"):
+     Setimo 700, italic, uppercase, tight line-height. Accent words keep the
+     italic and switch colour — marigold on teal, deep teal on cream. */
+  .display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.02;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: var(--forest);
+  }
+  .is-teal .display { color: var(--paper); }
+  .display em { font-style: italic; color: var(--leaf); }
+  .is-teal .display em { color: var(--lime); }
+  .display .accent { color: var(--gold-deep); font-style: italic; }
+  .is-teal .display .accent { color: var(--lime); }
+  .display .underline {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 12' preserveAspectRatio='none'><path d='M2,8 C50,2 110,12 198,5' stroke='%23F5C842' stroke-width='5' fill='none' stroke-linecap='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 0 92%;
+    background-size: 100% 0.32em;
+    padding-bottom: 0.12em;
+  }
+
+  .display-xxl { font-size: clamp(72px, 12.5vw, 200px); }
+  .display-xl  { font-size: clamp(56px, 8.5vw, 128px); }
+  .display-l   { font-size: clamp(40px, 5.4vw, 80px); }
+  .display-m   { font-size: clamp(32px, 3.4vw, 48px); }
+  .display-s   { font-size: clamp(22px, 2.0vw, 30px); }
+
+  .deck {
+    font-family: var(--font-sans);
+    font-weight: 500;
+    font-size: clamp(18px, 1.5vw, 22px);
+    line-height: 1.45;
+    color: var(--leaf);
+    max-width: 30ch;
+  }
+  .is-teal .deck { color: rgba(255,255,255,0.80); }
+
+  .body {
+    font-family: var(--font-sans); font-size: 16px; line-height: 1.6;
+    color: var(--forest); margin: 0;
+  }
+  .is-teal .body { color: rgba(255,255,255,0.84); }
+  .body--lg { font-size: 18px; line-height: 1.65; }
+
+  .caption {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--leaf);
+  }
+  .is-teal .caption { color: var(--lime); }
+
+  code {
+    font-family: var(--font-mono); font-size: 0.86em; font-weight: 500;
+    color: var(--leaf); background: rgba(48,92,103,0.10);
+    padding: 1px 6px; border-radius: 4px;
+    white-space: nowrap;
+  }
+  .is-teal code { color: var(--lime); background: rgba(245,200,66,0.14); }
+
+  .dropcap::first-letter {
+    font-family: var(--font-display);
+    font-size: 5em;
+    line-height: 0.82;
+    float: left;
+    margin: 0.06em 0.12em -0.05em -0.02em;
+    color: var(--gold-deep);
+  }
+
+  /* ───────── Page-load reveal ───────── */
+  @keyframes rise {
+    from { opacity: 0; transform: translate3d(0, 18px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  .reveal { opacity: 0; animation: rise 900ms var(--ease-out) forwards; }
+  .reveal[data-d="1"]  { animation-delay: 60ms; }
+  .reveal[data-d="2"]  { animation-delay: 160ms; }
+  .reveal[data-d="3"]  { animation-delay: 280ms; }
+  .reveal[data-d="4"]  { animation-delay: 400ms; }
+  .reveal[data-d="5"]  { animation-delay: 540ms; }
+
+  /* =============================================================
+     § 01 — COVER (teal-dominant hero)
+     ============================================================= */
+  .cover {
+    padding-top: 32px;
+    min-height: 100vh;
+    display: grid; grid-template-rows: auto 1fr auto;
+    background:
+      radial-gradient(1100px 600px at 100% 0%, rgba(245,200,66,0.20), transparent 60%),
+      radial-gradient(900px 700px at 0% 100%, rgba(36,72,82,0.55), transparent 55%),
+      var(--forest);
+    color: var(--paper);
+    border-bottom: 1px solid rgba(245,200,66,0.18);
+    background-image:
+      linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px),
+      radial-gradient(1100px 600px at 100% 0%, rgba(245,200,66,0.20), transparent 60%),
+      radial-gradient(900px 700px at 0% 100%, rgba(36,72,82,0.55), transparent 55%);
+    background-size: 80px 80px, 80px 80px, 100% 100%, 100% 100%;
+    background-color: var(--forest);
+  }
+  .cover .masthead {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 0 0;
+  }
+  .cover .mark-logo {
+    height: 84px; width: auto;
+    /* Full-colour logo sits on a soft cream plaque so the teal wordmark
+       reads clearly against the dark teal cover */
+    background: var(--cream);
+    padding: 10px 16px;
+    border-radius: 6px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.08), 0 14px 30px -18px rgba(0,0,0,0.45);
+  }
+  .cover .mast-r {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.20em;
+    text-transform: uppercase; color: var(--lime);
+    text-align: right; line-height: 1.7;
+  }
+  .cover .mast-r b { color: var(--paper); font-weight: 600; letter-spacing: 0.16em; }
+
+  .cover-body {
+    align-self: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding: 56px 0 32px;
+  }
+
+  .cover-eyebrow {
+    display: flex; width: max-content;
+    align-items: center; gap: 12px;
+    line-height: 1;
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 11px; letter-spacing: 0.30em; text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 32px;
+  }
+  .cover-eyebrow::before {
+    content: ""; width: 32px; height: 1px; background: var(--lime); opacity: 0.6;
+  }
+  .cover-eyebrow .live-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 0 0 rgba(245,200,66,0.5);
+    animation: live-pulse 2s ease-out infinite;
+    margin-left: -4px;
+  }
+  @keyframes live-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(245,200,66,0.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(245,200,66,0); }
+    100% { box-shadow: 0 0 0 0 rgba(245,200,66,0); }
+  }
+
+  .cover-headline {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: clamp(52px, 8.5vw, 132px);
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--paper);
+    margin-bottom: 36px;
+  }
+  .cover-headline span { display: block; }
+  .cover-headline .l3 { color: var(--lime); font-style: italic; }
+
+  .cover-deck {
+    font-family: var(--font-sans);
+    font-size: clamp(20px, 1.9vw, 26px);
+    line-height: 1.45; font-weight: 500;
+    color: rgba(255,255,255,0.84);
+    max-width: 64ch;
+    margin: 0;
+  }
+  .cover-deck em { font-style: italic; color: var(--lime); font-weight: 600; }
+
+  /* "See the app live" pill — primary CTA on the cover */
+  .cover-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 36px;
+    padding: 16px 24px 16px 28px;
+    background: var(--lime);
+    color: var(--forest);
+    border: none;
+    border-radius: var(--r-pill);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.10),
+      0 18px 36px -14px rgba(0,0,0,0.45);
+    transition: transform 240ms var(--ease-out),
+                background-color 240ms var(--ease-out),
+                box-shadow 240ms var(--ease-out);
+  }
+  .cover-cta:hover {
+    background: var(--lime-hot);
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.10),
+      0 24px 48px -18px rgba(0,0,0,0.5);
+  }
+  .cover-cta:active { transform: translateY(0) scale(0.985); }
+  .cover-cta:focus-visible {
+    outline: 3px solid var(--paper);
+    outline-offset: 4px;
+  }
+  .cover-cta svg {
+    width: 18px; height: 18px;
+    transition: transform 280ms var(--ease-out);
+  }
+  .cover-cta:hover svg { transform: translateX(4px); }
+
+  .cover-footer {
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: end;
+    gap: 24px;
+    border-top: 1px solid rgba(245,200,66,0.20);
+    padding: 18px 0 0;
+  }
+  .cover-footer .l, .cover-footer .r {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: rgba(245,200,66,0.82);
+  }
+  .cover-footer .r { text-align: right; }
+  .cover-footer .vol {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+    color: var(--lime);
+  }
+  .cover-footer .vol em { color: var(--paper); font-style: italic; }
+
+  /* Decorative geometric arcs softening the corners of the teal cover */
+  .arc {
+    position: absolute; pointer-events: none; z-index: 1;
+    border-radius: 50%;
+  }
+  .arc.a-1 {
+    top: -180px; right: -180px;
+    width: 460px; height: 460px;
+    background: var(--lime);
+    opacity: 0.08;
+    animation: arc-sway-a 11s ease-in-out infinite alternate;
+  }
+  .arc.a-2 {
+    bottom: -220px; left: -160px;
+    width: 520px; height: 520px;
+    background: var(--paper);
+    opacity: 0.04;
+    animation: arc-sway-b 13s ease-in-out infinite alternate;
+  }
+  @keyframes arc-sway-a {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-12px); }
+  }
+  @keyframes arc-sway-b {
+    from { transform: translateY(0); }
+    to   { transform: translateY(10px); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .arc.a-1, .arc.a-2, .cover-eyebrow .live-dot { animation: none; }
+    .feat-card { transition: none; }
+    .feat-card:hover { transform: none; box-shadow: var(--shadow-soft); }
+    .reveal { animation: none; opacity: 1; }
+  }
+
+  /* =============================================================
+     § 02 — THE REASON (personal POV + before/after pair)
+     ============================================================= */
+  .reason { background: var(--paper); border-bottom: var(--rule); }
+  .reason .head { margin-bottom: 56px; max-width: 36ch; }
+
+  .reason-grid { display: grid; gap: 56px; }
+
+  .reason-row-1 {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .reason-essay .body { font-size: 17px; line-height: 1.65; }
+  .reason-essay .body + .body { margin-top: 16px; }
+
+  /* Pull-quote divider */
+  .reason-pull-wrap {
+    text-align: center;
+    border-top: 1px solid rgba(48,92,103,0.18);
+    border-bottom: 1px solid rgba(48,92,103,0.18);
+    padding: 28px 0;
+  }
+  .reason-pull {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4.2vw, 58px);
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin: 0 auto;
+    max-width: none;
+    padding: 0; border: none;
+    white-space: nowrap;
+  }
+  .reason-pull em { font-style: italic; color: var(--gold-deep); }
+
+  .reason-row-2 {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .reason-photo {
+    position: relative;
+    margin: 0;
+    background: var(--paper);
+    border: 1px solid var(--mist);
+    border-radius: 6px;
+    padding: 12px 12px 14px;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.06),
+      0 20px 40px -22px rgba(0,0,0,0.30);
+  }
+  .reason-photo .img-wrap {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: 3px;
+    background: var(--bone);
+  }
+  .reason-photo img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+  }
+  .reason-photo .label {
+    position: absolute;
+    top: -18px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    font-size: 22px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height: 1;
+    color: var(--gold-deep);
+    transform: rotate(-3deg);
+    background: var(--paper);
+    padding: 4px 12px;
+    border-radius: 4px;
+  }
+  .reason-photo.is-before .label { left: 18px; }
+  .reason-photo.is-after  .label {
+    right: 18px;
+    color: var(--leaf);
+    transform: rotate(2deg);
+  }
+  .reason-photo .ph-caption {
+    font-family: var(--font-sans);
+    font-size: 13.5px; line-height: 1.5;
+    color: var(--leaf);
+    padding: 12px 4px 0;
+  }
+  .reason-photo .ph-caption em { color: var(--gold-deep); font-style: italic; }
+
+  .reason-row-1 .reason-photo.is-before {
+    max-width: 420px;
+    width: 100%;
+    margin: 0 0 0 auto;
+    transform: rotate(-2deg);
+    transition: transform 360ms var(--ease-out);
+  }
+  .reason-row-1 .reason-photo.is-before:hover { transform: rotate(0); }
+
+  .reason-row-2 .reason-photo.is-after {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .reason-row-2 .reason-photo.is-after .img-wrap {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 340px;
+  }
+
+  /* "What that gets you" teal card — visual rhyme with the deal card */
+  .reason-card {
+    margin: 0;
+    padding: 36px 36px 32px;
+    background:
+      radial-gradient(500px 320px at 100% 0%, rgba(245,200,66,0.14), transparent 60%),
+      var(--forest);
+    color: var(--paper);
+    border-radius: var(--r-md);
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .reason-card__eyebrow {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--lime);
+  }
+  .reason-card h4 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(32px, 2.6vw, 44px);
+    line-height: 1.04;
+    letter-spacing: -0.005em;
+    color: var(--paper);
+    margin: 0;
+    max-width: 18ch;
+  }
+  .reason-card__lede {
+    font-family: var(--font-sans);
+    font-size: 15.5px; line-height: 1.55;
+    color: rgba(255,255,255,0.80);
+    margin: 0;
+    max-width: 38ch;
+  }
+  .reason-card ul {
+    margin: 6px 0 0; padding: 0; list-style: none;
+    display: grid; gap: 0;
+  }
+  .reason-card li {
+    font-family: var(--font-sans); font-size: 14.5px; line-height: 1.55;
+    color: rgba(255,255,255,0.88);
+    padding: 14px 0 14px 22px;
+    border-top: 1px dashed rgba(255,255,255,0.16);
+    position: relative;
+  }
+  .reason-card li:first-child { border-top: none; padding-top: 6px; }
+  .reason-card li:last-child  { padding-bottom: 6px; }
+  .reason-card li::before {
+    content: "→";
+    position: absolute; left: 0; top: 14px;
+    font-family: var(--font-mono); font-weight: 700;
+    color: var(--lime);
+  }
+  .reason-card li:first-child::before { top: 6px; }
+  .reason-card__kicker {
+    margin: auto 0 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(20px, 1.6vw, 26px);
+    line-height: 1.1;
+    letter-spacing: -0.005em;
+    color: rgba(255,255,255,0.70);
+  }
+  .reason-card__kicker em { color: var(--lime); font-style: italic; }
+
+  @media (max-width: 1100px) {
+    .reason-grid { gap: 40px; }
+    .reason-row-1, .reason-row-2 { grid-template-columns: 1fr; gap: 32px; }
+    .reason-row-1 .reason-photo.is-before {
+      max-width: 100%; margin: 0; transform: none;
+    }
+    .reason-pull-wrap { padding: 20px 0; }
+    .reason-card h4 { font-size: clamp(28px, 5vw, 36px); }
+  }
+
+  /* =============================================================
+     § 03 — INTRO ESSAY
+     ============================================================= */
+  .intro { background: var(--bone); border-bottom: var(--rule); }
+  .intro .inner { padding-top: 24px; }
+  .intro .head {
+    display: grid; grid-template-columns: 1fr 1fr; align-items: end; gap: 32px;
+    margin-bottom: 56px;
+  }
+  .intro .head h2 { font-size: clamp(48px, 6.5vw, 96px); }
+
+  .intro-stage {
+    margin: 0;
+    display: grid;
+    gap: 32px;
+  }
+  .intro-stage .intro-tv {
+    background: var(--forest);
+    border-radius: var(--r-md);
+    padding: 14px;
+    box-shadow:
+      0 1px 0 rgba(0,0,0,0.10),
+      0 30px 60px -28px rgba(0,0,0,0.40);
+  }
+  .intro-stage .intro-tv img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    background: var(--bone);
+  }
+  .intro-stage__cap {
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+    text-align: center;
+  }
+  .intro-stage__cap .caption { color: var(--gold-deep); }
+  .intro-stage__cap .body {
+    max-width: 56ch;
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--forest);
+    margin: 0;
+  }
+
+  /* =============================================================
+     § 04 — FEATURES (card grid: 1 hero + 3 standard + 1 reveal)
+     ============================================================= */
+  .views { padding-bottom: 120px; }
+  .views .head {
+    display: grid; grid-template-columns: 1fr; gap: 64px;
+    align-items: end; margin-bottom: 64px;
+  }
+  .views .head h2 { font-size: clamp(56px, 7.5vw, 112px); white-space: nowrap; }
+
+  .feat-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .feat-card {
+    background: var(--paper);
+    border: 1px solid var(--mist);
+    border-radius: var(--r-md);
+    padding: 28px 28px 24px;
+    box-shadow: var(--shadow-soft);
+    display: flex; flex-direction: column;
+    position: relative;
+    transition: transform 280ms var(--ease-out), box-shadow 280ms var(--ease-out);
+  }
+  .feat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+  }
+  .feat-card header {
+    display: flex; align-items: baseline; gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed rgba(48,92,103,0.20);
+  }
+  .feat-num {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 12.5px; letter-spacing: 0.16em;
+    color: var(--gold-deep);
+  }
+  .feat-tag {
+    font-family: var(--font-mono); font-weight: 500;
+    font-size: 10.5px; letter-spacing: 0.20em; text-transform: uppercase;
+    color: var(--moss);
+  }
+  .feat-tag i { font-style: italic; color: var(--leaf); }
+  .feat-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(32px, 3vw, 44px);
+    line-height: 1.0;
+    letter-spacing: -0.005em;
+    color: var(--forest);
+    margin-bottom: 14px;
+  }
+  .feat-title em { font-style: italic; color: var(--gold-deep); }
+  .feat-body {
+    font-family: var(--font-sans); font-size: 15px; line-height: 1.55;
+    color: var(--forest); margin: 0 0 18px;
+  }
+  .feat-bullets {
+    margin: auto 0 0; padding: 0; list-style: none;
+    display: grid; gap: 0;
+  }
+  .feat-bullets li {
+    font-family: var(--font-sans); font-size: 13.5px; line-height: 1.5;
+    color: var(--leaf);
+    padding: 9px 0 9px 22px;
+    border-top: 1px dashed rgba(48,92,103,0.18);
+    position: relative;
+  }
+  .feat-bullets li::before {
+    content: "→";
+    position: absolute; left: 0; top: 9px;
+    font-family: var(--font-mono); font-weight: 700;
+    color: var(--gold-deep);
+  }
+
+  /* Hero feature card — spans 3 columns, teal bg */
+  .feat-card.feat-hero {
+    grid-column: 1 / -1;
+    background:
+      radial-gradient(700px 380px at 100% 0%, rgba(245,200,66,0.16), transparent 60%),
+      var(--forest);
+    color: var(--paper);
+    border-color: rgba(245,200,66,0.22);
+    padding: 40px 44px 38px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    grid-template-areas:
+      "head    bullets"
+      "title   bullets"
+      "body    bullets";
+    gap: 0 56px;
+    align-items: start;
+  }
+  .feat-card.feat-hero header {
+    grid-area: head;
+    padding-bottom: 16px;
+    border-color: rgba(255,255,255,0.18);
+    margin-bottom: 24px;
+  }
+  .feat-card.feat-hero .feat-num    { color: var(--lime); }
+  .feat-card.feat-hero .feat-tag    { color: rgba(255,255,255,0.72); }
+  .feat-card.feat-hero .feat-tag i  { color: var(--lime); }
+  .feat-card.feat-hero .feat-title  {
+    grid-area: title;
+    font-size: clamp(48px, 5vw, 80px);
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .feat-card.feat-hero .feat-title em { color: var(--lime); }
+  .feat-card.feat-hero .feat-body {
+    grid-area: body;
+    font-size: 17px; line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    max-width: 36ch;
+  }
+  .feat-card.feat-hero .feat-bullets {
+    grid-area: bullets;
+    margin: 0;
+    align-self: stretch;
+    border-top: 1px dashed rgba(255,255,255,0.18);
+  }
+  .feat-card.feat-hero .feat-bullets li {
+    color: rgba(255,255,255,0.86);
+    border-top-color: rgba(255,255,255,0.16);
+    font-size: 14px;
+    padding: 11px 0 11px 22px;
+  }
+  .feat-card.feat-hero .feat-bullets li:first-child { border-top: none; }
+  .feat-card.feat-hero .feat-bullets li::before { color: var(--lime); }
+  .feat-card.feat-hero:hover { transform: translateY(-3px); }
+
+  /* Closing-hero card — dominated by the live screen photo */
+  .feat-card.feat-reveal {
+    grid-column: 1 / -1;
+    background:
+      radial-gradient(680px 360px at 0% 100%, rgba(245,200,66,0.16), transparent 60%),
+      radial-gradient(520px 320px at 100% 0%, rgba(14,26,29,0.22), transparent 60%),
+      var(--leaf);
+    color: var(--paper);
+    border-color: rgba(245,200,66,0.28);
+    padding: 40px 44px;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.35fr);
+    gap: 56px;
+    align-items: center;
+    overflow: hidden;
+  }
+  .feat-card.feat-reveal header {
+    padding-bottom: 16px;
+    border-color: rgba(255,255,255,0.18);
+    margin-bottom: 24px;
+  }
+  .feat-card.feat-reveal .feat-num    { color: var(--lime); }
+  .feat-card.feat-reveal .feat-tag    { color: rgba(255,255,255,0.72); }
+  .feat-card.feat-reveal .feat-tag i  { color: var(--lime); }
+  .feat-card.feat-reveal .feat-title  {
+    font-size: clamp(40px, 4vw, 64px);
+    color: var(--paper);
+    margin-bottom: 18px;
+  }
+  .feat-card.feat-reveal .feat-title em { color: var(--lime); }
+  .feat-card.feat-reveal .feat-body {
+    font-size: 16px;
+    color: rgba(255,255,255,0.85);
+    margin: 0 0 18px;
+    max-width: 38ch;
+  }
+  .feat-card.feat-reveal .feat-bullets {
+    margin: 0;
+    border-top: 1px dashed rgba(255,255,255,0.18);
+  }
+  .feat-card.feat-reveal .feat-bullets li {
+    color: rgba(255,255,255,0.86);
+    border-top-color: rgba(255,255,255,0.16);
+    font-size: 14px;
+    padding: 11px 0 11px 22px;
+  }
+  .feat-card.feat-reveal .feat-bullets li:first-child { border-top: none; }
+  .feat-card.feat-reveal .feat-bullets li::before { color: var(--lime); }
+  .feat-card.feat-reveal:hover { transform: translateY(-3px); }
+
+  .feat-reveal__shot {
+    margin: 0;
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 14px 14px 12px;
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.04),
+      0 30px 60px -28px rgba(0,0,0,0.45),
+      0 60px 120px -50px rgba(245,200,66,0.12);
+    transform: rotate(-0.6deg);
+    transition: transform 360ms var(--ease-out);
+  }
+  .feat-card.feat-reveal:hover .feat-reveal__shot { transform: rotate(0); }
+  .feat-reveal__shot img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    background: var(--bone);
+  }
+  .feat-reveal__shot figcaption {
+    margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--leaf);
+  }
+  .feat-reveal__shot figcaption .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gold-deep);
+    box-shadow: 0 0 0 0 rgba(201,154,26,0.5);
+    animation: live-pulse 2s ease-out infinite;
+  }
+
+  @media (max-width: 1100px) {
+    .feat-card.feat-reveal {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      padding: 32px 28px;
+    }
+    .feat-reveal__shot { transform: rotate(0); }
+  }
+
+  /* =============================================================
+     § 06 — THE TERMS — built for ISC across all four clubs
+     ============================================================= */
+  .terms { background: var(--bone); border-bottom: var(--rule); }
+  .terms .head { margin-bottom: 56px; max-width: 28ch; }
+  .terms .head h2 { font-size: clamp(48px, 6vw, 88px); }
+
+  .terms-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .deal-card {
+    background:
+      radial-gradient(700px 380px at 100% 0%, rgba(245,200,66,0.16), transparent 60%),
+      var(--forest);
+    color: var(--paper);
+    border: 1px solid rgba(245,200,66,0.24);
+    border-radius: var(--r-lg);
+    padding: 44px 48px 40px;
+    box-shadow: var(--shadow-card);
+    display: grid;
+    gap: 32px;
+    align-content: start;
+  }
+  .deal-card header {
+    padding-bottom: 22px;
+    border-bottom: 1px dashed rgba(255,255,255,0.20);
+  }
+  .deal-eyebrow {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--lime);
+    margin-bottom: 14px;
+  }
+  .deal-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(44px, 4.8vw, 72px);
+    line-height: 1.0;
+    letter-spacing: -0.01em;
+    color: var(--paper);
+    margin: 0;
+  }
+  .deal-title em { font-style: italic; color: var(--lime); }
+
+  .deal-prices {
+    display: grid;
+    gap: 14px;
+    align-items: baseline;
+  }
+  .price-block { display: grid; gap: 10px; align-content: start; }
+  .price-label {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 10.5px; letter-spacing: 0.20em; text-transform: uppercase;
+    color: rgba(245,200,66,0.85);
+  }
+  .price-amount {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: clamp(34px, 3.6vw, 52px);
+    color: var(--paper);
+    letter-spacing: -0.01em;
+    line-height: 1;
+    display: flex; align-items: baseline; gap: 10px;
+    white-space: nowrap;
+  }
+  .price-amount .rp {
+    font-family: var(--font-sans); font-weight: 700;
+    font-size: 0.40em; letter-spacing: 0.10em;
+    color: var(--lime);
+    text-transform: uppercase;
+  }
+  .price-sub {
+    font-family: var(--font-sans); font-size: 13px; line-height: 1.45;
+    color: rgba(255,255,255,0.72);
+  }
+
+  .deal-includes {
+    margin: 0; padding: 0; list-style: none;
+    display: grid; gap: 0;
+    border-top: 1px dashed rgba(255,255,255,0.18);
+  }
+  .deal-includes li {
+    font-family: var(--font-sans); font-size: 14px; line-height: 1.5;
+    color: rgba(255,255,255,0.86);
+    padding: 11px 0 11px 22px;
+    border-bottom: 1px dashed rgba(255,255,255,0.16);
+    position: relative;
+  }
+  .deal-includes li::before {
+    content: "→";
+    position: absolute; left: 0; top: 11px;
+    font-family: var(--font-mono); font-weight: 700;
+    color: var(--lime);
+  }
+  .deal-includes li:last-child { border-bottom: none; }
+  .deal-includes li b {
+    color: var(--lime);
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 0.95em;
+    letter-spacing: 0.02em;
+  }
+
+  /* Future-clubs pill — highlights the partnership perk */
+  .deal-pill {
+    display: inline-flex; align-items: center; gap: 10px;
+    align-self: start;
+    padding: 8px 14px 8px 12px;
+    background: rgba(245,200,66,0.16);
+    border: 1px solid rgba(245,200,66,0.35);
+    border-radius: var(--r-pill);
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--lime);
+  }
+  .deal-pill .pill-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--lime);
+    box-shadow: 0 0 0 0 rgba(245,200,66,0.5);
+    animation: live-pulse 2.4s ease-out infinite;
+  }
+
+  .terms-aside {
+    background: var(--paper);
+    border: 1px solid var(--mist);
+    border-radius: var(--r-lg);
+    padding: 36px 32px 32px;
+    box-shadow: var(--shadow-soft);
+    display: grid; align-content: start; gap: 18px;
+  }
+  .terms-aside h4 {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 11px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--leaf);
+    margin: 0 0 8px;
+  }
+  .terms-aside p {
+    font-family: var(--font-sans); font-size: 14.5px; line-height: 1.55;
+    color: var(--forest);
+    margin: 0;
+    max-width: 32ch;
+  }
+  .terms-aside p b {
+    color: var(--gold-deep);
+    font-weight: 700;
+  }
+  .terms-aside .note-group { display: grid; gap: 4px; }
+  .terms-aside .a-divider {
+    height: 1px;
+    background: rgba(48,92,103,0.14);
+    margin: 2px 0;
+  }
+
+  /* Club roster row inside the deal card */
+  .deal-roster {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .deal-roster li {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(245,200,66,0.22);
+    border-radius: var(--r-sm);
+    padding: 14px 14px 12px;
+    display: grid;
+    gap: 4px;
+    align-content: start;
+  }
+  .deal-roster .r-num {
+    font-family: var(--font-mono); font-weight: 600;
+    font-size: 10px; letter-spacing: 0.22em;
+    color: var(--lime);
+  }
+  .deal-roster .r-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 22px;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    color: var(--paper);
+  }
+  .deal-roster .r-name em { font-style: italic; color: var(--lime); }
+  .deal-roster .r-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+  }
+  .deal-roster .r-future {
+    border-style: dashed;
+    border-color: rgba(245,200,66,0.30);
+    background: transparent;
+  }
+  .deal-roster .r-future .r-name {
+    color: var(--lime); font-style: italic;
+  }
+  @media (max-width: 1100px) {
+    .deal-roster { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .terms-footer {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: var(--rule);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: end;
+  }
+  .terms-sig .caption,
+  .terms-cta .caption { display: block; margin-bottom: 12px; }
+  .terms-sig .sig-name {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(26px, 2.4vw, 36px);
+    line-height: 1;
+    letter-spacing: 0;
+    color: var(--forest);
+    margin-bottom: 10px;
+  }
+  .terms-sig .sig-name em { font-style: italic; color: var(--gold-deep); }
+  .terms-sig .sig-email {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--leaf);
+  }
+  .terms-cta p { max-width: 40ch; margin: 0; }
+
+  @media (max-width: 1100px) {
+    .terms-grid { grid-template-columns: 1fr; }
+    .terms-footer { grid-template-columns: 1fr; gap: 28px; }
+    .deal-card { padding: 36px 32px 32px; }
+  }
+
+  /* =============================================================
+     § 05 — COLOPHON
+     ============================================================= */
+  .colophon { padding-bottom: 64px; border-bottom: var(--rule); }
+  .colophon .head { margin-bottom: 48px; max-width: 840px; }
+  .colophon .head h2 { font-size: clamp(48px, 6vw, 88px); }
+
+  .colophon-grid {
+    display: grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items: start;
+  }
+
+  .colophon-notes h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: clamp(28px, 2.8vw, 40px);
+    line-height: 1.05;
+    letter-spacing: -0.005em;
+    color: var(--forest); margin-bottom: 18px;
+  }
+  .colophon-notes h3 em { color: var(--gold-deep); font-style: italic; }
+  .colophon-notes p {
+    font-family: var(--font-sans); font-size: 16px; line-height: 1.6;
+    color: var(--forest); max-width: 50ch; margin: 0 0 14px;
+  }
+
+  .swatch-card {
+    background: var(--paper);
+    border: 1px solid var(--mist);
+    border-radius: var(--r-md);
+    padding: 26px 28px 24px;
+    box-shadow: var(--shadow-soft);
+  }
+  .swatch-title {
+    font-family: var(--font-sans); font-weight: 700;
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--leaf);
+    margin: 0 0 18px;
+  }
+  .swatch-row {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;
+  }
+  .swatch { display: grid; gap: 6px; }
+  .swatch .chip {
+    aspect-ratio: 1.3 / 1; border-radius: 4px;
+    border: 1px solid var(--mist);
+  }
+  .swatch .name {
+    font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.10em; color: var(--leaf);
+  }
+  .swatch .hex {
+    font-family: var(--font-mono); font-size: 10.5px; color: var(--moss);
+  }
+
+  /* ───────── Colophon footer ───────── */
+  .colophon-foot {
+    background: var(--ink);
+    color: rgba(255,255,255,0.65);
+    padding: 36px var(--gutter);
+  }
+  .colophon-foot .inner {
+    max-width: var(--max); margin: 0 auto;
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 24px; align-items: center;
+  }
+  .colophon-foot .mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    text-transform: uppercase;
+    font-size: 18px;
+    letter-spacing: 0.02em;
+    color: var(--lime);
+  }
+  .colophon-foot .mark em { color: var(--paper); font-style: italic; }
+  .colophon-foot .l, .colophon-foot .r {
+    font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .colophon-foot .r { text-align: right; }
+  .colophon-foot a {
+    color: var(--lime); text-decoration: none;
+    border-bottom: 1px solid rgba(245,200,66,0.4);
+  }
+
+  /* ───────── Responsive ───────── */
+  @media (max-width: 1100px) {
+    :root { --gutter: 5vw; }
+    .cover-body { grid-template-columns: 1fr; gap: 40px; padding: 32px 0 24px; }
+    .cover-headline { font-size: clamp(56px, 11vw, 96px); }
+    .cover .mark-logo { height: 64px; }
+    .cover-footer {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding-top: 24px;
+      text-align: left;
+    }
+    .cover-footer .r { text-align: left; }
+    .cover-footer .vol { justify-self: start; }
+    .intro .head, .views .head { grid-template-columns: 1fr; gap: 16px; }
+    .colophon-grid { grid-template-columns: 1fr; gap: 40px; }
+    .feat-grid { grid-template-columns: repeat(2, 1fr); }
+    .feat-card.feat-hero {
+      grid-column: 1 / -1;
+      grid-template-columns: 1fr;
+      grid-template-areas: "head" "title" "body" "bullets";
+      gap: 14px;
+      padding: 32px 32px 28px;
+    }
+    .feat-card.feat-hero .feat-bullets { border-top: 1px dashed rgba(255,255,255,0.18); margin-top: 12px; padding-top: 4px; }
+    .swatch-row { grid-template-columns: repeat(5, 1fr); }
+    .colophon-foot .inner { grid-template-columns: 1fr; text-align: left; }
+    .colophon-foot .r { text-align: left; }
+  }
+  @media (max-width: 640px) {
+    .spread { padding: 64px var(--gutter); }
+    .cover { padding-top: 24px; min-height: auto; }
+    .cover-body { padding: 40px 0 24px; gap: 32px; }
+    .cover .masthead {
+      flex-direction: column; align-items: flex-start; gap: 18px;
+    }
+    .cover .mast-r { text-align: left; }
+    .cover .mark-logo { height: 56px; }
+    .swatch-row { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .feat-grid { grid-template-columns: 1fr; }
+    .feat-card { padding: 24px 22px 20px; }
+    .colophon-foot .inner { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+
+  <!-- =====================================================
+       § 01 — COVER
+       ===================================================== -->
+  <section class="spread cover">
+    <span class="arc a-1" aria-hidden="true"></span>
+    <span class="arc a-2" aria-hidden="true"></span>
+
+    <div class="inner">
+      <div class="masthead reveal" data-d="1">
+        <img class="mark-logo" src="assets/ISC-Logo.png" alt="Island Sports Club" />
+        <div class="mast-r">
+          <b>Tournament Console</b><br />
+          Proposal · v1
+        </div>
+      </div>
+
+      <div class="cover-body">
+
+        <div class="cover-lead">
+          <div class="cover-eyebrow reveal" data-d="1">
+            <span class="live-dot" aria-hidden="true"></span>
+            Tournament Console · Proposal
+          </div>
+
+          <h1 class="cover-headline">
+            <span class="l1 reveal" data-d="2">One phone,</span>
+            <span class="l2 reveal" data-d="3">every match,</span>
+            <span class="l3 reveal" data-d="4">every winner.</span>
+          </h1>
+
+          <p class="cover-deck reveal" data-d="5">
+            Set up, score, time and crown the champions of every Island Sports Club event —
+            <em>morning, afternoon, evening</em> — mirrored from a phone to the big screen at the club.
+          </p>
+
+          <a class="cover-cta reveal" data-d="5" href="https://isc.matchscreen.app" target="_blank" rel="noopener">
+            <span>See the app live</span>
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3 10 L17 10 M11 4 L17 10 L11 16"
+                    stroke="currentColor" stroke-width="2.5" fill="none"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </a>
+        </div>
+
+      </div>
+
+      <div class="cover-footer reveal" data-d="5">
+        <div class="l">
+          Proposal · v1<br />
+          <span style="color:var(--paper);font-family:var(--font-sans);font-weight:600;font-size:13px;letter-spacing:0.04em;text-transform:none">2026 · 05 · 18</span>
+        </div>
+        <div class="vol">Vol. <em>01</em></div>
+        <div class="r">
+          Prepared by<br />
+          <span style="color:var(--paper);font-family:var(--font-sans);font-weight:600;font-size:13px;letter-spacing:0.04em;text-transform:none">natrix visuals · video@natrix-visuals.com</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       § 02 — THE REASON
+       ===================================================== -->
+  <section class="spread reason" id="reason">
+    <div class="inner">
+
+      <div class="head">
+        <span class="section-mark">§ 02 · The reason</span>
+        <h2 class="display display-l" style="margin-top:18px;white-space:nowrap">
+          Where the brand <em>stopped.</em>
+        </h2>
+      </div>
+
+      <div class="reason-grid">
+
+        <!-- Row 1 — the problem -->
+        <div class="reason-row-1">
+          <div class="reason-essay">
+            <p class="body body--lg">I spend a lot of time at Island Sports Club Cemagi, even when I'm not playing. The tournament screen has been bothering me for months — especially when I score high and want to take a picture of the results to send to friends.</p>
+            <p class="body">Everything else at ISC is intentional. The palette, the typography, the signage at the courts, the menus, the booking site I came in through. The tournament app on the TV wasn't. You don't need a designer's eye to feel the gap.</p>
+            <p class="body">I study design. <strong>I like to build things I want to exist.</strong> So I rebuilt the one thing in the club that was bugging me — in the club's own brand, on a single screen the staff mirror from a phone to the TV.</p>
+            <p class="body">Same flow they already run. Just looking like the rest of the club.</p>
+          </div>
+
+          <figure class="reason-photo is-before">
+            <span class="label">before.</span>
+            <div class="img-wrap">
+              <img src="assets/before.png"
+                   alt="The previous tournament app on the club TV — generic fonts, no ISC brand." />
+            </div>
+            <p class="ph-caption"><em>The club is designed on purpose.</em> The tournament TV wasn't.</p>
+          </figure>
+        </div>
+
+        <!-- Row 2 — the fix -->
+        <div class="reason-row-2">
+          <figure class="reason-photo is-after">
+            <span class="label">after.</span>
+            <div class="img-wrap">
+              <img src="assets/ISC-NEW.jpg"
+                   alt="The ISC Tournament Console on the same TV — teal and marigold, live scoring across the courts." />
+            </div>
+            <p class="ph-caption">Same hardware. Same flow. The club's own brand, end to end.</p>
+          </figure>
+
+          <div class="reason-card">
+            <span class="reason-card__eyebrow">§ what the new screen gets you</span>
+            <h4>Five small things, one bigger one.</h4>
+            <p class="reason-card__lede">
+              None of these are technical wins. They're the human ones — the moments players talk about long after the match is over.
+            </p>
+            <ul>
+              <li>Players want to photograph the results — and they actually post them</li>
+              <li>The club's brand is on the biggest screen in the room, not just at the door</li>
+              <li>Scores readable from across the floor — fewer "what round are we on?" interruptions</li>
+              <li>The champions reveal makes the end of the event a moment, not an afterthought</li>
+              <li>Same iPad or phone the staff already use — no new hardware, no subscription, nothing to renew</li>
+            </ul>
+            <p class="reason-card__kicker"><em>That's the whole pitch.</em></p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       § 03 — INTRO ESSAY
+       ===================================================== -->
+  <section class="spread intro" id="essay">
+    <div class="inner">
+
+      <div class="head">
+        <div>
+          <span class="section-mark">§ 03 · The console</span>
+          <h2 class="display display-l" style="margin-top:18px;white-space:nowrap">
+            One screen, <em>every event.</em>
+          </h2>
+        </div>
+      </div>
+
+      <figure class="intro-stage">
+        <div class="intro-tv">
+          <img src="assets/ISC-Setup.png" alt="ISC Tournament Console — the Setup tab, branded in ISC teal and marigold." />
+        </div>
+        <figcaption class="intro-stage__cap">
+          <span class="caption">The console, mirrored to the TV.</span>
+          <p class="body">One phone runs it. One screen shows it. Every player in the room can read the score from across the floor.</p>
+        </figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       § 04 — THE FIVE SCREENS
+       ===================================================== -->
+  <section class="spread views">
+    <div class="inner">
+
+      <div class="head">
+        <div>
+          <span class="section-mark">§ 04 · The features</span>
+          <h2 class="display display-xl" style="margin-top:18px">
+            Five screens, <em>one flow.</em>
+          </h2>
+        </div>
+      </div>
+
+      <div class="feat-grid">
+
+        <article class="feat-card feat-hero">
+          <header>
+            <div class="feat-num">N° 02</div>
+            <span class="feat-tag">Tab 2 · Rounds · <i>the hero view</i></span>
+          </header>
+          <h3 class="feat-title">Live <em>scoring.</em></h3>
+          <p class="feat-body">The screen that gets mirrored to the TV. One row per court, oversized numerals, plus and minus buttons, tap-to-open numpad. Drop into a court, drop out — scores stay where you left them.</p>
+          <ul class="feat-bullets">
+            <li>One row per court — Team A · Score · Team B</li>
+            <li>Tap any score to open a full numpad</li>
+            <li>Points mode auto-fills the opposing team</li>
+            <li>Tournament progress bar with one tick per round</li>
+            <li>"Started · Ends · ~ min per round" footer ticking live</li>
+            <li>Previous / Next never loses a prior round's scores</li>
+          </ul>
+        </article>
+
+        <article class="feat-card">
+          <header>
+            <div class="feat-num">N° 01</div>
+            <span class="feat-tag">Tab 1 · Americano</span>
+          </header>
+          <h3 class="feat-title">Tournament <em>setup.</em></h3>
+          <p class="feat-body">Pick the format, partners, target, player count and end time. Everything else is computed for you.</p>
+          <ul class="feat-bullets">
+            <li>Three formats: Americano · Argentino · King of the Court</li>
+            <li>Rotating or fixed partners</li>
+            <li>4–24 players · 1–6 courts (linked)</li>
+            <li>"Other" pill on every preset for custom values</li>
+            <li>Live preview of round one's pairings</li>
+          </ul>
+        </article>
+
+        <article class="feat-card">
+          <header>
+            <div class="feat-num">N° 03</div>
+            <span class="feat-tag">Tab 3 · Timer</span>
+          </header>
+          <h3 class="feat-title">Round <em>clock.</em></h3>
+          <p class="feat-body">A giant ring around the round timer. The last thirty seconds turn warm as a glanceable low-time warning.</p>
+          <ul class="feat-bullets">
+            <li>Length picker: 5 / 10 / 15 / 20 / 25 / 30 — or any custom value</li>
+            <li>Length locks once the round has started</li>
+            <li>Start · Pause · Resume · Reset · End round</li>
+            <li>Big numerals readable from across the club</li>
+          </ul>
+        </article>
+
+        <article class="feat-card">
+          <header>
+            <div class="feat-num">N° 04</div>
+            <span class="feat-tag">Tab 4 · Score</span>
+          </header>
+          <h3 class="feat-title">Live <em>standings.</em></h3>
+          <p class="feat-body">A running leaderboard that updates as scores come in. Sorted by total points, with rank, played, won and point-diff at a glance.</p>
+          <ul class="feat-bullets">
+            <li>Top three get accent avatars and a star prefix</li>
+            <li>Diff coloring runs teal for +, warm for −</li>
+            <li>Built for big-screen mirroring at any size</li>
+          </ul>
+        </article>
+
+        <article class="feat-card feat-reveal">
+          <div class="feat-reveal__text">
+            <header>
+              <div class="feat-num">N° 05</div>
+              <span class="feat-tag">Auto view · <i>Champions</i></span>
+            </header>
+            <h3 class="feat-title">The <em>reveal.</em></h3>
+            <p class="feat-body">Triggered automatically when the last round is confirmed. The console takes over the screen for the big moment.</p>
+            <ul class="feat-bullets">
+              <li>Podium row: 2nd · 1st · 3rd, with medals + per-place stats</li>
+              <li>Final standings list for everyone else, in two columns</li>
+              <li>Soft confetti petals layered behind</li>
+              <li>"Back to standings" or "Start new tournament" to close</li>
+            </ul>
+          </div>
+          <figure class="feat-reveal__shot">
+            <img src="assets/ISC-Podium.png" alt="The ISC Champions reveal — podium, final standings and confetti petals." />
+            <figcaption><span class="dot"></span>Live screen · Champions</figcaption>
+          </figure>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       § 05 — COLOPHON (brand)
+       ===================================================== -->
+  <section class="spread colophon">
+    <div class="inner">
+
+      <div class="head">
+        <span class="section-mark">§ 05 · Colophon</span>
+        <h2 class="display display-l" style="margin-top:18px">
+          The look &amp; <em>feel.</em>
+        </h2>
+      </div>
+
+      <div class="colophon-grid">
+
+        <div class="colophon-notes">
+          <h3>Built on the <em>club's own palette.</em></h3>
+          <p>The console borrows directly from iscbali.com — the same deep teal, the same crisp white, paired with a single marigold accent that picks up the warmth of the Cemagi sunset. Setimo runs through every editorial moment, with League Spartan for the body and JetBrains Mono for numerals.</p>
+          <p>The result: when staff open the console on the floor and mirror it to the TV, every player feels like they're inside the same brand they booked through — whichever of the four clubs they're in.</p>
+        </div>
+
+        <div class="swatch-card">
+          <h4 class="swatch-title">The palette</h4>
+          <div class="swatch-row">
+            <div class="swatch">
+              <div class="chip" style="background:var(--forest)"></div>
+              <div class="name">Teal</div>
+              <div class="hex">#305C67</div>
+            </div>
+            <div class="swatch">
+              <div class="chip" style="background:var(--leaf)"></div>
+              <div class="name">Teal·deep</div>
+              <div class="hex">#244852</div>
+            </div>
+            <div class="swatch">
+              <div class="chip" style="background:var(--lime)"></div>
+              <div class="name">Marigold</div>
+              <div class="hex">#F5C842</div>
+            </div>
+            <div class="swatch">
+              <div class="chip" style="background:var(--paper);border-color:var(--hairline)"></div>
+              <div class="name">White</div>
+              <div class="hex">#FFFFFF</div>
+            </div>
+            <div class="swatch">
+              <div class="chip" style="background:var(--ink)"></div>
+              <div class="name">Ink</div>
+              <div class="hex">#0E1A1D</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       § 06 — THE TERMS — built for ISC across all four clubs
+       ===================================================== -->
+  <section class="spread terms" id="terms">
+    <div class="inner">
+
+      <div class="head">
+        <span class="section-mark">§ 06 · The terms</span>
+        <h2 class="display display-l" style="margin-top:18px;white-space:nowrap">
+          Built for <em>Island Sports Club.</em>
+        </h2>
+      </div>
+
+      <div class="terms-grid">
+
+        <article class="deal-card">
+          <header>
+            <div class="deal-eyebrow">For Island Sports Club · Bali</div>
+            <h3 class="deal-title">The <em>console.</em></h3>
+            <span class="deal-pill" style="margin-top:18px">
+              <span class="pill-dot" aria-hidden="true"></span>
+              All four clubs · future locations included
+            </span>
+          </header>
+
+          <div class="deal-prices">
+            <div class="price-block">
+              <div class="price-label">Branded build, install &amp; launch · across all four clubs</div>
+              <div class="price-amount">
+                <span class="rp">Rp</span>69,000,000
+              </div>
+              <div class="price-sub">one-time · paid 50% on signing, 50% on first-club launch · no monthly fees</div>
+            </div>
+          </div>
+
+          <ul class="deal-roster" aria-label="Clubs covered">
+            <li><span class="r-num">N° 01</span><span class="r-name">Cemagi</span><span class="r-tag">Launch first</span></li>
+            <li><span class="r-num">N° 02</span><span class="r-name">Canggu</span><span class="r-tag">Island Kitchen</span></li>
+            <li><span class="r-num">N° 03</span><span class="r-name">Uluwatu</span><span class="r-tag">Cliffs</span></li>
+            <li><span class="r-num">N° 04</span><span class="r-name">Gili T</span><span class="r-tag">Island</span></li>
+          </ul>
+
+          <ul class="deal-includes">
+            <li>Deployed across <b>Canggu, Uluwatu, Cemagi and Gili T</b> — one branded build, installed at each venue</li>
+            <li><b>Future clubs welcome.</b> Any new ISC-branded club you open in the next three years comes online at no extra cost</li>
+            <li>All five screens — setup, scoring, timer, leaderboard and the champions reveal</li>
+            <li>ISC branding throughout — teal, marigold, white, Setimo display type</li>
+            <li>Three formats live — Americano, Argentino, King of the Court</li>
+            <li>Rotating or fixed partners · 4–24 players · 1–6 courts</li>
+            <li>On-site install at each club plus full staff training — no time cap, as long as it takes for everyone to feel confident</li>
+            <li>I'm there in person the first time it'll be used at the flagship — to make sure everything goes smoothly</li>
+          </ul>
+        </article>
+
+        <aside class="terms-aside">
+          <div class="note-group">
+            <h4>After each launch</h4>
+            <p><b>Thirty days</b> of free fixes per club for anything that doesn't work as described — bugs, typos, small copy tweaks. Just message me.</p>
+          </div>
+          <div class="a-divider"></div>
+          <div class="note-group">
+            <h4>Future clubs</h4>
+            <p>Any new ISC-branded club you open within three years is included — branded build, install, training. No extra cost.</p>
+          </div>
+          <div class="a-divider"></div>
+          <div class="note-group">
+            <h4>Beyond that</h4>
+            <p>New screens, additional formats, or larger feature work are quoted separately, whenever you need them.</p>
+          </div>
+          <div class="a-divider"></div>
+          <div class="note-group">
+            <h4>The fine print</h4>
+            <p>The setup fee is non-refundable once the branded build is delivered. The console runs on your own iPad or phone — no servers, no logins, nothing to renew.</p>
+          </div>
+        </aside>
+
+      </div>
+
+      <div class="terms-footer">
+        <div class="terms-sig">
+          <span class="caption">Proposed by</span>
+          <div class="sig-name">natrix <em>visuals.</em></div>
+          <div class="sig-email">video@natrix-visuals.com</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- =====================================================
+       Footer / credits
+       ===================================================== -->
+  <footer class="colophon-foot">
+    <div class="inner">
+      <div class="l">
+        Proposal · v1<br />
+        <span style="color:var(--paper);letter-spacing:0.08em">2026 · 05 · 18</span>
+      </div>
+      <div class="mark">Island Sports Club <em>·</em> Tournament Console</div>
+      <div class="r">
+        Prepared by natrix visuals<br />
+        <a href="mailto:video@natrix-visuals.com">video@natrix-visuals.com</a>
+      </div>
+    </div>
+  </footer>
+
+</main>
+
+</body>
+</html>
