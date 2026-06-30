@@ -1,1235 +1,471 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Natrix Visuals — Brand, code, motion, prints by one human</title>
-  <meta name="description" content="Solo studio building real products end-to-end — brand, code, motion, prints. One pair of hands, fed by years of restless craft, travel, and curiosity.">
-  <meta property="og:title" content="Natrix Visuals — One human, every layer">
-  <meta property="og:description" content="Brand, code, motion, prints — every layer by one pair of hands. Live products you can click.">
-  <link rel="icon" type="image/png" href="Logo_Black.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* ── Editorial hero typography ─────────────────────────── */
-    .hero-headline {
-      font-family: 'Instrument Serif', 'Times New Roman', serif;
-      font-weight: 400;
-      font-size: clamp(2.6rem, 8.4vw, 8rem);
-      line-height: 0.98;
-      letter-spacing: -0.02em;
-    }
-
-    .hero-headline .hero-em {
-      font-style: italic;
-      color: rgba(255,255,255,0.32);
-      font-weight: 400;
-      margin-right: 0.18em;
-    }
-
-    .hero-token {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.2em;
-      vertical-align: baseline;
-      padding: 0.04em 0.18em 0.04em 0.16em;
-      border-radius: 0.18em;
-      background: rgba(255,255,255,0.025);
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: background 0.4s ease, border-color 0.4s ease, transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
-    }
-
-    .hero-token:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(255,255,255,0.14);
-      transform: translateY(-2px) rotate(-0.4deg);
-    }
-
-    .hero-token--accent {
-      background: rgba(167,243,208,0.04);
-      border-color: rgba(167,243,208,0.18);
-      color: rgb(167,243,208);
-    }
-
-    .hero-token--accent:hover {
-      background: rgba(167,243,208,0.08);
-      border-color: rgba(167,243,208,0.32);
-    }
-
-    .hero-icon {
-      width: 0.78em;
-      height: 0.78em;
-      display: inline-block;
-      flex-shrink: 0;
-      color: rgba(255,255,255,0.78);
-    }
-
-    .hero-token--accent .hero-icon {
-      color: rgb(110,231,183);
-      animation: heroSparkFloat 4.5s ease-in-out infinite;
-      filter: drop-shadow(0 0 12px rgba(110,231,183,0.35));
-    }
-
-    @keyframes heroSparkFloat {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-3px) rotate(8deg); }
-    }
-
-    .hero-discipline {
-      transition: color 0.2s ease;
-      cursor: default;
-    }
-
-    .hero-discipline:hover {
-      color: rgba(255,255,255,0.95);
-    }
-
-    .hero-sep {
-      color: rgba(255,255,255,0.18);
-    }
-
-    @media (max-width: 640px) {
-      .hero-token {
-        padding: 0.02em 0.14em;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-token--accent .hero-icon { animation: none; }
-    }
-
-    :root {
-      --color-1: 0 100% 63%;
-      --color-2: 270 100% 63%;
-      --color-3: 210 100% 63%;
-      --color-4: 195 100% 63%;
-      --color-5: 90 100% 63%;
-      --speed: 2s;
-    }
-
-    @keyframes rainbow {
-      0% {
-        background-position: 0%;
-      }
-
-      100% {
-        background-position: 200%;
-      }
-    }
-
-    @keyframes marquee {
-      0% {
-        transform: translateX(0);
-      }
-
-      100% {
-        transform: translateX(-50%);
-      }
-    }
-
-    .rainbow-btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      height: 2.75rem;
-      padding: 0.5rem 1.5rem;
-      border-radius: 9999px;
-      border: 0.08rem solid transparent;
-      background:
-        linear-gradient(#0d0d0d, #0d0d0d),
-        linear-gradient(#0d0d0d 50%, rgba(13, 13, 13, 0.5) 80%, rgba(13, 13, 13, 0)),
-        linear-gradient(90deg,
-          hsl(var(--color-1)),
-          hsl(var(--color-5)),
-          hsl(var(--color-3)),
-          hsl(var(--color-4)),
-          hsl(var(--color-2)));
-      background-size: auto, auto, 200%;
-      background-clip: padding-box, border-box, border-box;
-      background-origin: border-box;
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      cursor: pointer;
-      animation: rainbow var(--speed) infinite linear;
-      transition: opacity 0.2s;
-      overflow: visible;
-    }
-
-    .rainbow-btn::before {
-      content: '';
-      position: absolute;
-      bottom: -20%;
-      left: 50%;
-      z-index: -1;
-      height: 20%;
-      width: 60%;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg,
-          hsl(var(--color-1)),
-          hsl(var(--color-5)),
-          hsl(var(--color-3)),
-          hsl(var(--color-4)),
-          hsl(var(--color-2)));
-      background-size: 200%;
-      filter: blur(0.8rem);
-      animation: rainbow var(--speed) infinite linear;
-    }
-
-    .rainbow-btn:hover {
-      opacity: 0.9;
-    }
-
-    @keyframes pulseRing {
-      0% {
-        transform: scale(1);
-        opacity: 0.8;
-      }
-
-      70% {
-        transform: scale(2.2);
-        opacity: 0;
-      }
-
-      100% {
-        transform: scale(1);
-        opacity: 0;
-      }
-    }
-
-    @keyframes availablePulse {
-
-      0%,
-      100% {
-        transform: scale(1);
-      }
-
-      50% {
-        transform: scale(1.7);
-      }
-    }
-
-    @keyframes svgDotBlink {
-
-      0%,
-      100% {
-        opacity: 1;
-      }
-
-      50% {
-        opacity: 0.2;
-      }
-    }
-
-    @keyframes equityGrow {
-      from {
-        stroke-dashoffset: 1;
-      }
-
-      to {
-        stroke-dashoffset: 0;
-      }
-    }
-
-    @keyframes equityFillGrow {
-      from {
-        opacity: 0;
-      }
-
-      to {
-        opacity: 0.5;
-      }
-    }
-
-    .marquee-track {
-      animation: marquee 40s linear infinite;
-    }
-
-    .pulse-ring-el {
-      position: absolute;
-      inset: 0;
-      border-radius: 9999px;
-      background: rgb(52 211 153);
-      animation: pulseRing 2s ease-out infinite;
-    }
-
-    .available-dot {
-      animation: availablePulse 2s ease-in-out infinite;
-    }
-
-    /* Scroll-reveal */
-    .fade-up {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-
-    .fade-up.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Glow card hover */
-    .glow-card {
-      position: relative;
-      transition: border-color 0.3s, background-color 0.3s;
-      overflow: hidden;
-    }
-
-    .glow-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(600px circle at var(--mx, 50%) var(--my, 50%), rgba(121, 87, 255, 0.08), transparent 40%);
-      opacity: 0;
-      transition: opacity 0.4s;
-      pointer-events: none;
-    }
-
-    .glow-card:hover::before {
-      opacity: 1;
-    }
-
-    .glow-card:hover {
-      border-color: rgba(255, 255, 255, 0.08) !important;
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: #080808;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #2a2a2a;
-      border-radius: 2px;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    /* ── Hero stacked product previews ───────────────────────── */
-    .hero-stack {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      max-width: 540px;
-      margin-left: auto;
-      perspective: 1400px;
-    }
-
-    .hero-card {
-      position: absolute;
-      width: 78%;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: #0d0d10;
-      box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.02) inset;
-      overflow: hidden;
-      will-change: transform;
-    }
-
-    .hero-card-back {
-      top: 4%;
-      right: 0;
-      transform: rotate(4deg) translateZ(0);
-      animation: heroFloat1 9s ease-in-out infinite;
-      opacity: 0.85;
-    }
-
-    .hero-card-mid {
-      top: 22%;
-      right: 12%;
-      transform: rotate(-3deg) translateZ(0);
-      animation: heroFloat2 11s ease-in-out infinite;
-      z-index: 2;
-    }
-
-    .hero-card-front {
-      top: 40%;
-      left: 0;
-      transform: rotate(2deg) translateZ(0);
-      animation: heroFloat3 13s ease-in-out infinite;
-      z-index: 3;
-    }
-
-    @keyframes heroFloat1 {
-      0%, 100% { transform: rotate(4deg) translateY(0); }
-      50% { transform: rotate(4.6deg) translateY(-8px); }
-    }
-    @keyframes heroFloat2 {
-      0%, 100% { transform: rotate(-3deg) translateY(0); }
-      50% { transform: rotate(-3.6deg) translateY(-12px); }
-    }
-    @keyframes heroFloat3 {
-      0%, 100% { transform: rotate(2deg) translateY(0); }
-      50% { transform: rotate(2.6deg) translateY(-6px); }
-    }
-
-    .hero-card-bar {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 12px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      background: rgba(255,255,255,0.02);
-    }
-
-    .hero-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .hero-card-label {
-      margin-left: 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 9px;
-      color: rgba(255,255,255,0.35);
-      letter-spacing: 0.04em;
-    }
-
-    .hero-card-live {
-      margin-left: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 8px;
-      color: #34d399;
-      letter-spacing: 0.1em;
-    }
-
-    .hero-card-live-dot {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: #34d399;
-      box-shadow: 0 0 6px rgba(52,211,153,0.7);
-      animation: heroLivePulse 1.6s ease-in-out infinite;
-    }
-
-    @keyframes heroLivePulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .hero-card-body {
-      padding: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      min-height: 140px;
-    }
-
-    .hero-card-row {
-      height: 8px;
-      border-radius: 3px;
-    }
-
-    .hero-card-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      margin-top: 6px;
-    }
-
-    .hero-card-tile {
-      aspect-ratio: 1 / 1;
-      border-radius: 5px;
-    }
-
-    .hero-card-chart {
-      display: flex;
-      align-items: flex-end;
-      gap: 5px;
-      height: 60px;
-      margin-top: 6px;
-      padding: 6px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.015);
-    }
-
-    .hero-card-bar-el {
-      flex: 1;
-      border-radius: 2px;
-      transition: height 0.5s ease;
-    }
-
-    .hero-card-bracket {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 4px;
-    }
-
-    .hero-bracket-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4px;
-    }
-
-    .hero-bracket-cell {
-      height: 16px;
-      border-radius: 3px;
-    }
-
-    @media (max-width: 1023px) {
-      .hero-stack {
-        max-width: 420px;
-        margin: 0 auto;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .hero-card-back,
-      .hero-card-mid,
-      .hero-card-front {
-        animation: none;
-      }
-    }
-
-    /* ── Product card hover ──────────────────────────────────── */
-    .product-card {
-      position: relative;
-      overflow: hidden;
-      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), border-color 0.3s ease;
-    }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255,255,255,0.12) !important;
-    }
-
-    .product-thumb {
-      aspect-ratio: 16 / 10;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.05);
-      overflow: hidden;
-      background: #0a0a0c;
-      position: relative;
-    }
-
-    .product-thumb-fallback {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 14px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.25);
-    }
-
-    /* ── Range strip ─────────────────────────────────────────── */
-    .range-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    @media (min-width: 768px) {
-      .range-strip {
-        grid-template-columns: repeat(6, 1fr);
-      }
-    }
-
-    .range-cell {
-      background: #0a0a0c;
-      padding: 24px 16px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-      transition: background 0.3s ease;
-    }
-
-    .range-cell:hover {
-      background: #0d0d10;
-    }
-
-    .range-cell svg {
-      color: rgba(255,255,255,0.35);
-    }
-
-    .range-cell-label {
-      font-size: 11px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.85);
-      letter-spacing: 0.02em;
-    }
-
-    .range-cell-sub {
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-      font-size: 9px;
-      color: rgba(255,255,255,0.3);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Natrix Ethos — Your money shouldn't need you.</title>
+  <meta name="description" content="A complete, honest course on automated trading. The algo trades, the prop firm provides the capital, you let it run. Built and tested by one human. No guru stuff." />
+
+  <meta property="og:title" content="Natrix Ethos — Your money shouldn't need you." />
+  <meta property="og:description" content="An automated trading system that runs on funded capital. No hype, no fake screenshots. Built and tested by someone who'll show you exactly how it works." />
+  <meta property="og:type" content="website" />
+
+  <link rel="preconnect" href="https://whop.com" />
+  <link rel="preload" href="fonts/Mosvita-Bold.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="fonts/Mosvita-Regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
 </head>
+<body>
+  <a class="skip-link" href="#story">Skip to the story</a>
 
-<body class="bg-[#080808] text-zinc-100 overflow-x-hidden" style="font-family:'Inter',ui-sans-serif,system-ui,sans-serif;">
-
-  <!-- Background grid -->
-  <div class="pointer-events-none fixed inset-0 z-0"
-    style="background-image: linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px); background-size: 60px 60px;">
+  <!-- Atmosphere: the blue glow -->
+  <div class="glow-field" aria-hidden="true">
+    <span class="glow glow--one"></span>
+    <span class="glow glow--two"></span>
   </div>
 
-  <!-- Ambient glow blobs -->
-  <div id="blob-top" class="pointer-events-none fixed top-[-20%] left-[10%] w-[500px] h-[500px] rounded-full opacity-20"
-    style="background: radial-gradient(circle, rgba(121,87,255,0.2) 0%, transparent 70%); will-change: transform;">
-  </div>
-  <div id="blob-bottom"
-    class="pointer-events-none fixed bottom-[-10%] right-[5%] w-[400px] h-[400px] rounded-full opacity-10"
-    style="background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, transparent 70%); will-change: transform;">
-  </div>
+  <header class="site-header" id="top">
+    <a class="wordmark" href="#top" aria-label="Natrix Ethos home">
+      Natrix Ethos
+    </a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="#how">How it works</a>
+      <a href="#inside">What's inside</a>
+      <a href="#about">About</a>
+      <a href="#story">My story</a>
+      <a class="btn btn--ghost" href="https://whop.com/natrix-ethos/natrix-ethos/" target="_blank" rel="noopener">Get the system</a>
+    </nav>
+  </header>
 
-  <!-- ── Navigation ─────────────────────────────────────────── -->
-  <nav id="main-nav" class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-[#080808]/70 border-b border-white/[0.04]" style="transition: transform 0.3s ease, opacity 0.3s ease;">
-    <div class="max-w-7xl mx-auto flex items-center justify-between px-8 md:px-16 lg:px-24 py-4 md:py-5">
-      <span class="text-xs font-mono text-zinc-600 tracking-widest uppercase">natrix-visuals</span>
-      <div class="flex items-center gap-2">
-        <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-        <span class="hidden sm:inline text-xs font-mono text-zinc-500">Systems online</span>
-      </div>
-    </div>
-  </nav>
+  <main>
 
-  <!-- ── Hero ──────────────────────────────────────────────── -->
-  <section class="relative z-10 min-h-screen flex items-center px-8 md:px-16 lg:px-24 max-w-7xl mx-auto pt-32 md:pt-24 pb-24">
-    <!-- Hand-drawn margin marks -->
-    <svg aria-hidden="true" class="hidden lg:block absolute left-8 top-32 text-zinc-800 fade-up" width="36" height="120" viewBox="0 0 36 120" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round">
-      <path d="M6 4c-2 6 2 14 0 22-2 8 4 16 0 24-3 8 2 18-1 26-2 8 3 16 1 24-1 6 1 14 1 18"/>
-      <path d="M14 60h14M14 64h10"/>
-    </svg>
-
-    <div class="w-full">
-      <!-- Status pill -->
-      <div class="mb-8 inline-flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.02] backdrop-blur-sm fade-up">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-        </span>
-        <span class="text-[11px] font-mono text-zinc-300 tracking-wide">Open for aligned projects</span>
-        <span class="text-[10px] font-mono text-zinc-600 border-l border-white/[0.08] pl-2.5">Bali · 2026</span>
+    <!-- 1. HERO -->
+    <section class="hero" aria-labelledby="hero-h">
+      <div class="hero__text">
+        <p class="kicker reveal">Natrix Ethos &nbsp;·&nbsp; Algo Trading</p>
+        <h1 class="hero__title reveal" id="hero-h">
+          Your money<br />shouldn't<br />need you.
+        </h1>
+        <p class="hero__sub reveal">
+          An automated trading system that runs on funded capital. The algo trades,
+          the prop firm provides the money, you let it run. No guru stuff. No fake
+          screenshots. Built and tested by someone who'll show you exactly how it works.
+        </p>
+        <div class="hero__cta reveal">
+          <a class="btn btn--primary" href="https://whop.com/natrix-ethos/natrix-ethos/" target="_blank" rel="noopener">
+            Get the system <span class="btn__price">€79</span>
+          </a>
+          <p class="microcopy">No hype. No fake profit screenshots. No Lambo.</p>
+        </div>
       </div>
 
-      <!-- Editorial headline with inline icons -->
-      <h1 class="hero-headline text-zinc-100 fade-up mb-10 md:mb-12" style="transition-delay:0.1s">
-        <span class="block">Brand, code,</span>
-        <span class="block">motion, prints —</span>
-        <span class="block">
-          <em class="hero-em">by</em>
-          <span class="hero-token">
-            <svg class="hero-icon" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M14 34c0-12 8-22 18-22s18 10 18 22"/>
-              <path d="M22 34c0-8 4-14 10-14s10 6 10 14v6"/>
-              <path d="M28 34c0-4 2-8 4-8s4 4 4 8v8"/>
-              <path d="M16 44c0 6 2 10 6 14"/>
-              <path d="M48 44c0 6-2 10-6 14"/>
-              <path d="M22 50c2 4 6 6 10 6s8-2 10-6"/>
-            </svg>
-            <span>one human,</span>
-          </span>
-        </span>
-        <span class="block">
-          <em class="hero-em">fed by</em>
-          <span class="hero-token hero-token--accent">
-            <svg class="hero-icon hero-icon--spark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <circle cx="32" cy="32" r="26"/>
-              <path d="M6 32h52M32 6c8 8 12 18 12 26s-4 18-12 26c-8-8-12-18-12-26S24 14 32 6z"/>
-              <path d="M44 20l-8 8 8 8M20 44l8-8-8-8" opacity="0.5"/>
-            </svg>
-            <span>the world.</span>
-          </span>
-        </span>
-      </h1>
+      <div class="hero__media reveal">
+        <div class="dash" role="img" aria-label="Example system dashboard: all systems running, equity up 5.2 percent this month, daily target 74 percent reached, webhook service active, and the strategy copy-traded to five funded accounts.">
+          <div class="dash__bar">
+            <span class="dash__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="dash__tab">Overview</span>
+            <span class="dash__status"><span class="dash__led" aria-hidden="true"></span>All systems running</span>
+          </div>
+          <div class="dash__body">
+            <div class="dash__top">
+              <div class="dash__chart">
+                <svg viewBox="0 0 440 150" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="equityFill" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" /><stop offset="100%" />
+                    </linearGradient>
+                  </defs>
+                  <g class="dash__grow">
+                    <path class="dash__area" d="M6,128 L44,118 L82,122 L120,100 L158,108 L196,82 L234,90 L272,62 L310,70 L348,46 L392,38 L434,24 L434,150 L6,150 Z" />
+                    <path class="dash__line" d="M6,128 L44,118 L82,122 L120,100 L158,108 L196,82 L234,90 L272,62 L310,70 L348,46 L392,38 L434,24" />
+                  </g>
+                  <circle class="dash__pt" cx="434" cy="24" r="4.5" />
+                </svg>
+              </div>
+              <div class="dash__meta">
+                <span class="dash__label">This month</span>
+                <span class="dash__gain">+5.2%</span>
+                <span class="dash__metasub">Open trades · 3</span>
+              </div>
+            </div>
 
-      <!-- Subhead -->
-      <div class="relative max-w-xl mb-10 fade-up" style="transition-delay:0.25s">
-        <p class="text-base md:text-lg text-zinc-400 leading-relaxed">
-          Solo studio for products I actually care about. Every layer by one pair of hands — taste built over years of restless craft, travel, and the kind of curiosity that won't sit still. The work below is live, not concepts.
+            <div class="dash__kpis">
+              <div class="kpi">
+                <span class="kpi__head">
+                  <span class="kpi__label">Daily target</span>
+                  <span class="kpi__val">€184 <span class="kpi__muted">/ €250</span></span>
+                </span>
+                <span class="kpi__bar"><span class="kpi__fill" style="--p:0.74"></span></span>
+              </div>
+            </div>
+
+            <div class="dash__services">
+              <div class="svc"><span class="svc__dot" aria-hidden="true"></span><span class="svc__name">Webhook service</span><span class="svc__state">Active</span></div>
+              <div class="svc"><span class="svc__dot" aria-hidden="true"></span><span class="svc__name">Copy trading</span><span class="svc__state">5 accounts synced</span></div>
+              <div class="dash__accounts">
+                <span class="acct"><i aria-hidden="true"></i>#84021</span>
+                <span class="acct"><i aria-hidden="true"></i>#84105</span>
+                <span class="acct"><i aria-hidden="true"></i>#84233</span>
+                <span class="acct"><i aria-hidden="true"></i>#84309</span>
+                <span class="acct"><i aria-hidden="true"></i>#84477</span>
+              </div>
+              <div class="svc"><span class="svc__dot svc__dot--blue" aria-hidden="true"></span><span class="svc__name">Last signal</span><span class="svc__state">2m ago</span></div>
+            </div>
+
+            <p class="dash__foot">Illustrative example</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. THE HONEST FRAME -->
+    <section class="band band--frame" aria-labelledby="frame-h">
+      <p class="kicker reveal">Read this first</p>
+      <h2 class="display reveal" id="frame-h">I'm not a<br />trading guru.</h2>
+      <p class="lede reveal">
+        No fake profit screenshots. No rented Lambo. No promise you'll be rich by Friday.
+        I'm a builder. I set this system up, ran it, and broke it a few times figuring it out.
+        This course is just the clear version of the path I walked, so it takes you days
+        instead of months.
+      </p>
+    </section>
+
+    <!-- SIGNAL VS NOISE -->
+    <section class="band band--noise" id="noise" aria-labelledby="noise-h">
+      <p class="kicker reveal">Signal vs noise</p>
+      <h2 class="display reveal" id="noise-h">The market<br />is mostly noise.</h2>
+
+      <div class="filter reveal" role="img" aria-label="A storm of trading indicators, gurus, and strategies on the left is filtered down to a single verified result: what actually works.">
+        <div class="filter__noise">
+          <span class="noise-chip" style="--x:3%;  --y:18%; --r:-8deg;  --d:0s">RSI divergence</span>
+          <span class="noise-chip" style="--x:32%; --y:6%;  --r:5deg;   --d:1.1s">MACD cross</span>
+          <span class="noise-chip" style="--x:62%; --y:22%; --r:-4deg;  --d:2.3s">ICT</span>
+          <span class="noise-chip" style="--x:14%; --y:40%; --r:7deg;   --d:0.6s">+312% in a week</span>
+          <span class="noise-chip" style="--x:44%; --y:50%; --r:-6deg;  --d:1.8s">SMC</span>
+          <span class="noise-chip" style="--x:73%; --y:38%; --r:3deg;   --d:0.3s">Fibonacci</span>
+          <span class="noise-chip" style="--x:5%;  --y:62%; --r:-5deg;  --d:2.7s">martingale</span>
+          <span class="noise-chip" style="--x:36%; --y:72%; --r:6deg;   --d:1.4s">grid bot</span>
+          <span class="noise-chip" style="--x:66%; --y:62%; --r:-7deg;  --d:0.9s">guru signals</span>
+          <span class="noise-chip" style="--x:20%; --y:86%; --r:4deg;   --d:2.1s">win rate 92%</span>
+          <span class="noise-chip" style="--x:55%; --y:86%; --r:-3deg;  --d:1.6s">liquidity grab</span>
+          <span class="noise-chip" style="--x:84%; --y:10%; --r:8deg;   --d:3.1s">scalping</span>
+          <span class="noise-chip" style="--x:86%; --y:74%; --r:-5deg;  --d:2.5s">news spike</span>
+          <span class="noise-chip" style="--x:80%; --y:48%; --r:5deg;   --d:1.2s">EA v4.2</span>
+        </div>
+
+        <div class="filter__bar" aria-hidden="true">
+          <span class="filter__stream"></span>
+          <span class="filter__stream filter__stream--2"></span>
+          <span class="filter__stream filter__stream--3"></span>
+        </div>
+
+        <div class="filter__signal">
+          <div class="filter__result">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <span class="filter__caption filter__caption--right">What actually works</span>
+        </div>
+      </div>
+
+      <p class="lede reveal filter__lede">
+        For the last seven months I've been testing, researching, and breaking things
+        myself. This is the filtered version. What works, what doesn't, and nothing I
+        haven't run with my own hands.
+      </p>
+    </section>
+
+    <!-- 4. HOW IT ACTUALLY WORKS -->
+    <section class="band" id="how" aria-labelledby="how-h">
+      <p class="kicker reveal">How it actually works</p>
+      <h2 class="display reveal" id="how-h">Three pieces.<br />You place zero trades.</h2>
+
+      <div class="pipeline reveal" role="img" aria-label="The signal flows from the strategy, to the execution layer, to your funded account. You never place a trade by hand.">
+        <svg class="pipeline__svg" viewBox="0 0 900 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+          <defs>
+            <linearGradient id="wire" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-opacity="0.12" />
+              <stop offset="50%" stop-opacity="0.55" />
+              <stop offset="100%" stop-opacity="0.12" />
+            </linearGradient>
+          </defs>
+          <!-- ripple rings fire as the signal passes each node -->
+          <circle class="pipeline__ripple" data-node="0" cx="150" cy="100" r="46" />
+          <circle class="pipeline__ripple" data-node="1" cx="450" cy="100" r="46" />
+          <circle class="pipeline__ripple" data-node="2" cx="750" cy="100" r="46" />
+          <path class="pipeline__wire" d="M150 100 H750" />
+          <g class="pipeline__node" data-node="0" transform="translate(150 100)">
+            <circle class="pipeline__core" r="46" /><circle class="pipeline__ring" r="46" />
+          </g>
+          <g class="pipeline__node" data-node="1" transform="translate(450 100)">
+            <circle class="pipeline__core" r="46" /><circle class="pipeline__ring" r="46" />
+          </g>
+          <g class="pipeline__node" data-node="2" transform="translate(750 100)">
+            <circle class="pipeline__core" r="46" /><circle class="pipeline__ring" r="46" />
+          </g>
+          <circle class="pipeline__pulse" r="5" cx="150" cy="100" />
+        </svg>
+        <ol class="pipeline__steps">
+          <li>
+            <span class="pipeline__num">01</span>
+            <h3>The strategy</h3>
+            <p>A pre-built algorithm watches the chart and decides when to act. You don't build it or predict anything. You learn to read and trust the data behind it.</p>
+          </li>
+          <li>
+            <span class="pipeline__num">02</span>
+            <h3>The execution</h3>
+            <p>When the strategy fires a signal, it's passed automatically to an execution layer. No clicking, no manual orders, no sitting at a screen.</p>
+          </li>
+          <li>
+            <span class="pipeline__num">03</span>
+            <h3>The funded account</h3>
+            <p>That trade lands in a funded account, on capital a prop firm provides. The whole chain runs without you placing a single trade.</p>
+          </li>
+        </ol>
+      </div>
+
+    </section>
+
+    <!-- 6. WHAT'S INSIDE -->
+    <section class="band" id="inside" aria-labelledby="inside-h">
+      <p class="kicker reveal">What's inside</p>
+      <h2 class="display reveal" id="inside-h">The whole path,<br />in order.</h2>
+
+      <ol class="curriculum">
+        <span class="curriculum__rail" aria-hidden="true"><span class="curriculum__fill"></span></span>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">01</span>
+          <div class="curriculum__text">
+            <h3>Foundations</h3>
+            <p>What automated trading actually is, in plain language. What an algorithm is, how a strategy makes decisions, and why removing emotion is the entire point.</p>
+          </div>
+        </li>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">02</span>
+          <div class="curriculum__text">
+            <h3>Getting funded</h3>
+            <p>How funded accounts work end to end. The application, the rules and limits, how to pick a provider, and how much capital you can trade without risking your own.</p>
+          </div>
+        </li>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">03</span>
+          <div class="curriculum__text">
+            <h3>Building the system</h3>
+            <p>Setting up a charting platform, loading pre-built strategies, and reading the backtested performance data so you understand what you're trusting and why.</p>
+          </div>
+        </li>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">04</span>
+          <div class="curriculum__text">
+            <h3>Connecting the pieces</h3>
+            <p>How a signal moves automatically from a strategy, to an execution system, to a live funded account. Explained in everyday language. No technical background needed.</p>
+          </div>
+        </li>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">05</span>
+          <div class="curriculum__text">
+            <h3>Going live</h3>
+            <p>A guided first live test where you watch the whole system work end to end. Then risk settings, account protections, and the safety nets that keep you inside the limits automatically.</p>
+          </div>
+        </li>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">06</span>
+          <div class="curriculum__text">
+            <h3>Scaling up</h3>
+            <p>How one working account becomes many. Running the same strategy across multiple funded accounts, and a realistic roadmap to build that up over time.</p>
+          </div>
+        </li>
+        <li class="curriculum__row reveal">
+          <span class="curriculum__idx">07</span>
+          <div class="curriculum__text">
+            <h3>Staying consistent</h3>
+            <p>What live trading feels like day to day, quiet stretches and losing streaks included. A full troubleshooting reference, and what daily and weekly management really looks like.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- 7. THE HONEST PART -->
+    <section class="band band--honest" id="honest" aria-labelledby="honest-h">
+      <p class="kicker reveal">The honest part</p>
+      <h2 class="display reveal" id="honest-h">There will be<br />losing days.</h2>
+      <div class="story__body story__body--narrow">
+        <p class="reveal">This is not a money printer, and I won't pretend it is. Drawdowns happen. Quiet weeks happen. Accounts get blown. That's a normal part of running an automated system, not a sign something is broken.</p>
+        <p class="reveal">Here's the rhythm of a normal week. A run of green, a red day, then green again. The losing day isn't a failure, it's just part of it.</p>
+      </div>
+
+      <div class="calendar reveal" role="img" aria-label="An example trading week: three winning days, one losing day on Thursday, and a win on Friday. Profitable overall.">
+        <div class="calendar__head">
+          <div class="calendar__titlewrap">
+            <p class="calendar__title">A normal week</p>
+            <p class="calendar__month">Example · not a real track record</p>
+          </div>
+          <div class="calendar__summary">
+            <span class="calendar__stat"><b class="is-win">+€1,007</b> net</span>
+            <span class="calendar__stat"><b class="is-loss">1</b> red day</span>
+          </div>
+        </div>
+
+        <div class="calendar__week">
+          <div class="cal-day cal-day--win"><span class="cal-day__n">Mon</span><span class="cal-day__pnl">+€268</span></div>
+          <div class="cal-day cal-day--win"><span class="cal-day__n">Tue</span><span class="cal-day__pnl">+€291</span></div>
+          <div class="cal-day cal-day--win"><span class="cal-day__n">Wed</span><span class="cal-day__pnl">+€317</span></div>
+          <div class="cal-day cal-day--loss"><span class="cal-day__n">Thu</span><span class="cal-day__pnl">−€124</span></div>
+          <div class="cal-day cal-day--win"><span class="cal-day__n">Fri</span><span class="cal-day__pnl">+€255</span></div>
+        </div>
+
+        <p class="calendar__note">Illustrative example, not a real track record. Just the shape of a normal week.</p>
+      </div>
+
+      <div class="story__body story__body--narrow">
+        <p class="reveal">What I can give you is the honest version: what the ups and downs actually feel like, why they're normal, and the safety nets that keep a single bad day from becoming a disaster.</p>
+        <p class="reveal">And the time cost? Once it's set up and running, it's minutes a day, not hours. Roughly a daily check-in, not constant monitoring.</p>
+      </div>
+    </section>
+
+    <!-- 8. WHO IT'S FOR -->
+    <section class="band band--split" id="who" aria-labelledby="who-h">
+      <div class="split__lead">
+        <p class="kicker reveal">Who this is for</p>
+        <h2 class="display reveal" id="who-h">Start from<br />zero.</h2>
+      </div>
+      <div class="who-grid reveal">
+        <div class="who-col">
+          <p class="who-col__head who-col__head--yes">This is for you if</p>
+          <ul class="ticklist ticklist--yes">
+            <li>You've never opened a trading platform in your life</li>
+            <li>You can't code, and don't want to</li>
+            <li>You're done with hype and want the honest mechanics</li>
+            <li>You want a system that runs without you watching it</li>
+          </ul>
+        </div>
+        <div class="who-col">
+          <p class="who-col__head who-col__head--no">It's not for you if</p>
+          <ul class="ticklist ticklist--no">
+            <li>You want guaranteed profits with zero risk</li>
+            <li>You expect to be rich overnight</li>
+            <li>You want to day-trade manually on instinct</li>
+            <li>You won't follow a clear, step-by-step path</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9. ABOUT JENNY -->
+    <section class="band band--about" id="about" aria-labelledby="about-h">
+      <p class="kicker reveal">Who's behind this</p>
+      <h2 class="display reveal" id="about-h">Built by<br />one human.</h2>
+      <div class="story__body story__body--narrow">
+        <p class="reveal">I'm Jenny. Brand, code, motion, prints, by one person, fed by the world. I run a small studio, Natrix Visuals, where everything I show is live, not concepts.</p>
+        <p class="reveal">I built this course the same way I build everything: by actually doing it, breaking it, and writing down the version that would have saved me months. No theory I haven't run myself.</p>
+        <p class="reveal">
+          <a class="textlink" href="https://www.natrix-visuals.com" target="_blank" rel="noopener">See the rest of my work →</a>
         </p>
       </div>
+    </section>
 
-      <!-- CTAs -->
-      <div class="flex flex-wrap items-center gap-4 fade-up" style="transition-delay:0.4s">
-        <a href="#products" class="rainbow-btn">See the products</a>
-        <button onclick="openContactModal()" class="group inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/[0.08] bg-white/[0.02] text-zinc-300 text-sm font-medium hover:border-white/[0.18] hover:bg-white/[0.05] transition-colors">
-          <span>Or hire me</span>
-          <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 -rotate-45" fill="none" stroke="currentColor" stroke-width="1.6" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"/></svg>
-        </button>
-        <span class="text-[11px] font-mono text-zinc-600 ml-1">~1 day reply</span>
+    <!-- 10. FAQ -->
+    <section class="band" id="faq" aria-labelledby="faq-h">
+      <p class="kicker reveal">Honest answers</p>
+      <h2 class="display reveal" id="faq-h">Before you<br />ask.</h2>
+      <div class="faq">
+        <details class="faq__item reveal">
+          <summary>Do I need my own money to trade?</summary>
+          <div class="faq__a"><p>Not your own trading capital, no. You trade on a funded account that a prop firm provides. Your own cost is the small entry fee for their evaluation, plus the one-time €79 for this course.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Do I need to know how to code?</summary>
+          <div class="faq__a"><p>No. You're given working, pre-built strategies. The course teaches you to set them up, read the data, and connect the pieces. There's no coding and no advanced math anywhere in it.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>How much time does it take to run?</summary>
+          <div class="faq__a"><p>Setting it up is the main effort, and the course walks you through every step. After that it's minutes a day. Roughly a daily check-in, not hours at a screen.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Is this actually automated, or do I place trades?</summary>
+          <div class="faq__a"><p>It's genuinely automated. The strategy fires a signal, the execution layer places the trade, and it lands in your funded account. You don't place a single trade by hand.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>What if I lose money or blow an account?</summary>
+          <div class="faq__a"><p>It can happen, and the course addresses it directly. You'll learn the risk settings and account protections that keep losses contained, and why losing days are a normal part of the process rather than a failure.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>What exactly do I get for €79?</summary>
+          <div class="faq__a"><p>Lifetime access to the full course: every step from foundations to scaling, real walkthroughs rather than theory, and the troubleshooting reference. One payment, no subscription.</p></div>
+        </details>
       </div>
+    </section>
 
-      <!-- Discipline ticker (inline, not pills) -->
-      <div class="mt-16 pt-8 border-t border-white/[0.05] fade-up" style="transition-delay:0.5s">
-        <p class="text-[10px] font-mono text-zinc-600 tracking-[0.2em] uppercase mb-4">What "every layer" means</p>
-        <div class="flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-zinc-400">
-          <span class="hero-discipline">Product design</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-discipline">Web &amp; app</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-discipline">Motion</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-discipline">Brand identity</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-discipline">Print</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-discipline">Copy</span>
-          <span class="hero-sep">·</span>
-          <span class="hero-discipline">Code &amp; AI</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- THE STORY (closing narrative) -->
+    <section class="story" id="story" aria-labelledby="story-h">
+      <p class="kicker reveal">My story</p>
+      <h2 class="display reveal" id="story-h">The whole<br />honest story.</h2>
 
-  <!-- ── Products ──────────────────────────────────────────── -->
-  <section id="products" class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto py-24">
-
-    <div class="mb-14 fade-up">
-      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-4">Products</p>
-      <h2 class="text-3xl md:text-4xl font-semibold text-zinc-100 leading-snug max-w-3xl">Things I built because I wanted them to exist.</h2>
-      <p class="text-zinc-400 leading-relaxed text-base max-w-2xl mt-5">Each one is designed, coded, branded and shipped by me. Some are live, some are growing. All real.</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-
-      <!-- MatchScreen -->
-      <a href="https://matchscreen.app" target="_blank" rel="noopener noreferrer"
-        class="product-card glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6 fade-up flex flex-col hover:border-white/[0.1] transition-colors group"
-        style="text-decoration:none;">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span class="text-[10px] font-mono text-emerald-400 tracking-widest uppercase">Live</span>
-          <span class="text-[10px] font-mono text-zinc-700 ml-auto">2026</span>
-        </div>
-        <h3 class="text-xl font-semibold text-zinc-100 mb-2 tracking-tight">MatchScreen</h3>
-        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Tournament console for padel — bracket logic, live scoring, full brand and UI in one app.</p>
-        <span class="mt-auto text-xs font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors flex items-center gap-1">matchscreen.app <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
-      </a>
-
-      <!-- NorthStar -->
-      <a href="https://northstar-architect.vercel.app/" target="_blank" rel="noopener noreferrer"
-        class="product-card glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6 fade-up flex flex-col hover:border-white/[0.1] transition-colors group"
-        style="transition-delay:0.05s; text-decoration:none;">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span class="text-[10px] font-mono text-emerald-400 tracking-widest uppercase">Live</span>
-          <span class="text-[10px] font-mono text-zinc-700 ml-auto">2026</span>
-        </div>
-        <h3 class="text-xl font-semibold text-zinc-100 mb-2 tracking-tight">NorthStar</h3>
-        <p class="text-sm text-zinc-500 leading-relaxed mb-4">Architecture and direction tool that turns scattered thinking into a clear plan. Built on Gemini.</p>
-        <span class="mt-auto text-xs font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors flex items-center gap-1">northstar-architect.vercel.app <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
-      </a>
-
-      <!-- Contract With Self -->
-      <a href="https://contract-with-self.vercel.app" target="_blank" rel="noopener noreferrer"
-        class="product-card glow-card rounded-2xl border border-white/[0.05] bg-white/[0.02] p-6 fade-up flex flex-col hover:border-white/[0.1] transition-colors group"
-        style="transition-delay:0.1s; text-decoration:none;">
-        <div class="flex items-center gap-2 mb-3">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          <span class="text-[10px] font-mono text-emerald-400 tracking-widest uppercase">Live</span>
-          <span class="text-[10px] font-mono text-zinc-700 ml-auto">2026</span>
-        </div>
-        <h3 class="text-xl font-semibold text-zinc-100 mb-2 tracking-tight">Contract With Self</h3>
-        <p class="text-sm text-zinc-500 leading-relaxed mb-4">A commitment device — write the contract you'd sign with yourself, then hold the line.</p>
-        <span class="mt-auto text-xs font-mono text-zinc-600 group-hover:text-zinc-400 transition-colors flex items-center gap-1">contract-with-self.vercel.app <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg></span>
-      </a>
-
-      <!-- Empty / "more" placeholder -->
-      <a href="#contact" onclick="event.preventDefault(); openContactModal();"
-        class="product-card glow-card rounded-2xl border border-dashed border-white/[0.06] bg-transparent p-6 fade-up block group flex flex-col items-center justify-center text-center min-h-[180px]"
-        style="transition-delay:0.2s; text-decoration:none;">
-        <div class="text-zinc-600 mb-4">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 5v14M5 12h14"/>
+      <div class="gsearch reveal" role="img" aria-label="A Google search for: What's the hardest job mentally?">
+        <span class="gsearch__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="gsearch__text"><span class="gsearch__typed"></span><span class="gsearch__caret" aria-hidden="true"></span></span>
+        <span class="gsearch__mic" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <defs><clipPath id="gmic"><rect x="9" y="2" width="6" height="12" rx="3"/></clipPath></defs>
+            <g clip-path="url(#gmic)">
+              <rect x="9" y="2" width="6" height="3.2" fill="#4285F4"/>
+              <rect x="9" y="5.2" width="6" height="3.2" fill="#EA4335"/>
+              <rect x="9" y="8.4" width="6" height="3.2" fill="#FBBC05"/>
+              <rect x="9" y="11.6" width="6" height="2.4" fill="#34A853"/>
+            </g>
+            <path d="M6.5 12.2 a5.5 5.5 0 0 0 11 0" stroke="#9aa0a6" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M12 17.7 V20.6 M9.6 20.6 H14.4" stroke="#9aa0a6" stroke-width="1.6" stroke-linecap="round"/>
           </svg>
-        </div>
-        <h3 class="text-sm font-semibold text-zinc-300 mb-1.5">Got a product idea?</h3>
-        <p class="text-xs text-zinc-600 leading-relaxed max-w-[22ch]">I take on a few external projects a year. Tell me about yours.</p>
-      </a>
-
-    </div>
-  </section>
-
-  <!-- ── Range strip ──────────────────────────────────────────── -->
-  <section class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto pb-24">
-    <div class="mb-8 fade-up">
-      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-3">Range</p>
-      <h2 class="text-2xl md:text-3xl font-semibold text-zinc-100 leading-snug max-w-3xl">One person, every layer.</h2>
-      <p class="text-zinc-500 leading-relaxed text-sm max-w-2xl mt-3">The reason the products look and feel cohesive: the same hands shape every layer, from the first sketch to the live URL.</p>
-    </div>
-
-    <div class="range-strip fade-up" style="transition-delay:0.1s">
-
-      <div class="range-cell">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <path d="M3 9h18M9 21V9"/>
-        </svg>
-        <span class="range-cell-label">Product Design</span>
-        <span class="range-cell-sub">Figma · Flows</span>
+        </span>
       </div>
 
-      <div class="range-cell">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="16 18 22 12 16 6"/>
-          <polyline points="8 6 2 12 8 18"/>
-        </svg>
-        <span class="range-cell-label">Web &amp; App</span>
-        <span class="range-cell-sub">HTML · React · Tailwind</span>
+      <div class="story__body">
+        <p class="reveal">About five years ago, I Googled one thing.</p>
+        <p class="reveal">I fell down a rabbit hole. Ended up on Reddit. And almost everyone said the same thing. Trading.</p>
+        <p class="reveal">So I thought, alright. Let's try it. The work I was doing at the time just wasn't pushing me anymore. I needed something that would actually challenge me. Trading felt like that thing.</p>
+        <p class="reveal">I found a German trader, Willem Weise, joined his community, and started learning to trade manually. While I was in there, I built a free trading journal in Notion for the whole community. Just because I saw the need for it.</p>
+        <p class="reveal">And while I was building that, I noticed something. There was so much potential in automating this. People were doing it by hand. Emotionally. Inconsistently. There had to be a better way.</p>
+        <p class="reveal">So I bought my first bot. MT5, from someone in the community. Then I spent weeks, honestly weeks, figuring out the right settings. Testing, tweaking, adjusting. And then it started working. Actually profitable, for a few weeks straight.</p>
+
+        <blockquote class="pullquote reveal">
+          <p>Then Trump got elected.</p>
+          <p>And my profits were gone. Overnight.</p>
+        </blockquote>
+
+        <p class="reveal">But I'd seen it work. That was the moment it clicked: manual trading wasn't for me. Too emotional. And I was travelling full time, dealing with personal stuff. I couldn't sit at a screen all day. I needed something that ran without me.</p>
+        <p class="reveal">That's when I found this. Algorithmic trading on prop firms. The algo does the work. The prop firm provides the capital. I just let it run.</p>
+        <p class="reveal">And once it's set up and working, it genuinely runs itself. It would have taken me far less time if someone had just laid it all out clearly from the start.</p>
+        <p class="reveal story__kicker-line">So that's what I'm doing here.</p>
       </div>
+    </section>
 
-      <div class="range-cell">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="23 7 16 12 23 17 23 7"/>
-          <rect x="1" y="5" width="15" height="14" rx="2"/>
-        </svg>
-        <span class="range-cell-label">Motion</span>
-        <span class="range-cell-sub">After Effects · Premiere</span>
+    <!-- 11. FINAL CTA -->
+    <section class="finale" aria-labelledby="finale-h">
+      <p class="kicker reveal">One payment. Lifetime access.</p>
+      <h2 class="finale__title reveal" id="finale-h">Your money<br />shouldn't<br />need you.</h2>
+      <div class="hero__cta reveal">
+        <a class="btn btn--primary btn--lg" href="https://whop.com/natrix-ethos/natrix-ethos/" target="_blank" rel="noopener">
+          Get the system <span class="btn__price">€79</span>
+        </a>
+        <p class="microcopy">Set it up once. Then let it run.</p>
       </div>
+    </section>
+  </main>
 
-      <div class="range-cell">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="M12 2a14 14 0 0 1 0 20M2 12h20"/>
-        </svg>
-        <span class="range-cell-label">Brand</span>
-        <span class="range-cell-sub">Identity · Voice</span>
-      </div>
-
-      <div class="range-cell">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="3" width="20" height="14" rx="2"/>
-          <path d="M8 21h8M12 17v4"/>
-        </svg>
-        <span class="range-cell-label">Print &amp; 3D</span>
-        <span class="range-cell-sub">Posters · Prototypes</span>
-      </div>
-
-      <div class="range-cell">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 17l6-6-6-6M12 19h8"/>
-        </svg>
-        <span class="range-cell-label">Code &amp; AI</span>
-        <span class="range-cell-sub">Cursor · Claude · APIs</span>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ── Moving Pictures (Motion / Video) ──────────────────── -->
-  <section id="motion" class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto pb-24">
-    <div class="mb-10 fade-up flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-      <div>
-        <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-3">Moving pictures</p>
-        <h2 class="text-2xl md:text-3xl font-semibold text-zinc-100 leading-snug max-w-3xl">Motion is still part of how I think.</h2>
-        <p class="text-zinc-500 leading-relaxed text-sm max-w-2xl mt-3">Before the products, there were frames. I ran a video studio, shot campaigns, and animated the kind of things I wanted to see. The instinct lives on inside the products — but here are a few of the pieces.</p>
-      </div>
-    </div>
-
-    <div class="grid md:grid-cols-3 gap-4 fade-up" style="transition-delay:0.1s">
-      <!-- Hello, my name is Jenny -->
-      <div class="motion-card cursor-pointer group" data-yt-id="IArZ3UrgwWU">
-        <div class="relative aspect-video rounded-xl overflow-hidden border border-white/[0.06] bg-zinc-900">
-          <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            src="https://img.youtube.com/vi/IArZ3UrgwWU/maxresdefault.jpg" alt="Hello, my name is Jenny">
-          <div class="absolute inset-0 flex items-center justify-center bg-zinc-950/30">
-            <div class="w-12 h-12 rounded-full border border-white/30 flex items-center justify-center transition-transform duration-200 group-hover:scale-110">
-              <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-        </div>
-        <div class="mt-3 flex items-start justify-between">
-          <div>
-            <h3 class="text-sm font-semibold text-zinc-100">Hello, my name is Jenny</h3>
-            <p class="text-xs text-zinc-500 mt-0.5">Motion · Personal intro</p>
-          </div>
-          <span class="text-[10px] font-mono text-zinc-700 mt-1">2024</span>
-        </div>
-      </div>
-
-      <!-- Trading Animation -->
-      <div class="motion-card cursor-pointer group" data-yt-id="MBcvdUfrYks">
-        <div class="relative aspect-video rounded-xl overflow-hidden border border-white/[0.06] bg-zinc-900">
-          <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            src="https://img.youtube.com/vi/MBcvdUfrYks/maxresdefault.jpg" alt="Trading Animation">
-          <div class="absolute inset-0 flex items-center justify-center bg-zinc-950/30 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div class="w-12 h-12 rounded-full border border-white/40 flex items-center justify-center">
-              <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-        </div>
-        <div class="mt-3 flex items-start justify-between">
-          <div>
-            <h3 class="text-sm font-semibold text-zinc-100">Trading Animation</h3>
-            <p class="text-xs text-zinc-500 mt-0.5">Motion · Generative viz</p>
-          </div>
-          <span class="text-[10px] font-mono text-zinc-700 mt-1">2024</span>
-        </div>
-      </div>
-
-      <!-- Wildcat Piercing -->
-      <div class="motion-card cursor-pointer group" data-yt-id="KJfzvOBKJ9A">
-        <div class="relative aspect-video rounded-xl overflow-hidden border border-white/[0.06] bg-zinc-900">
-          <img class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            src="https://img.youtube.com/vi/KJfzvOBKJ9A/maxresdefault.jpg" alt="Wildcat Piercing Campaign">
-          <div class="absolute inset-0 flex items-center justify-center bg-zinc-950/30 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div class="w-12 h-12 rounded-full border border-white/40 flex items-center justify-center">
-              <svg class="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-            </div>
-          </div>
-        </div>
-        <div class="mt-3 flex items-start justify-between">
-          <div>
-            <h3 class="text-sm font-semibold text-zinc-100">Wildcat Piercing</h3>
-            <p class="text-xs text-zinc-500 mt-0.5">Video · Brand campaign</p>
-          </div>
-          <span class="text-[10px] font-mono text-zinc-700 mt-1">2023</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── Tools Marquee ─────────────────────────────────────── -->
-  <section class="relative z-10 py-16 border-y border-white/[0.04] overflow-hidden">
-    <p class="text-xs font-mono text-zinc-700 tracking-widest uppercase text-center mb-8">Stack</p>
-    <div class="flex overflow-hidden">
-      <div class="marquee-track flex gap-12 whitespace-nowrap">
-        <!-- Set 1 -->
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Figma</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Cursor</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Claude</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>React</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Tailwind</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>After Effects</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Premiere Pro</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Illustrator</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Photoshop</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>DaVinci Resolve</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Stripe</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Supabase</span>
-        <!-- Set 2 (duplicate for seamless loop) -->
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Figma</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Cursor</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Claude</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>React</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Tailwind</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>After Effects</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Premiere Pro</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Illustrator</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Photoshop</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>DaVinci Resolve</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Stripe</span>
-        <span class="text-sm font-mono text-zinc-600 flex items-center gap-3 flex-shrink-0"><span
-            class="w-1.5 h-1.5 rounded-full bg-zinc-700 inline-block"></span>Supabase</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ── About ─────────────────────────────────────────────── -->
-  <section id="about" class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto py-24">
-
-    <div class="mb-14 fade-up">
-      <p class="text-xs font-mono text-zinc-600 tracking-widest uppercase mb-4">About</p>
-      <h2 class="text-3xl md:text-4xl font-semibold text-zinc-100 leading-snug">The person behind the products.</h2>
-    </div>
-
-    <!-- Desktop: overlapping layout -->
-    <div class="hidden md:flex relative items-center w-full max-w-5xl mx-auto fade-up">
-      <div class="w-[420px] h-[420px] rounded-3xl overflow-hidden bg-zinc-900 flex-shrink-0 border border-white/[0.06]">
-        <img alt="Jenny Keller" class="w-full h-full object-cover"
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/95c4a037-6b8a-4dac-9297-a77dee1f6307/FMM-Grading-Jensta-1771907019165.jpg?width=800&height=800&resize=contain">
-      </div>
-      <div class="rounded-3xl border border-white/[0.08] bg-zinc-950 shadow-2xl p-8 z-10 max-w-xl flex-1"
-        style="margin-left:-80px">
-        <div class="mb-6">
-          <h2 class="text-2xl font-bold text-zinc-100 mb-2">Jenny Keller</h2>
-          <p class="text-sm font-mono text-[#7957ff] tracking-wide">Designer · Builder · Maker</p>
-        </div>
-        <p class="text-zinc-300 text-sm leading-relaxed mb-4">
-          I started in graphic design, ran a video production studio in Germany, then learned to code. Now I build
-          full products — design, app, brand, motion, copy — by myself. I take on a few client projects a year, but
-          most of my time goes into the products on this page.
-        </p>
-        <p class="text-zinc-400 text-sm leading-relaxed">
-          The reason it works as one person: I learn fast, I keep adding skills, and I stay restless.
-          Most of what shows up in the work — the rhythm, the colour, the tone — comes from somewhere I've been or someone I've watched closely.
-        </p>
-      </div>
-    </div>
-
-    <!-- Mobile: stacked -->
-    <div class="md:hidden max-w-sm mx-auto text-center fade-up">
-      <div class="w-full aspect-square rounded-3xl overflow-hidden mb-6 border border-white/[0.06]">
-        <img alt="Jenny Keller" class="w-full h-full object-cover"
-          src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/95c4a037-6b8a-4dac-9297-a77dee1f6307/FMM-Grading-Jensta-1771907019165.jpg?width=800&height=800&resize=contain">
-      </div>
-      <h2 class="text-xl font-bold text-zinc-100 mb-2">Jenny Keller</h2>
-      <p class="text-sm font-mono text-[#7957ff] tracking-wide mb-4">Designer · Builder · Maker</p>
-      <p class="text-zinc-400 text-sm leading-relaxed">I build full products end-to-end — design, app, brand, motion, copy — as one person. Started in graphic design, ran a video studio, then learned to code. The products on this page are what I do with that.</p>
-    </div>
-
-  </section>
-
-  <!-- ── Footer ────────────────────────────────────────────── -->
-  <footer class="relative z-10 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto pb-16 pt-8 border-t border-white/[0.04]">
-    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-      <p class="text-xs font-mono text-zinc-700">Natrix Visuals · Jenny Keller · © 2026</p>
-      <div class="flex items-center gap-2">
-        <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-        <span class="text-xs font-mono text-zinc-600">All systems nominal</span>
-      </div>
-    </div>
+  <footer class="site-footer">
+    <p class="wordmark">Natrix Ethos</p>
+    <p class="footer__fine">
+      A Natrix Visuals project. Trading involves risk, including the loss of capital.
+      Nothing here is financial advice.
+    </p>
+    <p class="footer__links">
+      <a href="https://whop.com/natrix-ethos/natrix-ethos/" target="_blank" rel="noopener">Enroll on Whop</a>
+      <span aria-hidden="true">·</span>
+      <a href="https://www.natrix-visuals.com" target="_blank" rel="noopener">natrix-visuals.com</a>
+    </p>
   </footer>
 
-  <!-- ── Video Modal ────────────────────────────────────────── -->
-  <div id="video-modal" class="fixed inset-0 z-[200] flex items-center justify-center" style="display:none; opacity:0; transition:opacity 0.2s ease;">
-    <div id="video-overlay" class="absolute inset-0 bg-zinc-950/92 backdrop-blur-sm"></div>
-    <div id="video-panel" class="relative z-10 w-full max-w-4xl mx-6" style="transform:scale(0.95); opacity:0; transition:transform 0.28s cubic-bezier(0.34,1.56,0.64,1), opacity 0.2s ease;">
-      <button id="video-close" class="absolute -top-10 right-0 text-zinc-500 hover:text-white transition-colors text-xs flex items-center gap-2 font-medium tracking-widest uppercase">
-        Close
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
-      <div id="video-player" class="aspect-video bg-zinc-900 rounded-xl overflow-hidden border border-white/[0.06]"></div>
-    </div>
-  </div>
-
-  <!-- ── Contact Modal ──────────────────────────────────────── -->
-  <div id="contact-modal" aria-modal="true" role="dialog" aria-label="Contact form"
-    style="display:none; position:fixed; inset:0; z-index:200; align-items:center; justify-content:center; padding:1.5rem;">
-    <!-- Backdrop -->
-    <div id="contact-backdrop" onclick="closeContactModal()"
-      style="position:absolute; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(6px);"></div>
-    <!-- Panel -->
-    <div style="position:relative; width:100%; max-width:480px; background:#0f0f0f; border:1px solid rgba(255,255,255,0.07); border-radius:1.25rem; padding:2rem; box-shadow:0 24px 64px rgba(0,0,0,0.6);">
-      <!-- Close -->
-      <button onclick="closeContactModal()" aria-label="Close"
-        style="position:absolute; top:1rem; right:1rem; background:none; border:none; cursor:pointer; color:rgba(255,255,255,0.3); line-height:1; font-size:1.25rem; padding:0.25rem;">✕</button>
-
-      <h2 style="font-size:1.125rem; font-weight:600; color:#f4f4f5; margin:0 0 0.25rem;">Let's talk</h2>
-      <p style="font-size:0.75rem; color:#71717a; font-family:monospace; margin:0 0 1.75rem;">hello@natrix-visuals.com</p>
-
-      <form id="contact-form" onsubmit="submitContactForm(event)">
-        <input type="hidden" name="access_key" value="42883b3e-9bb8-45da-b1c7-05f8914cf4ad">
-        <div style="margin-bottom:1rem;">
-          <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Name</label>
-          <input id="cf-name" type="text" required placeholder="Your name"
-            style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.5rem; padding:0.65rem 0.875rem; font-size:0.875rem; color:#f4f4f5; outline:none; box-sizing:border-box; transition:border-color 0.2s;"
-            onfocus="this.style.borderColor='rgba(121,87,255,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
-        </div>
-        <div style="margin-bottom:1rem;">
-          <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Your email</label>
-          <input id="cf-email" type="email" required placeholder="you@example.com"
-            style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.5rem; padding:0.65rem 0.875rem; font-size:0.875rem; color:#f4f4f5; outline:none; box-sizing:border-box; transition:border-color 0.2s;"
-            onfocus="this.style.borderColor='rgba(121,87,255,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
-        </div>
-        <div style="margin-bottom:1.5rem;">
-          <label style="display:block; font-size:0.7rem; font-family:monospace; color:#71717a; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Message</label>
-          <textarea id="cf-message" required rows="4" placeholder="What's on your mind?"
-            style="width:100%; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:0.5rem; padding:0.65rem 0.875rem; font-size:0.875rem; color:#f4f4f5; outline:none; box-sizing:border-box; resize:vertical; font-family:inherit; transition:border-color 0.2s;"
-            onfocus="this.style.borderColor='rgba(121,87,255,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.08)'"></textarea>
-        </div>
-        <button type="submit" class="rainbow-btn" style="width:100%; justify-content:center;">Send message</button>
-      </form>
-    </div>
-  </div>
-
-  <script>
-    // Parallax blobs on mouse move
-    let ticking = false;
-    document.addEventListener('mousemove', (e) => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const x = (e.clientX / window.innerWidth - 0.5) * 30;
-          const y = (e.clientY / window.innerHeight - 0.5) * 30;
-          document.getElementById('blob-top').style.transform = `translateX(${x * 0.45}px) translateY(${y * 0.45}px)`;
-          document.getElementById('blob-bottom').style.transform = `translateX(${-x * 0.3}px) translateY(${-y * 0.3}px)`;
-          ticking = false;
-        });
-        ticking = true;
-      }
-    });
-
-    // Scroll-reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-
-    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-    // Glow card mouse tracking
-    document.querySelectorAll('.glow-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width * 100).toFixed(1);
-        const y = ((e.clientY - rect.top) / rect.height * 100).toFixed(1);
-        card.style.setProperty('--mx', x + '%');
-        card.style.setProperty('--my', y + '%');
-      });
-    });
-
-
-
-    // Hide nav on scroll down, show on scroll up
-    const mainNav = document.getElementById('main-nav');
-    let lastScrollY = 0;
-    window.addEventListener('scroll', () => {
-      const currentScrollY = window.scrollY;
-      if (currentScrollY > lastScrollY && currentScrollY > 80) {
-        mainNav.style.transform = 'translateY(-100%)';
-        mainNav.style.opacity = '0';
-      } else {
-        mainNav.style.transform = 'translateY(0)';
-        mainNav.style.opacity = '1';
-      }
-      lastScrollY = currentScrollY;
-    }, { passive: true });
-
-
-
-    // Contact modal
-    function openContactModal() {
-      const modal = document.getElementById('contact-modal');
-      modal.style.display = 'flex';
-      requestAnimationFrame(() => {
-        modal.style.opacity = '1';
-      });
-      document.body.style.overflow = 'hidden';
-      document.getElementById('cf-name').focus();
-    }
-
-    function closeContactModal() {
-      const modal = document.getElementById('contact-modal');
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeContactModal();
-    });
-
-    async function submitContactForm(e) {
-      e.preventDefault();
-      const name = document.getElementById('cf-name').value.trim();
-      const email = document.getElementById('cf-email').value.trim();
-      const message = document.getElementById('cf-message').value.trim();
-      const btn = e.target.querySelector('button[type="submit"]');
-
-      btn.disabled = true;
-      btn.textContent = 'Sending…';
-
-      try {
-        const res = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            access_key: '42883b3e-9bb8-45da-b1c7-05f8914cf4ad',
-            name, email, message,
-            subject: `Message from ${name}`
-          })
-        });
-        const data = await res.json();
-        if (data.success) {
-          btn.textContent = 'Message sent!';
-          btn.style.opacity = '0.7';
-          e.target.reset();
-          setTimeout(closeContactModal, 1500);
-        } else {
-          throw new Error(data.message);
-        }
-      } catch {
-        btn.textContent = 'Failed — try again';
-        btn.disabled = false;
-        setTimeout(() => { btn.textContent = 'Send message'; btn.style.opacity = ''; }, 3000);
-      }
-    }
-
-    // Video modal
-    const videoModal = document.getElementById('video-modal');
-    const videoPanel = document.getElementById('video-panel');
-    const videoPlayer = document.getElementById('video-player');
-    const videoOverlay = document.getElementById('video-overlay');
-    const videoClose = document.getElementById('video-close');
-
-    function openVideo(ytId) {
-      videoPlayer.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1" class="w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-      videoModal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      requestAnimationFrame(() => {
-        videoModal.style.opacity = '1';
-        videoPanel.style.transform = 'scale(1)';
-        videoPanel.style.opacity = '1';
-      });
-    }
-
-    function closeVideo() {
-      videoModal.style.opacity = '0';
-      videoPanel.style.transform = 'scale(0.95)';
-      videoPanel.style.opacity = '0';
-      setTimeout(() => {
-        videoModal.style.display = 'none';
-        videoPlayer.innerHTML = '';
-        document.body.style.overflow = '';
-      }, 220);
-    }
-
-    document.querySelectorAll('.motion-card').forEach(card => {
-      card.addEventListener('click', () => openVideo(card.dataset.ytId));
-    });
-    videoClose.addEventListener('click', closeVideo);
-    videoOverlay.addEventListener('click', closeVideo);
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeVideo(); });
-  </script>
-
+  <script src="script.js"></script>
 </body>
-
 </html>
