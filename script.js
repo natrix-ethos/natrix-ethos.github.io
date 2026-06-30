@@ -183,6 +183,27 @@
     cio.observe(calendar);
   }
 
+  /* ---------- Community Discord: pop the messages in one after another ---------- */
+  var discord = document.querySelector(".discord");
+  var dcMsgs = Array.prototype.slice.call(document.querySelectorAll(".discord .dc-msg"));
+
+  if (discord && dcMsgs.length && !reduce && "IntersectionObserver" in window) {
+    discord.classList.add("discord--anim");
+    var popped = false;
+    var dcio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting && !popped) {
+          popped = true;
+          dcMsgs.forEach(function (m, i) {
+            setTimeout(function () { m.classList.add("is-on"); }, 250 + i * 750);
+          });
+          dcio.unobserve(discord);
+        }
+      });
+    }, { threshold: 0.35 });
+    dcio.observe(discord);
+  }
+
   /* ---------- System status window: draw the equity curve ---------- */
   var dash = document.querySelector(".dash");
   if (dash && !reduce && "IntersectionObserver" in window) {
