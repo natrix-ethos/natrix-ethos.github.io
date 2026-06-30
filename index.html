@@ -13,10 +13,20 @@
   <link rel="preconnect" href="https://whop.com" />
   <link rel="preload" href="fonts/Mosvita-Bold.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/Mosvita-Regular.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="icon" href="NE-LOGO.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the story</a>
+
+  <!-- Brand mark, referenced via <use> in header/footer -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="ne-logo" viewBox="49 70 203 159">
+      <path d="M245.869 76H214.314V223H245.869V76Z" fill="currentColor"/>
+      <path d="M86.555 76H55V223H86.555V76Z" fill="currentColor"/>
+      <circle cx="149.665" cy="149.885" r="40.79" fill="#648953"/>
+    </symbol>
+  </svg>
 
   <!-- Atmosphere: the blue glow -->
   <div class="glow-field" aria-hidden="true">
@@ -26,7 +36,8 @@
 
   <header class="site-header" id="top">
     <a class="wordmark" href="#top" aria-label="Natrix Ethos home">
-      Natrix Ethos
+      <svg class="wordmark__mark" aria-hidden="true" focusable="false"><use href="#ne-logo" /></svg>
+      <span>Natrix Ethos</span>
     </a>
     <nav class="site-nav" aria-label="Primary">
       <a href="#how">How it works</a>
@@ -454,7 +465,10 @@
   </main>
 
   <footer class="site-footer">
-    <p class="wordmark">Natrix Ethos</p>
+    <p class="wordmark">
+      <svg class="wordmark__mark" aria-hidden="true" focusable="false"><use href="#ne-logo" /></svg>
+      <span>Natrix Ethos</span>
+    </p>
     <p class="footer__fine">
       A Natrix Visuals project. Trading involves risk, including the loss of capital.
       Nothing here is financial advice.
