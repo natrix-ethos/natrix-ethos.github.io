@@ -74,11 +74,19 @@ you are responsible for observing.
 
 ## 5. Third-party strategies and tools
 
-The Course may reference or include strategies, bots or settings that originate
-from third parties or the community. We do not warrant that you have the right to
-use any third-party item beyond your own personal use, that it will perform in
-any way, or that it is free of defects. Use is at your own risk and subject to
-the risk warnings in the Terms.
+5.1 The trading strategies provided with the Course are **not authored by us**.
+They originate from third parties or the trading community; we select, test and
+fine-tune them (settings and configuration) and share the results. Our
+contribution is the testing, configuration and instruction — authorship of the
+underlying strategies remains with their respective creators.
+
+5.2 The Course may also reference other strategies, bots or settings that
+originate from third parties or the community. We do not warrant that you have
+the right to use any third-party item beyond your own personal use, that it will
+perform in any way, or that it is free of defects. Access to third-party
+strategies (for example invite-only scripts) may depend on their authors and can
+change or be withdrawn by them. Use is at your own risk and subject to the risk
+warnings in the Terms.
 
 ## 6. No warranty
 
