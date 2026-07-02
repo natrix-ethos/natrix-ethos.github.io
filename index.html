@@ -106,7 +106,7 @@
             "name": "Do I need my own money to trade?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Not your own trading capital, no. You trade on a funded account that a prop firm provides. Your own cost is the small entry fee for their evaluation, plus the one-time €79 for this course."
+              "text": "Not your own trading capital, no. You trade on a funded account that a prop firm provides. Your real costs: €79 once for the course, a $50–100 challenge fee per funded-account attempt, and roughly $65–85 a month in tool subscriptions (charting + a webhook connector). Every number is listed openly on the page."
             }
           },
           {
@@ -146,7 +146,23 @@
             "name": "What exactly do I get for €79?",
             "acceptedAnswer": {
               "@type": "Answer",
-              "text": "Lifetime access to the full course: every step from foundations to scaling, real walkthroughs rather than theory, and the troubleshooting reference. One payment, no subscription."
+              "text": "Lifetime access to the full course — 7 modules, 28 lessons, every step from foundations to scaling — both strategies with exact settings, the troubleshooting reference, and the Discord community. One payment, no subscription."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Did you build the strategies yourself?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No — the strategies come from the trading community. What's original is everything around them: the testing, the fine-tuned settings, the setup path, and the judgement about which ones survive. Students get the strategies ready to run, with the backtest data behind them."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is the Discord community included?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — it's part of the €79, not an upsell. It's where strategies are shared and fine-tuned, bugs get reported and fixed together, and members help each other when stuck."
             }
           }
         ]
@@ -181,6 +197,7 @@
     <nav class="site-nav" aria-label="Primary">
       <a href="#how">How it works</a>
       <a href="#inside">What's inside</a>
+      <a href="#costs">What it costs</a>
       <a href="#community">Community</a>
       <a href="#about">About</a>
       <a href="#story">My story</a>
@@ -323,7 +340,9 @@
       <p class="lede reveal filter__lede">
         For the last seven months I've been testing, researching, and breaking things
         myself. This is the filtered version. What works, what doesn't, and nothing I
-        haven't run with my own hands.
+        haven't run with my own hands. The strategies aren't my inventions, and I won't
+        pretend they are — I find them, fine-tune them, and keep the ones that survive
+        testing.
       </p>
     </section>
 
@@ -481,6 +500,45 @@
       </div>
     </section>
 
+    <!-- 7.5 THE HONEST MATH -->
+    <section class="band" id="costs" aria-labelledby="costs-h">
+      <p class="kicker reveal">What it actually costs</p>
+      <h2 class="display reveal" id="costs-h">The honest<br />math.</h2>
+      <p class="lede reveal">
+        Most trading courses hide the running costs until you're already inside.
+        Here's every number up front, so you decide with the full picture.
+      </p>
+
+      <div class="costs reveal">
+        <ul class="costs__list">
+          <li class="costs__row">
+            <span class="costs__what">The course — Discord community included</span>
+            <span class="costs__price costs__price--once">€79 once</span>
+            <span class="costs__sub">Lifetime access. All 7 modules, both strategies with my exact settings, and every future update. No subscription, no upsell tier.</span>
+          </li>
+          <li class="costs__row">
+            <span class="costs__what">Charting — TradingView, Essential plan</span>
+            <span class="costs__price">≈ $16 / month</span>
+            <span class="costs__sub">The free plan can't send webhook alerts; Essential can. It's what connects your strategy to the execution layer.</span>
+          </li>
+          <li class="costs__row">
+            <span class="costs__what">Execution — a webhook connector</span>
+            <span class="costs__price">$49–69 / month</span>
+            <span class="costs__sub">Receives the signals, places the trades, and copy-trades across your funded accounts. Any webhook connector works — the course walks through QuantCrawler Ghost (Elite plan, $69/mo); RoboQuant's webhook service is a cheaper option at $49/mo.</span>
+          </li>
+          <li class="costs__row">
+            <span class="costs__what">One funded-account challenge</span>
+            <span class="costs__price">$50–100</span>
+            <span class="costs__sub">Per attempt, at firms like Lucid, MyFundedFutures or Tradify. Fail one and you buy another — budget for that from day one.</span>
+          </li>
+        </ul>
+        <p class="costs__note">
+          Third-party prices are set by those companies and can change — check their sites for the current numbers.
+          If this math doesn't fit your budget right now, don't buy the course yet. It'll still be here.
+        </p>
+      </div>
+    </section>
+
     <!-- 8. WHO IT'S FOR -->
     <section class="band band--split" id="who" aria-labelledby="who-h">
       <div class="split__lead">
@@ -516,7 +574,8 @@
       <p class="lede reveal community__lede">
         This is the hub. Where I share the strategies I find and fine-tune, where we
         report bugs and fix them together, and where we learn, grow, and help each
-        other through the green weeks and the quiet ones.
+        other through the green weeks and the quiet ones. It's included with the
+        course — not a separate subscription.
       </p>
 
       <div class="discord reveal">
@@ -616,7 +675,7 @@
       <div class="faq">
         <details class="faq__item reveal">
           <summary>Do I need my own money to trade?</summary>
-          <div class="faq__a"><p>Not your own trading capital, no. You trade on a funded account that a prop firm provides. Your own cost is the small entry fee for their evaluation, plus the one-time €79 for this course.</p></div>
+          <div class="faq__a"><p>Not your own trading capital, no. You trade on a funded account that a prop firm provides. Your real costs: €79 once for the course, a $50–100 challenge fee per funded-account attempt, and roughly $65–85 a month in tool subscriptions (charting + a webhook connector). The full breakdown is in <a href="#costs">the honest math</a> above.</p></div>
         </details>
         <details class="faq__item reveal">
           <summary>Do I need to know how to code?</summary>
@@ -636,7 +695,15 @@
         </details>
         <details class="faq__item reveal">
           <summary>What exactly do I get for €79?</summary>
-          <div class="faq__a"><p>Lifetime access to the full course: every step from foundations to scaling, real walkthroughs rather than theory, and the troubleshooting reference. One payment, no subscription.</p></div>
+          <div class="faq__a"><p>Lifetime access to the full course — 7 modules, 28 lessons, every step from foundations to scaling — both strategies with my exact settings, the troubleshooting reference, and the Discord community. One payment, no subscription.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Did you build the strategies yourself?</summary>
+          <div class="faq__a"><p>No — and I won't pretend I did. The strategies come from the trading community. What's mine is everything around them: the testing, the fine-tuned settings, the setup path, and the judgement about which ones survive. You get the strategies ready to run, with the data that earned my trust.</p></div>
+        </details>
+        <details class="faq__item reveal">
+          <summary>Is the Discord community included?</summary>
+          <div class="faq__a"><p>Yes — it's part of the €79, not an upsell. It's where I share the strategies I find and fine-tune, where bugs get reported and fixed together, and where you ask when you're stuck.</p></div>
         </details>
       </div>
     </section>
@@ -700,6 +767,13 @@
     <section class="finale" aria-labelledby="finale-h">
       <p class="kicker reveal">One payment. Lifetime access.</p>
       <h2 class="finale__title reveal" id="finale-h">Your money<br />shouldn't<br />need you.</h2>
+      <ul class="ticklist ticklist--yes finale__stack reveal">
+        <li>7 modules, 28 lessons — the whole path from zero to a running system</li>
+        <li>Two ready-to-run strategies, with my exact settings</li>
+        <li>The Discord community — included, not an upsell</li>
+        <li>The troubleshooting reference for when something acts up</li>
+        <li>Lifetime access, every future update</li>
+      </ul>
       <div class="hero__cta reveal">
         <a class="btn btn--primary btn--lg" href="https://whop.com/natrix-ethos/natrix-ethos/" target="_blank" rel="noopener">
           Get the system <span class="btn__price">€79</span>
