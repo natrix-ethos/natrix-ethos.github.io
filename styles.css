@@ -857,5 +857,44 @@ main { position: relative; z-index: 1; }
   .gsearch__caret { animation: none; }
 }
 
+/* ---------- Legal documents ---------- */
+.legal {
+  position: relative; z-index: 1;
+  max-width: 760px; margin-inline: auto;
+  padding-left: var(--pad); padding-right: var(--pad);
+  padding-top: clamp(2.5rem, 7vh, 4.5rem);
+  padding-bottom: clamp(4rem, 12vh, 8rem);
+}
+.legal h1 {
+  font-family: var(--font-exp); font-weight: 700;
+  font-size: clamp(2rem, 1.4rem + 2.4vw, 3.4rem);
+  line-height: 1.05; letter-spacing: -0.015em; margin-bottom: 0.7rem;
+}
+.legal__eff {
+  font-size: var(--step-kicker); text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--ink-faint);
+  margin-bottom: clamp(2rem, 5vh, 3rem); padding-bottom: clamp(2rem, 5vh, 3rem);
+  border-bottom: 1px solid var(--line-soft);
+}
+.legal h2 {
+  font-size: clamp(1.3rem, 1.1rem + 0.8vw, 1.75rem); font-weight: 700;
+  letter-spacing: -0.01em; margin: clamp(2.4rem, 5vh, 3.2rem) 0 1rem;
+}
+.legal h3 { font-size: 1.1rem; font-weight: 600; margin: 1.7rem 0 0.6rem; color: var(--ink); }
+.legal p { color: var(--ink-mute); line-height: 1.7; margin-bottom: 1.15rem; }
+.legal ul, .legal ol { margin: 0 0 1.3rem; padding-left: 1.4rem; display: grid; gap: 0.55rem; }
+.legal li { color: var(--ink-mute); line-height: 1.65; padding-left: 0.2rem; }
+.legal strong { color: var(--ink); font-weight: 600; }
+.legal a { color: var(--ink); border-bottom: 1px solid var(--line); transition: border-color 0.25s var(--ease); }
+.legal a:hover { border-color: var(--glow); }
+.legal table { width: 100%; border-collapse: collapse; margin: 0 0 1.5rem; font-size: 0.92rem; }
+.legal th, .legal td { text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--line-soft); color: var(--ink-mute); vertical-align: top; line-height: 1.5; }
+.legal thead th { color: var(--ink); font-weight: 600; border-bottom: 1px solid var(--line); }
+.legal blockquote { margin: 0 0 1.4rem; padding: 0.9rem 1.2rem; border-left: 3px solid var(--glow-soft); background: oklch(0.155 0.012 250 / 0.5); border-radius: 0 10px 10px 0; }
+.legal blockquote p { margin: 0; font-size: 0.95rem; }
+.legal hr { border: 0; border-top: 1px solid var(--line-soft); margin: clamp(2rem, 5vh, 3rem) 0; }
+.legal__lead { color: var(--ink) !important; font-weight: 500; }
+.site-footer .footer__links + .footer__links { margin-top: 0.2rem; }
+
 /* ---------- Focus visibility ---------- */
 :focus-visible { outline: 2px solid var(--glow); outline-offset: 3px; border-radius: 4px; }
