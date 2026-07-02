@@ -449,26 +449,26 @@
       <h2 class="display reveal" id="honest-h">There will be<br />losing days.</h2>
       <div class="story__body story__body--narrow">
         <p class="reveal">This is not a money printer, and I won't pretend it is. Drawdowns happen. Quiet weeks happen. Accounts get blown. That's a normal part of running an automated system, not a sign something is broken.</p>
-        <p class="reveal">Here's the rhythm of a normal week. A run of green, a red day, then green again. The losing day isn't a failure, it's just part of it.</p>
+        <p class="reveal">Here's the rhythm of a normal week. A red day, a run of green, another red, then green again. The losing days aren't failures, they're just part of it.</p>
       </div>
 
-      <div class="calendar reveal" role="img" aria-label="An example trading week: three winning days, one losing day on Thursday, and a win on Friday. Profitable overall.">
+      <div class="calendar reveal" role="img" aria-label="An example trading week: three winning days and two small losing days on Monday and Thursday. Profitable overall.">
         <div class="calendar__head">
           <div class="calendar__titlewrap">
             <p class="calendar__title">A normal week</p>
             <p class="calendar__month">Example · not a real track record</p>
           </div>
           <div class="calendar__summary">
-            <span class="calendar__stat"><b class="is-win">+€1,007</b> net</span>
-            <span class="calendar__stat"><b class="is-loss">1</b> red day</span>
+            <span class="calendar__stat"><b class="is-win">+€594</b> net</span>
+            <span class="calendar__stat"><b class="is-loss">2</b> red days</span>
           </div>
         </div>
 
         <div class="calendar__week">
-          <div class="cal-day cal-day--win"><span class="cal-day__n">Mon</span><span class="cal-day__pnl">+€268</span></div>
+          <div class="cal-day cal-day--loss"><span class="cal-day__n">Mon</span><span class="cal-day__pnl">−€45</span></div>
           <div class="cal-day cal-day--win"><span class="cal-day__n">Tue</span><span class="cal-day__pnl">+€291</span></div>
           <div class="cal-day cal-day--win"><span class="cal-day__n">Wed</span><span class="cal-day__pnl">+€317</span></div>
-          <div class="cal-day cal-day--loss"><span class="cal-day__n">Thu</span><span class="cal-day__pnl">−€124</span></div>
+          <div class="cal-day cal-day--loss"><span class="cal-day__n">Thu</span><span class="cal-day__pnl">−€224</span></div>
           <div class="cal-day cal-day--win"><span class="cal-day__n">Fri</span><span class="cal-day__pnl">+€255</span></div>
         </div>
 
@@ -514,13 +514,13 @@
       <p class="kicker reveal">You're not doing this alone</p>
       <h2 class="display reveal" id="community-h">Learn, share,<br />grow together.</h2>
       <p class="lede reveal community__lede">
-        Setting this up is easier with people who've done it. Inside the Discord we
-        ask questions, share what's actually working, and post the wins, green days
-        and red ones alike.
+        This is the hub. Where I share the strategies I find and fine-tune, where we
+        report bugs and fix them together, and where we learn, grow, and help each
+        other through the green weeks and the quiet ones.
       </p>
 
-      <div class="discord reveal" role="img" aria-label="The Natrix Ethos Discord community. Marco asks whether the algo keeps running with his laptop off, Jenny answers that it runs on a VPS so it keeps trading, and Lena shares her first green week of plus 312 euros on a funded account.">
-        <div class="discord__bar">
+      <div class="discord reveal">
+        <div class="discord__bar" aria-hidden="true">
           <span class="dash__dots" aria-hidden="true"><i></i><i></i><i></i></span>
           <span class="discord__brand">
             <span class="discord__logo" aria-hidden="true">
@@ -528,7 +528,7 @@
             </span>
             Natrix Ethos
           </span>
-          <span class="discord__online"><span class="discord__onlinedot" aria-hidden="true"></span>342 online</span>
+          <span class="discord__online"><span class="discord__onlinedot" aria-hidden="true"></span>72 online</span>
         </div>
 
         <div class="discord__body">
@@ -541,17 +541,18 @@
             <span class="dc-chan dc-chan--active"># 💬-general</span>
             <span class="dc-chan"># 🧠-strategy-chat</span>
             <span class="dc-chan"># 🏦-prop-firm-chat</span>
+            <span class="dc-chan"># 🐛-bug-reports</span>
             <span class="dc-chan"># 📦-learnings</span>
             <span class="dc-chan"># 🎏-wins</span>
           </aside>
 
-          <div class="discord__chat">
-            <p class="discord__channelhead" aria-hidden="true"># 💬-general</p>
+          <div class="discord__chat" aria-hidden="true">
+            <p class="discord__channelhead"># 💬-general</p>
             <div class="dc-msgs">
               <article class="dc-msg">
-                <span class="dc-msg__av" style="--c: oklch(0.60 0.13 250)" aria-hidden="true">M</span>
+                <span class="dc-msg__av" style="--c: oklch(0.60 0.13 250)" aria-hidden="true">F</span>
                 <div class="dc-msg__body">
-                  <p class="dc-msg__meta"><b>Marco</b> <span class="dc-msg__time">today at 09:14</span></p>
+                  <p class="dc-msg__meta"><b>Finn</b> <span class="dc-msg__time">today at 09:14</span></p>
                   <p class="dc-msg__text">Quick one — does the algo keep running if my laptop's off? 😅</p>
                 </div>
               </article>
@@ -559,22 +560,39 @@
                 <span class="dc-msg__av dc-msg__av--host" aria-hidden="true">J</span>
                 <div class="dc-msg__body">
                   <p class="dc-msg__meta"><b>Jenny</b> <span class="dc-badge">Host</span> <span class="dc-msg__time">today at 09:16</span></p>
-                  <p class="dc-msg__text">Yep, it runs on the VPS, not your machine. Close the lid, it keeps trading. 👍</p>
+                  <p class="dc-msg__text">Yep, it runs on the TradingView, not your machine. Close the lid, it keeps trading. 👍</p>
                 </div>
               </article>
               <article class="dc-msg">
-                <span class="dc-msg__av" style="--c: oklch(0.62 0.14 20)" aria-hidden="true">L</span>
+                <span class="dc-msg__av dc-msg__av--host" aria-hidden="true">J</span>
                 <div class="dc-msg__body">
-                  <p class="dc-msg__meta"><b>Lena</b> <span class="dc-msg__time">today at 09:41</span></p>
+                  <p class="dc-msg__meta"><b>Jenny</b> <span class="dc-badge">Host</span> <span class="dc-msg__time">today at 09:22</span></p>
+                  <p class="dc-msg__text">Also dropped a fine-tuned version of this week's setup in #🧠-strategy-chat. I tweaked the risk settings, not the logic. 📈</p>
+                </div>
+              </article>
+              <article class="dc-msg">
+                <span class="dc-msg__av" style="--c: oklch(0.62 0.14 20)" aria-hidden="true">Z</span>
+                <div class="dc-msg__body">
+                  <p class="dc-msg__meta"><b>Zak</b> <span class="dc-msg__time">today at 09:41</span></p>
                   <p class="dc-msg__text">First green week on the funded account 🎉</p>
                   <span class="dc-profit">+€312 <span class="dc-profit__sub">this week</span></span>
                 </div>
               </article>
             </div>
           </div>
+
+          <aside class="discord__about">
+            <p class="discord__abouttitle">What the hub is for</p>
+            <ul class="dc-purpose">
+              <li><span class="dc-purpose__ic" aria-hidden="true">🧠</span><span class="dc-purpose__txt"><b>Strategies, shared</b>I find the ones that work and fine-tune them. I don't build from scratch. Then they go straight in here.</span></li>
+              <li><span class="dc-purpose__ic" aria-hidden="true">🛠️</span><span class="dc-purpose__txt"><b>Bugs, reported &amp; fixed</b>Something acting up? Post it. We catch and sort it out together.</span></li>
+              <li><span class="dc-purpose__ic" aria-hidden="true">📈</span><span class="dc-purpose__txt"><b>Learn &amp; grow</b>Backtests, walkthroughs, and what's actually working right now.</span></li>
+              <li><span class="dc-purpose__ic" aria-hidden="true">🤝</span><span class="dc-purpose__txt"><b>Help each other</b>Stuck on setup or riding out a quiet week? Someone here has been there.</span></li>
+            </ul>
+          </aside>
         </div>
 
-        <p class="discord__foot">Illustrative example of the community.</p>
+        <p class="discord__foot" aria-hidden="true">Illustrative example of the community.</p>
       </div>
     </section>
 
@@ -652,9 +670,19 @@
         <p class="reveal">About five years ago, I Googled one thing.</p>
         <p class="reveal">I fell down a rabbit hole. Ended up on Reddit. And almost everyone said the same thing. Trading.</p>
         <p class="reveal">So I thought, alright. Let's try it. The work I was doing at the time just wasn't pushing me anymore. I needed something that would actually challenge me. Trading felt like that thing.</p>
-        <p class="reveal">I found a German trader, Willem Weise, joined his community, and started learning to trade manually. While I was in there, I built a free trading journal in Notion for the whole community. Just because I saw the need for it.</p>
+        <p class="reveal">I found a German trader, Willem Weise, bought his course, and joined his community to learn to trade by hand. While I was in there, I built a free trading journal in Notion for the whole community. Just because I saw the need for it.</p>
+
+        <figure class="story-figure reveal">
+          <img src="assets/course-notes-web.jpg" width="1125" height="1500" loading="lazy" decoding="async" alt="My desk while learning to trade by hand: a live chart on the monitor and a notebook full of handwritten trading notes." />
+          <figcaption>Learning by hand. His course, his community, and a notebook I filled.</figcaption>
+        </figure>
         <p class="reveal">And while I was building that, I noticed something. There was so much potential in automating this. People were doing it by hand. Emotionally. Inconsistently. There had to be a better way.</p>
         <p class="reveal">So I bought my first bot. MT5, from someone in the community. Then I spent weeks, honestly weeks, figuring out the right settings. Testing, tweaking, adjusting. And then it started working. Actually profitable, for a few weeks straight.</p>
+
+        <figure class="story-figure story-figure--tall reveal">
+          <img src="assets/mt5-bot-web.jpg" width="654" height="1200" loading="lazy" decoding="async" alt="A screenshot of my first MT5 trading bot running on EUR/USD, with its live trade history and running profit." />
+          <figcaption>My first bot. MT5, from someone in the community. 2022.</figcaption>
+        </figure>
 
         <blockquote class="pullquote reveal">
           <p>Then Trump got elected.</p>
