@@ -3,18 +3,157 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Natrix Ethos — Your money shouldn't need you.</title>
-  <meta name="description" content="A complete, honest course on automated trading. The algo trades, the prop firm provides the capital, you let it run. Built and tested by one human. No guru stuff." />
+  <title>Automated Algo Trading Course for Beginners | Natrix Ethos</title>
+  <meta name="description" content="Learn automated algo trading from zero — no coding, no hype. A funded account provides the capital, the algorithm places the trades, you let it run. €79, lifetime access." />
+  <meta name="author" content="Jenny — Natrix Ethos" />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
+  <meta name="keywords" content="automated trading for beginners, algo trading course, algorithmic trading, funded account trading, prop firm trading, learn trading from scratch, no-code trading, passive trading system" />
 
-  <meta property="og:title" content="Natrix Ethos — Your money shouldn't need you." />
-  <meta property="og:description" content="An automated trading system that runs on funded capital. No hype, no fake screenshots. Built and tested by someone who'll show you exactly how it works." />
+  <!-- TODO(Jenny): confirm the live domain, then update canonical + all og:/schema URLs if it isn't natrix-ethos.com -->
+  <link rel="canonical" href="https://www.natrix-ethos.com/" />
+
+  <meta property="og:title" content="Automated Algo Trading Course for Beginners | Natrix Ethos" />
+  <meta property="og:description" content="Start from zero. A funded account provides the capital, the algorithm places the trades, you let it run. No coding, no hype, no fake screenshots. €79, lifetime access." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.natrix-ethos.com/" />
+  <meta property="og:site_name" content="Natrix Ethos" />
+  <meta property="og:locale" content="en_US" />
+  <!-- TODO(Jenny): create a 1200×630 raster (JPG/PNG) preview and place it at /og-image.jpg — social/AI scrapers don't render SVG -->
+  <meta property="og:image" content="https://www.natrix-ethos.com/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Natrix Ethos — automated algo trading course for beginners" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Automated Algo Trading Course for Beginners | Natrix Ethos" />
+  <meta name="twitter:description" content="Start from zero. The algorithm trades, a funded account provides the capital, you let it run. No coding, no hype. €79, lifetime access." />
+  <meta name="twitter:image" content="https://www.natrix-ethos.com/og-image.jpg" />
+  <meta name="theme-color" content="#0b0f14" />
 
   <link rel="preconnect" href="https://whop.com" />
   <link rel="preload" href="fonts/Mosvita-Bold.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="fonts/Mosvita-Regular.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="icon" href="NE-LOGO.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
+
+  <!-- Structured data: helps Google + AI answer engines (ChatGPT, Perplexity, AI Overviews) understand and cite the course -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://www.natrix-ethos.com/#org",
+        "name": "Natrix Ethos",
+        "url": "https://www.natrix-ethos.com/",
+        "logo": "https://www.natrix-ethos.com/NE-LOGO.svg",
+        "parentOrganization": {
+          "@type": "Organization",
+          "name": "Natrix Visuals",
+          "url": "https://www.natrix-visuals.com"
+        },
+        "founder": { "@id": "https://www.natrix-ethos.com/#jenny" }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.natrix-ethos.com/#jenny",
+        "name": "Jenny",
+        "description": "Builder and founder of Natrix Visuals who set up, ran, and stress-tested an automated algo trading system before teaching it.",
+        "url": "https://www.natrix-visuals.com",
+        "jobTitle": "Course creator"
+      },
+      {
+        "@type": "Course",
+        "@id": "https://www.natrix-ethos.com/#course",
+        "name": "Natrix Ethos — Automated Algo Trading Course for Beginners",
+        "description": "A complete, honest, beginner-friendly course on automated algorithmic trading. Learn how a funded (prop firm) account provides the capital, how a pre-built algorithm places the trades automatically, and how to run and scale the system — with no coding, no advanced math, and no prior trading experience required.",
+        "url": "https://www.natrix-ethos.com/",
+        "inLanguage": "en",
+        "educationalLevel": "Beginner",
+        "teaches": [
+          "What automated trading is, in plain language",
+          "How funded (prop firm) accounts work and how to get one",
+          "Loading and reading pre-built trading strategies",
+          "Connecting signals to automated execution",
+          "Going live and managing risk",
+          "Scaling across multiple funded accounts"
+        ],
+        "about": ["Automated trading", "Algorithmic trading", "Prop firm trading", "Funded accounts"],
+        "provider": { "@id": "https://www.natrix-ethos.com/#org" },
+        "instructor": { "@id": "https://www.natrix-ethos.com/#jenny" },
+        "isAccessibleForFree": false,
+        "offers": {
+          "@type": "Offer",
+          "price": "79",
+          "priceCurrency": "EUR",
+          "category": "Paid",
+          "availability": "https://schema.org/InStock",
+          "url": "https://whop.com/natrix-ethos/natrix-ethos/"
+        },
+        "hasCourseInstance": {
+          "@type": "CourseInstance",
+          "courseMode": "Online",
+          "courseWorkload": "PT1H",
+          "instructor": { "@id": "https://www.natrix-ethos.com/#jenny" }
+        }
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.natrix-ethos.com/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Do I need my own money to trade?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not your own trading capital, no. You trade on a funded account that a prop firm provides. Your own cost is the small entry fee for their evaluation, plus the one-time €79 for this course."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to know how to code?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "No. You're given working, pre-built strategies. The course teaches you to set them up, read the data, and connect the pieces. There's no coding and no advanced math anywhere in it."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How much time does it take to run?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Setting it up is the main effort, and the course walks you through every step. After that it's minutes a day — roughly a daily check-in, not hours at a screen."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is this actually automated, or do I place trades?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It's genuinely automated. The strategy fires a signal, the execution layer places the trade, and it lands in your funded account. You don't place a single trade by hand."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What if I lose money or blow an account?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It can happen, and the course addresses it directly. You'll learn the risk settings and account protections that keep losses contained, and why losing days are a normal part of the process rather than a failure."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What exactly do I get for €79?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Lifetime access to the full course: every step from foundations to scaling, real walkthroughs rather than theory, and the troubleshooting reference. One payment, no subscription."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#story">Skip to the story</a>
@@ -54,13 +193,14 @@
     <!-- 1. HERO -->
     <section class="hero" aria-labelledby="hero-h">
       <div class="hero__text">
-        <p class="kicker reveal">Natrix Ethos &nbsp;·&nbsp; Algo Trading</p>
+        <p class="kicker reveal">Natrix Ethos &nbsp;·&nbsp; Algo Trading for Beginners</p>
         <h1 class="hero__title reveal" id="hero-h">
           Your money<br />shouldn't<br />need you.
         </h1>
         <p class="hero__sub reveal">
-          An automated trading system that runs on funded capital. The algo trades,
-          the prop firm provides the money, you let it run. No guru stuff. No fake
+          A beginner-friendly automated trading system that runs on funded capital.
+          Start from zero, even if you've never traded before. The algo trades, the
+          prop firm provides the money, you let it run. No guru stuff. No fake
           screenshots. Built and tested by someone who'll show you exactly how it works.
         </p>
         <div class="hero__cta reveal">
@@ -161,9 +301,9 @@
           <span class="noise-chip" style="--x:66%; --y:62%; --r:-7deg;  --d:0.9s">guru signals</span>
           <span class="noise-chip" style="--x:20%; --y:86%; --r:4deg;   --d:2.1s">win rate 92%</span>
           <span class="noise-chip" style="--x:55%; --y:86%; --r:-3deg;  --d:1.6s">liquidity grab</span>
-          <span class="noise-chip" style="--x:84%; --y:10%; --r:8deg;   --d:3.1s">scalping</span>
-          <span class="noise-chip" style="--x:86%; --y:74%; --r:-5deg;  --d:2.5s">news spike</span>
-          <span class="noise-chip" style="--x:80%; --y:48%; --r:5deg;   --d:1.2s">EA v4.2</span>
+          <span class="noise-chip" style="--x:80%; --y:10%; --r:8deg;   --d:3.1s">scalping</span>
+          <span class="noise-chip" style="--x:78%; --y:74%; --r:-5deg;  --d:2.5s">news spike</span>
+          <span class="noise-chip" style="--x:74%; --y:48%; --r:5deg;   --d:1.2s">EA v4.2</span>
         </div>
 
         <div class="filter__bar" aria-hidden="true">
@@ -191,6 +331,12 @@
     <section class="band" id="how" aria-labelledby="how-h">
       <p class="kicker reveal">How it actually works</p>
       <h2 class="display reveal" id="how-h">Three pieces.<br />You place zero trades.</h2>
+
+      <p class="lede reveal">
+        New to this? Automated trading — also called algorithmic or "algo" trading — means
+        a pre-built program places trades for you based on fixed rules. No manual clicking,
+        no emotion, no sitting at a screen. Here it runs in three pieces.
+      </p>
 
       <div class="pipeline reveal" role="img" aria-label="The signal flows from the strategy, to the execution layer, to your funded account. You never place a trade by hand.">
         <svg class="pipeline__svg" viewBox="0 0 900 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
@@ -387,14 +533,20 @@
 
         <div class="discord__body">
           <aside class="discord__rail" aria-hidden="true">
-            <span class="dc-chan"># welcome</span>
-            <span class="dc-chan dc-chan--active"># questions</span>
-            <span class="dc-chan"># wins</span>
-            <span class="dc-chan"># setup-help</span>
+            <span class="dc-chan"># 👋-welcome</span>
+            <span class="dc-chan"># ⚠️-rules</span>
+            <span class="dc-chan"># 📣-announcements</span>
+            <span class="dc-chan"># 🛰️-start-here</span>
+            <span class="dc-cat">📈 Trading</span>
+            <span class="dc-chan dc-chan--active"># 💬-general</span>
+            <span class="dc-chan"># 🧠-strategy-chat</span>
+            <span class="dc-chan"># 🏦-prop-firm-chat</span>
+            <span class="dc-chan"># 📦-learnings</span>
+            <span class="dc-chan"># 🎏-wins</span>
           </aside>
 
           <div class="discord__chat">
-            <p class="discord__channelhead" aria-hidden="true"># questions</p>
+            <p class="discord__channelhead" aria-hidden="true"># 💬-general</p>
             <div class="dc-msgs">
               <article class="dc-msg">
                 <span class="dc-msg__av" style="--c: oklch(0.60 0.13 250)" aria-hidden="true">M</span>
