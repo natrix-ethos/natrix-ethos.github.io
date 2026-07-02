@@ -35,7 +35,7 @@
 
   --step-kicker: clamp(0.72rem, 0.68rem + 0.2vw, 0.82rem);
   --step-body:   clamp(1rem, 0.95rem + 0.4vw, 1.18rem);
-  --step-lede:   clamp(1.35rem, 1.1rem + 1.4vw, 2.1rem);
+  --step-lede:   clamp(1.2rem, 1.05rem + 0.75vw, 1.6rem);
   --step-h2:     clamp(2.1rem, 1.3rem + 3.6vw, 4.6rem);
   --step-h1:     clamp(2.5rem, 1.3rem + 5.6vw, 6.6rem);
 
@@ -264,14 +264,9 @@ main { position: relative; z-index: 1; }
 /* ---------- Generic lede / body ---------- */
 .lede {
   max-width: 60ch; font-size: var(--step-lede); font-weight: 400;
-  line-height: 1.42; color: var(--ink-mute); letter-spacing: -0.01em;
+  line-height: 1.5; color: var(--ink-mute); letter-spacing: -0.01em;
 }
 .band--frame .display { color: var(--ink); }
-/* Honest-frame paragraph is long-form; size it as a comfortable lede, not a headline */
-.band--frame .lede {
-  font-size: clamp(1.15rem, 1rem + 0.62vw, 1.5rem);
-  line-height: 1.55; max-width: 54ch;
-}
 
 /* ---------- Story ---------- */
 .story__body { max-width: 62ch; margin-top: clamp(1rem, 3vh, 2rem); }
