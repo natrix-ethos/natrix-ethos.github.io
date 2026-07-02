@@ -267,6 +267,11 @@ main { position: relative; z-index: 1; }
   line-height: 1.42; color: var(--ink-mute); letter-spacing: -0.01em;
 }
 .band--frame .display { color: var(--ink); }
+/* Honest-frame paragraph is long-form; size it as a comfortable lede, not a headline */
+.band--frame .lede {
+  font-size: clamp(1.15rem, 1rem + 0.62vw, 1.5rem);
+  line-height: 1.55; max-width: 54ch;
+}
 
 /* ---------- Story ---------- */
 .story__body { max-width: 62ch; margin-top: clamp(1rem, 3vh, 2rem); }
@@ -762,6 +767,38 @@ main { position: relative; z-index: 1; }
 @media (hover: hover) and (pointer: fine) {
   .cal-day--win:hover  { transform: translateY(-3px); border-color: var(--win); }
   .cal-day--loss:hover { transform: translateY(-3px); border-color: var(--loss); }
+}
+
+/* ---------- The honest math (running costs) ---------- */
+.costs {
+  margin: clamp(2.5rem, 6vh, 4rem) 0 0;
+  border: 1px solid var(--line-soft); border-radius: 18px;
+  background: oklch(0.115 0.012 250 / 0.7);
+  padding: clamp(1rem, 2.6vw, 1.9rem);
+}
+.costs__list { list-style: none; display: grid; }
+.costs__row {
+  display: grid; grid-template-columns: 1fr auto; gap: 0.3rem 1.2rem;
+  padding: clamp(0.9rem, 2vw, 1.2rem) 0.2rem;
+  border-bottom: 1px solid var(--line-soft); align-items: baseline;
+}
+.costs__row:last-child { border-bottom: 0; padding-bottom: 0.4rem; }
+.costs__what { font-weight: 700; letter-spacing: -0.01em; }
+.costs__sub { grid-column: 1; font-size: 0.86rem; color: var(--ink-mute); max-width: 56ch; }
+.costs__price {
+  font-weight: 700; font-size: clamp(1rem, 0.9rem + 0.7vw, 1.4rem);
+  letter-spacing: -0.02em; white-space: nowrap;
+}
+.costs__price--once { color: var(--glow); }
+.costs__note { margin-top: 1.3rem; font-size: 0.8rem; color: var(--ink-faint); max-width: 70ch; }
+@media (max-width: 560px) {
+  .costs__row { grid-template-columns: 1fr; }
+}
+
+/* Offer stack in the finale */
+.finale__stack {
+  margin: clamp(2.2rem, 5vh, 3.2rem) auto 0;
+  max-width: 580px; text-align: left;
 }
 @media (max-width: 560px) {
   .calendar__week { gap: 5px; }
